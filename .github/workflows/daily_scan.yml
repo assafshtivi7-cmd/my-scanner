@@ -19,7 +19,14 @@ jobs:
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
         run: python stock_scanner.py
-      - name: Save progress
+      - name:- name: Save progress
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git pull --rebase origin main
+          git add last_run.json
+          git commit -m "Update scores" || exit 0
+          git push origin main
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
