@@ -1,18 +1,18 @@
 name: Daily Stock Scan
 on:
   schedule:
-    - cron: '30 13 * * *' # 16:30 שעון ישראל
-  workflow_dispatch: # כפתור הרצה ידנית
+    - cron: '30 13 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # נותן לבוט רשות לכתוב קבצים באופן מפורש
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # מוודא שכל ההיסטוריה קיימת כדי למנוע שגיאות שמירה
+          fetch-depth: 0
           
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -20,12 +20,16 @@ jobs:
           python-version: '3.10'
           
       - name: Install dependencies
-        run: pip install yfinance pandas numpy xlsxwriter
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install yfinance pandas numpy xlsxwriter openpyxl
         
       - name: Run Scanner
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
-        run: python stock_scanner.py
+        run: |
+          if [ ! -f last_run.json ]; then echo "{}" > last_run.json; fi
+          python stock_scanner.py
         
       - name: Save progress
         run: |
