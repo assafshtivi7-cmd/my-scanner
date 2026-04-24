@@ -1,35 +1,36 @@
 name: Daily Stock Scan
 on:
   schedule:
-    - cron: '30 13 * * *' # ריצה אוטומטית ב-16:30
-  workflow_dispatch: # כפתור להפעלה ידנית
+    - cron: '30 13 * * *' # 16:30 שעון ישראל
+  workflow_dispatch: # כפתור הרצה ידנית
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # נותן לבוט רשות לכתוב קבצים באופן מפורש
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # מוודא שכל ההיסטוריה קיימת כדי למנוע שגיאות שמירה
+          
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+          
       - name: Install dependencies
         run: pip install yfinance pandas numpy xlsxwriter
+        
       - name: Run Scanner
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
         run: python stock_scanner.py
-      - name:- name: Save progress
+        
+      - name: Save progress
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git pull --rebase origin main
           git add last_run.json
-          git commit -m "Update scores" || exit 0
+          git commit -m "Update scores [skip ci]" || exit 0
           git push origin main
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add last_run.json
-          git commit -m "Update" || exit 0
-          git push
