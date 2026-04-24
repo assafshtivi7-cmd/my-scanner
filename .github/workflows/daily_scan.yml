@@ -11,24 +11,29 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11' # שדרגנו לגרסה יציבה יותר
+          
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
-          pip install yfinance pandas numpy xlsxwriter openpyxl
+          python -m pip install --upgrade pip
+          # הוספת ניסיונות חוזרים למקרה של תקלת תקשורת
+          python -m pip install yfinance pandas numpy xlsxwriter openpyxl --retries 10 --timeout 60
+        
       - name: Run Scanner
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
         run: |
           if [ ! -f last_run.json ]; then echo "{}" > last_run.json; fi
           python stock_scanner.py
+        
       - name: Save progress
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add last_run.json
-          git commit -m "Update scores" || exit 0
-          git push
+          git commit -m "Update scores [skip ci]" || exit 0
+          git push origin main
