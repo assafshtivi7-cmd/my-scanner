@@ -5,6 +5,9 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 import os
 
+# הגדרות המייל שלך - מעודכן לכתובת הנכונה
+MY_EMAIL = "assafshtivi7@gmail.com"
+
 WATCHLIST = {
     "AI & Tech": ["PLTR", "SOFI", "AMD", "NVDA", "MSFT"],
     "Crypto & Growth": ["MSTR", "MARA", "COIN", "TSLA"],
@@ -20,6 +23,7 @@ def get_data():
             price, change = data['Close'].iloc[-1], ((data['Close'].iloc[-1] - data['Close'].iloc[-2]) / data['Close'].iloc[-2]) * 100
             market_summary.append({"name": name, "price": f"{price:,.2f}", "change": f"{change:+.2f}%", "color": "success" if change >= 0 else "danger"})
         except: continue
+
     for cat, tickers in WATCHLIST.items():
         results[cat] = []
         for t in tickers:
@@ -30,6 +34,7 @@ def get_data():
                 results[cat].append(stock_obj)
                 all_stocks.append(stock_obj)
             except: continue
+    
     top_performers = sorted(all_stocks, key=lambda x: x['raw_chg'], reverse=True)[:3]
     return results, market_summary, top_performers
 
@@ -41,34 +46,28 @@ def generate_html(data, market, top):
     for cat, stocks in data.items():
         rows = "".join([f"<tr><td><strong>{s['ticker']}</strong></td><td>{s['price']}$</td><td class='text-{'success' if '+' in s['change'] else 'danger'}'>{s['change']}</td></tr>" for s in stocks])
         sections += f'<div class="card mb-4"><div class="card-header bg-dark text-white"><h5>{cat}</h5></div><table class="table mb-0"><thead><tr><th>Ticker</th><th>Price</th><th>Daily</th></tr></thead><tbody>{rows}</tbody></table></div>'
+
     html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head><body class="bg-light"><div class="container py-4"><h1>Market Dashboard</h1><p>{now}</p><div class="row">{market_cards}</div><h4 class="mb-3">🔥 Top Performers</h4><div class="row">{top_html}</div>{sections}</div></body></html>'''
     with open("index.html", "w", encoding="utf-8") as f: f.write(html)
 
 def send_email(top):
     pwd = os.getenv("APP_PASSWORD")
-    if not pwd:
-        print("DEBUG: APP_PASSWORD is missing!")
-        return
-    
-    # ניקוי רווחים מהסיסמה ליתר ביטחון
+    if not pwd: return
     clean_pwd = pwd.replace(" ", "")
-    
     try:
-        content = "Top Stocks Today:\n" + "\n".join([f"{s['ticker']}: {s['change']}" for s in top])
+        content = "🔥 Top Stocks Today:\n\n" + "\n".join([f"{s['ticker']}: {s['change']} (Price: {s['price']}$)" for s in top])
         msg = MIMEMultipart()
         msg['Subject'] = f"Stock Report {datetime.now().strftime('%d/%m/%Y')}"
-        msg['From'] = "ashtivi@gmail.com"
-        msg['To'] = "ashtivi@gmail.com"
+        msg['From'] = MY_EMAIL
+        msg['To'] = MY_EMAIL
         msg.attach(MIMEText(content, 'plain'))
-        
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login("ashtivi@gmail.com", clean_pwd)
+            server.login(MY_EMAIL, clean_pwd)
             server.send_message(msg)
             print("DEBUG: Email Sent Successfully!")
     except Exception as e:
         print(f"DEBUG: Email failed: {e}")
 
-# הפעלה
 res, mkt, top_3 = get_data()
 generate_html(res, mkt, top_3)
 send_email(top_3)
