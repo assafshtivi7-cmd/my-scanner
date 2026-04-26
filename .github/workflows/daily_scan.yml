@@ -7,12 +7,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # הגדרת הרשאות ברמת ה-Job כדי לוודא שאין חסימה
     permissions:
       contents: write
+      pages: write
+      id-token: write
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -31,11 +36,11 @@ jobs:
           if [ ! -f last_run.json ]; then echo "{}" > last_run.json; fi
           python stock_scanner.py
         
-      - name: Save progress & Update Website
+      - name: Force Push Update
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add last_run.json index.html
           git commit -m "Update dashboard [skip ci]" || exit 0
-          # פקודת "נשק יום הדין" - הזרקת טוקן האבטחה ישירות לכתובת
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+          # שימוש בטוקן בתוך הכתובת כדי לעקוף שגיאות 128
+          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" main
