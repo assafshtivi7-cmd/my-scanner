@@ -8,11 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # נותן אישור כתיבה מפורש
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }} # שימוש בטוקן מובנה לאימות חזק
           
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -33,9 +34,9 @@ jobs:
         
       - name: Save progress & Update Website
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git pull origin main --rebase # מונע שגיאות 128 של התנגשות גרסאות
           git add last_run.json index.html
-          git commit -m "Update scores and dashboard [skip ci]" || exit 0
+          git commit -m "Update dashboard [skip ci]" || exit 0
           git push origin main
