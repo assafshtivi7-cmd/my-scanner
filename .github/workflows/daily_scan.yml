@@ -11,25 +11,29 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
+
       - name: Install dependencies
         run: |
           pip install yfinance pandas numpy xlsxwriter openpyxl
-          
+
       - name: Run Scanner
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
         run: |
           if [ ! -f last_run.json ]; then echo "{}" > last_run.json; fi
           python stock_scanner.py
-          
+
       - name: Auto Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update dashboard [skip ci]"
+          commit_message: "Update dashboard and scores [skip ci]"
           file_pattern: 'last_run.json index.html'
+          branch: main
+          push_options: '--force'
