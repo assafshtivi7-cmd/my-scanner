@@ -29,7 +29,7 @@ WATCHLIST = [
 
 MARKET_INDICES = {
     "S&P 500": "^GSPC", "NASDAQ": "^IXIC", 
-    "BITCOIN": "BTC-USD", "VIX": "^VIX"
+    "BITCOIN": "BTC-USD", "VIX (FEAR)": "^VIX"
 }
 
 # --- לוגיקה טכנית ---
@@ -71,7 +71,7 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
         rank = (score * 25) + (adx_val / 2) + min(rs_vs_spy / 4, 12)
 
         prev = prev_scores.get(ticker)
-        trend = "↑" if prev and score > prev else "↓" if prev and score < prev else "-"
+        trend = f"↑ ({prev})" if prev and score > prev else f"↓ ({prev})" if prev and score < prev else "-"
 
         return {
             'Ticker': ticker, 'Price': round(curr_p, 2), 'SCORE': score, 'Power_Rank': round(rank, 1),
@@ -82,7 +82,7 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
         }
     except: return None
 
-# --- פונקציות תצוגה ---
+# --- תצוגה ---
 def generate_html(results, market_summary):
     now = datetime.now().strftime("%d/%m/%Y %H:%M")
     m_cards = "".join([f'''
@@ -97,13 +97,13 @@ def generate_html(results, market_summary):
     rows = "".join([f'''
         <tr onclick="showChart('{s['Ticker']}')">
             <td><div class="ticker-badge">{s['Ticker']}</div></td>
-            <td class="fw-bold">${s['Price']}</td>
+            <td class="fw-bold text-white">${s['Price']}</td>
             <td class="fw-bold text-{'success' if s['Day_Chg_%'] > 0 else 'danger'}">{s['Day_Chg_%']}%</td>
             <td><span class="score-dot score-{s['SCORE']}">{s['SCORE']}</span></td>
             <td class="fw-bold" style="color: #f0b90b;">{s['Power_Rank']}</td>
             <td style="color: #00d2ff;">${s['Breakout']}</td>
             <td style="color: #ff9f43;">${s['Stop_Loss']}</td>
-            <td>{s['TREND']}</td>
+            <td class="text-white">{s['TREND']}</td>
         </tr>''' for s in results])
 
     html = f'''
@@ -111,7 +111,7 @@ def generate_html(results, market_summary):
     <html lang="he" dir="rtl">
     <head>
         <meta charset="UTF-8">
-        <title>SHTIVI | PRO COMMAND CENTER</title>
+        <title>SHTIVI | COMMAND CENTER</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
         <style>
@@ -119,18 +119,18 @@ def generate_html(results, market_summary):
             body {{ background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }}
             .navbar {{ background-color: var(--card); border-bottom: 2px solid var(--accent); }}
             .index-card {{ background: var(--card); border-radius: 12px; border: 1px solid #333; }}
-            .ticker-badge {{ background: #2b3139; padding: 5px 15px; border-radius: 6px; color: var(--accent); font-weight: 800; display: inline-block; min-width: 80px; }}
+            .ticker-badge {{ background: var(--accent); padding: 5px 12px; border-radius: 6px; color: #000; font-weight: 800; display: inline-block; min-width: 80px; }}
             .table {{ background-color: var(--card); color: var(--text); border-radius: 12px; overflow: hidden; }}
             .score-dot {{ width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }}
             .score-4 {{ background: #0ecb81; color: #fff; }} .score-3 {{ background: #f0b90b; color: #000; }}
             tr:hover {{ background-color: #2b3139 !important; cursor: pointer; }}
-            .dataTables_filter input {{ background: #2b3139 !important; color: white !important; border: 1px solid #444; }}
+            .dataTables_filter input {{ background: #2b3139; color: white; border: 1px solid #444; }}
         </style>
     </head>
     <body>
         <nav class="navbar mb-4 py-3 shadow"><div class="container d-flex justify-content-between align-items-center">
-            <span class="h4 mb-0 fw-bold" style="letter-spacing: 1px;">📊 ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
-            <span class="badge bg-secondary">{now}</span>
+            <span class="h4 mb-0 fw-bold">⚡ ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
+            <span class="badge bg-dark">{now}</span>
         </div></nav>
         <div class="container">
             <div class="row mb-4">{m_cards}</div>
@@ -142,7 +142,7 @@ def generate_html(results, market_summary):
             </div>
         </div>
         <div class="modal fade" id="chartModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary"><h5 class="modal-title" id="modalTitle">Chart Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>Live Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
             <div class="modal-body" style="height: 750px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
         </div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -153,7 +153,6 @@ def generate_html(results, market_summary):
         <script>
             $(document).ready(function() {{ $('#stockTable').DataTable({{ "order": [[4, "desc"]], "pageLength": 50, "language": {{ "search": "חיפוש:" }} }}); }});
             function showChart(ticker) {{
-                document.getElementById('modalTitle').innerText = ticker + " - Live View";
                 new bootstrap.Modal(document.getElementById('chartModal')).show();
                 new TradingView.widget({{ "autosize": true, "symbol": ticker, "interval": "D", "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "en", "container_id": "tv_widget" }});
             }}
@@ -166,21 +165,24 @@ def create_styled_excel(df, file_name):
     df.to_excel(writer, index=False, sheet_name='Scanner')
     workbook, worksheet = writer.book, writer.sheets['Scanner']
     
-    # פורמטים
-    header_f = workbook.add_format({'bold': True, 'bg_color': '#1E2329', 'font_color': '#FFFFFF', 'border': 1, 'align': 'center'})
-    green_f = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'})
+    # הגדרת פורמטים
+    header_f = workbook.add_format({'bold': True, 'bg_color': '#FFFF00', 'border': 1, 'align': 'center'})
+    green_f = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100', 'align': 'center'})
     
     for col_num, value in enumerate(df.columns.values):
         worksheet.write(0, col_num, value, header_f)
     
-    # צביעה מותנית (Score >= 4)
-    worksheet.conditional_format(1, 2, len(df), 2, {'type': 'cell', 'criteria': '>=', 'value': 4, 'format': green_f})
-    # סקאלת צבעים ל-Rank
-    worksheet.conditional_format(1, 3, len(df), 3, {'type': '3_color_scale'})
+    # החלת צביעה מותנית
+    last_row = len(df)
+    # SCORE >= 4
+    worksheet.conditional_format(1, 2, last_row, 2, {'type': 'cell', 'criteria': '>=', 'value': 4, 'format': green_f})
+    # Power_Rank - סקאלה
+    worksheet.conditional_format(1, 3, last_row, 3, {'type': '3_color_scale'})
+    # TREND - חץ למעלה נצבע בירוק
+    worksheet.conditional_format(1, 9, last_row, 9, {'type': 'text', 'criteria': 'containing', 'value': '↑', 'format': green_f})
     
     writer.close()
 
-# --- הרצה ראשית ---
 if __name__ == "__main__":
     try:
         spy_df = yf.download('SPY', period='1mo', progress=False)
@@ -192,9 +194,9 @@ if __name__ == "__main__":
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = {executor.submit(analyze_ticker, t, spy_ret, prev_scores): t for t in WATCHLIST}
         for f in as_completed(futures):
-            res = f.result()
+            res = f.result(); 
             if res: results.append(res)
-    
+
     m_summary = []
     for n, t in MARKET_INDICES.items():
         try:
@@ -204,22 +206,17 @@ if __name__ == "__main__":
         except: continue
 
     results.sort(key=lambda x: (x['SCORE'], x['Power_Rank']), reverse=True)
-    
-    # יצירת הקבצים
     f_name = f"Master_Scanner_{datetime.now().strftime('%Y-%m-%d')}.xlsx"
     create_styled_excel(pd.DataFrame(results), f_name)
     generate_html(results, m_summary)
-    
-    # שמירת היסטוריה
     json.dump({r['Ticker']: int(r['SCORE']) for r in results}, open(DB_FILE, "w"))
     
-    # שליחת מייל
     try:
         pwd = os.getenv("APP_PASSWORD").replace(" ", "")
         msg = MIMEMultipart()
         msg['Subject'] = f"🚀 COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
         msg['From'], msg['To'] = MY_EMAIL, MY_EMAIL
-        msg.attach(MIMEText("הדוח המעודכן מוכן. האתר שודרג לגרסה המלאה.", "plain"))
+        msg.attach(MIMEText("אסף, הדוח והאתר מוכנים בגרסת ה-Ultimate. הטיקרים והצבעים תוקנו.", "plain"))
         with open(f_name, "rb") as f:
             part = MIMEBase("application", "octet-stream")
             part.set_payload(f.read()); encoders.encode_base64(part)
