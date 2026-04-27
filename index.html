@@ -3,7 +3,7 @@
     <html lang="he" dir="rtl">
     <head>
         <meta charset="UTF-8">
-        <title>SHTIVI | PRO COMMAND CENTER</title>
+        <title>SHTIVI | COMMAND CENTER</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
         <style>
@@ -11,18 +11,18 @@
             body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
             .navbar { background-color: var(--card); border-bottom: 2px solid var(--accent); }
             .index-card { background: var(--card); border-radius: 12px; border: 1px solid #333; }
-            .ticker-badge { background: #2b3139; padding: 5px 15px; border-radius: 6px; color: var(--accent); font-weight: 800; display: inline-block; min-width: 80px; }
+            .ticker-badge { background: var(--accent); padding: 5px 12px; border-radius: 6px; color: #000; font-weight: 800; display: inline-block; min-width: 80px; }
             .table { background-color: var(--card); color: var(--text); border-radius: 12px; overflow: hidden; }
             .score-dot { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }
             .score-4 { background: #0ecb81; color: #fff; } .score-3 { background: #f0b90b; color: #000; }
             tr:hover { background-color: #2b3139 !important; cursor: pointer; }
-            .dataTables_filter input { background: #2b3139 !important; color: white !important; border: 1px solid #444; }
+            .dataTables_filter input { background: #2b3139; color: white; border: 1px solid #444; }
         </style>
     </head>
     <body>
         <nav class="navbar mb-4 py-3 shadow"><div class="container d-flex justify-content-between align-items-center">
-            <span class="h4 mb-0 fw-bold" style="letter-spacing: 1px;">📊 ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
-            <span class="badge bg-secondary">27/04/2026 06:20</span>
+            <span class="h4 mb-0 fw-bold">⚡ ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
+            <span class="badge bg-dark">27/04/2026 06:57</span>
         </div></nav>
         <div class="container">
             <div class="row mb-4">
@@ -43,13 +43,13 @@
         <div class="col-md-3 mb-3">
             <div class="index-card text-center p-3">
                 <small class="text-muted d-block mb-1 text-uppercase">BITCOIN</small>
-                <div class="h3 mb-0 fw-bold" style="color: #fff;">77,835.18</div>
-                <div class="text-success small fw-bold">+0.29%</div>
+                <div class="h3 mb-0 fw-bold" style="color: #fff;">77,732.80</div>
+                <div class="text-danger small fw-bold">-1.18%</div>
             </div>
         </div>
         <div class="col-md-3 mb-3">
             <div class="index-card text-center p-3">
-                <small class="text-muted d-block mb-1 text-uppercase">VIX</small>
+                <small class="text-muted d-block mb-1 text-uppercase">VIX (FEAR)</small>
                 <div class="h3 mb-0 fw-bold" style="color: #fff;">18.71</div>
                 <div class="text-danger small fw-bold">-3.11%</div>
             </div>
@@ -60,789 +60,789 @@
                     <tbody>
         <tr onclick="showChart('CNC')">
             <td><div class="ticker-badge">CNC</div></td>
-            <td class="fw-bold">$41.82</td>
+            <td class="fw-bold text-white">$41.82</td>
             <td class="fw-bold text-success">1.78%</td>
             <td><span class="score-dot score-4">4</span></td>
             <td class="fw-bold" style="color: #f0b90b;">117.4</td>
             <td style="color: #00d2ff;">$41.88</td>
             <td style="color: #ff9f43;">$39.35</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CLSK')">
             <td><div class="ticker-badge">CLSK</div></td>
-            <td class="fw-bold">$12.76</td>
+            <td class="fw-bold text-white">$12.76</td>
             <td class="fw-bold text-success">4.33%</td>
             <td><span class="score-dot score-4">4</span></td>
             <td class="fw-bold" style="color: #f0b90b;">116.7</td>
             <td style="color: #00d2ff;">$13.23</td>
             <td style="color: #ff9f43;">$11.33</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('NVDA')">
             <td><div class="ticker-badge">NVDA</div></td>
-            <td class="fw-bold">$208.27</td>
+            <td class="fw-bold text-white">$208.27</td>
             <td class="fw-bold text-success">4.32%</td>
             <td><span class="score-dot score-4">4</span></td>
             <td class="fw-bold" style="color: #f0b90b;">115.9</td>
             <td style="color: #00d2ff;">$210.95</td>
             <td style="color: #ff9f43;">$198.44</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('BEN')">
             <td><div class="ticker-badge">BEN</div></td>
-            <td class="fw-bold">$27.12</td>
+            <td class="fw-bold text-white">$27.12</td>
             <td class="fw-bold text-success">1.12%</td>
             <td><span class="score-dot score-4">4</span></td>
             <td class="fw-bold" style="color: #f0b90b;">115.8</td>
             <td style="color: #00d2ff;">$28.28</td>
             <td style="color: #ff9f43;">$25.66</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('IREN')">
             <td><div class="ticker-badge">IREN</div></td>
-            <td class="fw-bold">$50.64</td>
+            <td class="fw-bold text-white">$50.64</td>
             <td class="fw-bold text-danger">-2.65%</td>
             <td><span class="score-dot score-4">4</span></td>
             <td class="fw-bold" style="color: #f0b90b;">114.8</td>
             <td style="color: #00d2ff;">$54.14</td>
             <td style="color: #ff9f43;">$43.81</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('NEM')">
             <td><div class="ticker-badge">NEM</div></td>
-            <td class="fw-bold">$120.7</td>
+            <td class="fw-bold text-white">$120.7</td>
             <td class="fw-bold text-success">8.68%</td>
             <td><span class="score-dot score-4">4</span></td>
             <td class="fw-bold" style="color: #f0b90b;">112.2</td>
             <td style="color: #00d2ff;">$122.0</td>
             <td style="color: #ff9f43;">$112.88</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('BTG')">
             <td><div class="ticker-badge">BTG</div></td>
-            <td class="fw-bold">$4.97</td>
+            <td class="fw-bold text-white">$4.97</td>
             <td class="fw-bold text-success">0.4%</td>
             <td><span class="score-dot score-4">4</span></td>
             <td class="fw-bold" style="color: #f0b90b;">111.0</td>
             <td style="color: #00d2ff;">$5.12</td>
             <td style="color: #ff9f43;">$4.6</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('INTC')">
             <td><div class="ticker-badge">INTC</div></td>
-            <td class="fw-bold">$82.54</td>
+            <td class="fw-bold text-white">$82.54</td>
             <td class="fw-bold text-success">23.6%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">107.2</td>
             <td style="color: #00d2ff;">$85.22</td>
             <td style="color: #ff9f43;">$75.65</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('AMD')">
             <td><div class="ticker-badge">AMD</div></td>
-            <td class="fw-bold">$347.81</td>
+            <td class="fw-bold text-white">$347.81</td>
             <td class="fw-bold text-success">13.91%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">106.3</td>
             <td style="color: #00d2ff;">$352.99</td>
             <td style="color: #ff9f43;">$326.56</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('ON')">
             <td><div class="ticker-badge">ON</div></td>
-            <td class="fw-bold">$98.4</td>
+            <td class="fw-bold text-white">$98.4</td>
             <td class="fw-bold text-success">0.63%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">104.5</td>
             <td style="color: #00d2ff;">$100.3</td>
             <td style="color: #ff9f43;">$92.15</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('SNDK')">
             <td><div class="ticker-badge">SNDK</div></td>
-            <td class="fw-bold">$989.9</td>
+            <td class="fw-bold text-white">$989.9</td>
             <td class="fw-bold text-success">6.16%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">102.8</td>
             <td style="color: #00d2ff;">$1002.09</td>
             <td style="color: #ff9f43;">$880.23</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('NVTS')">
             <td><div class="ticker-badge">NVTS</div></td>
-            <td class="fw-bold">$17.28</td>
+            <td class="fw-bold text-white">$17.28</td>
             <td class="fw-bold text-danger">-6.65%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">102.7</td>
             <td style="color: #00d2ff;">$19.79</td>
             <td style="color: #ff9f43;">$14.54</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('EQIX')">
             <td><div class="ticker-badge">EQIX</div></td>
-            <td class="fw-bold">$1108.76</td>
+            <td class="fw-bold text-white">$1108.76</td>
             <td class="fw-bold text-danger">-0.59%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">102.4</td>
             <td style="color: #00d2ff;">$1128.68</td>
             <td style="color: #ff9f43;">$1067.06</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CRML')">
             <td><div class="ticker-badge">CRML</div></td>
-            <td class="fw-bold">$11.51</td>
+            <td class="fw-bold text-white">$11.51</td>
             <td class="fw-bold text-success">8.18%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">97.7</td>
             <td style="color: #00d2ff;">$13.75</td>
             <td style="color: #ff9f43;">$9.24</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('AMZN')">
             <td><div class="ticker-badge">AMZN</div></td>
-            <td class="fw-bold">$263.99</td>
+            <td class="fw-bold text-white">$263.99</td>
             <td class="fw-bold text-success">3.49%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">97.0</td>
             <td style="color: #00d2ff;">$264.5</td>
             <td style="color: #ff9f43;">$251.73</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('OKLO')">
             <td><div class="ticker-badge">OKLO</div></td>
-            <td class="fw-bold">$71.0</td>
+            <td class="fw-bold text-white">$71.0</td>
             <td class="fw-bold text-danger">-7.14%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">96.5</td>
             <td style="color: #00d2ff;">$81.5</td>
             <td style="color: #ff9f43;">$59.03</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CVNA')">
             <td><div class="ticker-badge">CVNA</div></td>
-            <td class="fw-bold">$409.08</td>
+            <td class="fw-bold text-white">$409.08</td>
             <td class="fw-bold text-success">1.5%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">96.4</td>
             <td style="color: #00d2ff;">$416.88</td>
             <td style="color: #ff9f43;">$371.73</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('GOOG')">
             <td><div class="ticker-badge">GOOG</div></td>
-            <td class="fw-bold">$342.32</td>
+            <td class="fw-bold text-white">$342.32</td>
             <td class="fw-bold text-success">1.35%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">94.2</td>
             <td style="color: #00d2ff;">$343.69</td>
             <td style="color: #ff9f43;">$328.87</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('MU')">
             <td><div class="ticker-badge">MU</div></td>
-            <td class="fw-bold">$496.72</td>
+            <td class="fw-bold text-white">$496.72</td>
             <td class="fw-bold text-success">3.11%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">93.8</td>
             <td style="color: #00d2ff;">$506.99</td>
             <td style="color: #ff9f43;">$452.39</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('ALLY')">
             <td><div class="ticker-badge">ALLY</div></td>
-            <td class="fw-bold">$44.18</td>
+            <td class="fw-bold text-white">$44.18</td>
             <td class="fw-bold text-danger">-1.87%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">91.7</td>
             <td style="color: #00d2ff;">$47.02</td>
             <td style="color: #ff9f43;">$41.89</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('VRT')">
             <td><div class="ticker-badge">VRT</div></td>
-            <td class="fw-bold">$323.46</td>
+            <td class="fw-bold text-white">$323.46</td>
             <td class="fw-bold text-success">0.53%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">90.5</td>
             <td style="color: #00d2ff;">$330.3</td>
             <td style="color: #ff9f43;">$299.27</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('HUN')">
             <td><div class="ticker-badge">HUN</div></td>
-            <td class="fw-bold">$13.62</td>
+            <td class="fw-bold text-white">$13.62</td>
             <td class="fw-bold text-success">0.52%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">90.5</td>
             <td style="color: #00d2ff;">$14.22</td>
             <td style="color: #ff9f43;">$12.31</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('WULF')">
             <td><div class="ticker-badge">WULF</div></td>
-            <td class="fw-bold">$20.01</td>
+            <td class="fw-bold text-white">$20.01</td>
             <td class="fw-bold text-danger">-1.77%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">89.7</td>
             <td style="color: #00d2ff;">$21.6</td>
             <td style="color: #ff9f43;">$17.21</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CAT')">
             <td><div class="ticker-badge">CAT</div></td>
-            <td class="fw-bold">$830.79</td>
+            <td class="fw-bold text-white">$830.79</td>
             <td class="fw-bold text-danger">-0.53%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">89.6</td>
             <td style="color: #00d2ff;">$845.27</td>
             <td style="color: #ff9f43;">$792.4</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('RIVN')">
             <td><div class="ticker-badge">RIVN</div></td>
-            <td class="fw-bold">$16.52</td>
+            <td class="fw-bold text-white">$16.52</td>
             <td class="fw-bold text-danger">-2.54%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">87.1</td>
             <td style="color: #00d2ff;">$18.07</td>
             <td style="color: #ff9f43;">$15.1</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('OSS')">
             <td><div class="ticker-badge">OSS</div></td>
-            <td class="fw-bold">$9.71</td>
+            <td class="fw-bold text-white">$9.71</td>
             <td class="fw-bold text-danger">-0.72%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">87.0</td>
             <td style="color: #00d2ff;">$11.28</td>
             <td style="color: #ff9f43;">$8.21</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('UUUU')">
             <td><div class="ticker-badge">UUUU</div></td>
-            <td class="fw-bold">$20.32</td>
+            <td class="fw-bold text-white">$20.32</td>
             <td class="fw-bold text-danger">-7.26%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">85.6</td>
             <td style="color: #00d2ff;">$23.13</td>
             <td style="color: #ff9f43;">$17.32</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('AAPL')">
             <td><div class="ticker-badge">AAPL</div></td>
-            <td class="fw-bold">$271.06</td>
+            <td class="fw-bold text-white">$271.06</td>
             <td class="fw-bold text-danger">-0.87%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">83.9</td>
             <td style="color: #00d2ff;">$275.77</td>
             <td style="color: #ff9f43;">$260.17</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('ASML')">
             <td><div class="ticker-badge">ASML</div></td>
-            <td class="fw-bold">$1457.7</td>
+            <td class="fw-bold text-white">$1457.7</td>
             <td class="fw-bold text-success">2.81%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">83.1</td>
             <td style="color: #00d2ff;">$1531.98</td>
             <td style="color: #ff9f43;">$1369.61</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('TCMD')">
             <td><div class="ticker-badge">TCMD</div></td>
-            <td class="fw-bold">$25.07</td>
+            <td class="fw-bold text-white">$25.07</td>
             <td class="fw-bold text-success">2.54%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">82.5</td>
             <td style="color: #00d2ff;">$27.07</td>
             <td style="color: #ff9f43;">$22.94</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('MRNA')">
             <td><div class="ticker-badge">MRNA</div></td>
-            <td class="fw-bold">$50.73</td>
+            <td class="fw-bold text-white">$50.73</td>
             <td class="fw-bold text-danger">-4.01%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">82.2</td>
             <td style="color: #00d2ff;">$56.2</td>
             <td style="color: #ff9f43;">$45.45</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('ONDS')">
             <td><div class="ticker-badge">ONDS</div></td>
-            <td class="fw-bold">$10.55</td>
+            <td class="fw-bold text-white">$10.55</td>
             <td class="fw-bold text-success">0.09%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">81.7</td>
             <td style="color: #00d2ff;">$11.61</td>
             <td style="color: #ff9f43;">$9.09</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('SEDG')">
             <td><div class="ticker-badge">SEDG</div></td>
-            <td class="fw-bold">$45.83</td>
+            <td class="fw-bold text-white">$45.83</td>
             <td class="fw-bold text-danger">-3.23%</td>
             <td><span class="score-dot score-3">3</span></td>
             <td class="fw-bold" style="color: #f0b90b;">80.8</td>
             <td style="color: #00d2ff;">$53.75</td>
             <td style="color: #ff9f43;">$38.84</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('WDC')">
             <td><div class="ticker-badge">WDC</div></td>
-            <td class="fw-bold">$404.0</td>
+            <td class="fw-bold text-white">$404.0</td>
             <td class="fw-bold text-success">0.22%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">78.0</td>
             <td style="color: #00d2ff;">$416.37</td>
             <td style="color: #ff9f43;">$368.71</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('AFRM')">
             <td><div class="ticker-badge">AFRM</div></td>
-            <td class="fw-bold">$63.72</td>
+            <td class="fw-bold text-white">$63.72</td>
             <td class="fw-bold text-success">1.17%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">76.7</td>
             <td style="color: #00d2ff;">$68.74</td>
             <td style="color: #ff9f43;">$57.58</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('BULL')">
             <td><div class="ticker-badge">BULL</div></td>
-            <td class="fw-bold">$6.9</td>
+            <td class="fw-bold text-white">$6.9</td>
             <td class="fw-bold text-danger">-0.14%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">75.8</td>
             <td style="color: #00d2ff;">$7.52</td>
             <td style="color: #ff9f43;">$6.18</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('AVGO')">
             <td><div class="ticker-badge">AVGO</div></td>
-            <td class="fw-bold">$422.76</td>
+            <td class="fw-bold text-white">$422.76</td>
             <td class="fw-bold text-success">0.67%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">75.5</td>
             <td style="color: #00d2ff;">$429.31</td>
             <td style="color: #ff9f43;">$400.54</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('IONQ')">
             <td><div class="ticker-badge">IONQ</div></td>
-            <td class="fw-bold">$42.69</td>
+            <td class="fw-bold text-white">$42.69</td>
             <td class="fw-bold text-danger">-2.15%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">74.4</td>
             <td style="color: #00d2ff;">$49.13</td>
             <td style="color: #ff9f43;">$36.23</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('MSFT')">
             <td><div class="ticker-badge">MSFT</div></td>
-            <td class="fw-bold">$424.62</td>
+            <td class="fw-bold text-white">$424.62</td>
             <td class="fw-bold text-success">2.13%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">69.1</td>
             <td style="color: #00d2ff;">$433.7</td>
             <td style="color: #ff9f43;">$404.78</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('MSTR')">
             <td><div class="ticker-badge">MSTR</div></td>
-            <td class="fw-bold">$171.02</td>
+            <td class="fw-bold text-white">$171.02</td>
             <td class="fw-bold text-danger">-0.84%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">68.3</td>
             <td style="color: #00d2ff;">$183.25</td>
             <td style="color: #ff9f43;">$153.3</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('QBTS')">
             <td><div class="ticker-badge">QBTS</div></td>
-            <td class="fw-bold">$18.49</td>
+            <td class="fw-bold text-white">$18.49</td>
             <td class="fw-bold text-danger">-4.25%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">67.4</td>
             <td style="color: #00d2ff;">$22.49</td>
             <td style="color: #ff9f43;">$15.49</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('ORCL')">
             <td><div class="ticker-badge">ORCL</div></td>
-            <td class="fw-bold">$173.28</td>
+            <td class="fw-bold text-white">$173.28</td>
             <td class="fw-bold text-danger">-1.7%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">67.1</td>
             <td style="color: #00d2ff;">$189.18</td>
             <td style="color: #ff9f43;">$157.11</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('SOFI')">
             <td><div class="ticker-badge">SOFI</div></td>
-            <td class="fw-bold">$18.44</td>
+            <td class="fw-bold text-white">$18.44</td>
             <td class="fw-bold text-success">0.66%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">66.5</td>
             <td style="color: #00d2ff;">$20.13</td>
             <td style="color: #ff9f43;">$16.92</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('HOOD')">
             <td><div class="ticker-badge">HOOD</div></td>
-            <td class="fw-bold">$84.71</td>
+            <td class="fw-bold text-white">$84.71</td>
             <td class="fw-bold text-success">1.4%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">66.0</td>
             <td style="color: #00d2ff;">$93.32</td>
             <td style="color: #ff9f43;">$76.21</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('BX')">
             <td><div class="ticker-badge">BX</div></td>
-            <td class="fw-bold">$121.65</td>
+            <td class="fw-bold text-white">$121.65</td>
             <td class="fw-bold text-danger">-0.56%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">66.0</td>
             <td style="color: #00d2ff;">$133.25</td>
             <td style="color: #ff9f43;">$112.92</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('SMR')">
             <td><div class="ticker-badge">SMR</div></td>
-            <td class="fw-bold">$11.96</td>
+            <td class="fw-bold text-white">$11.96</td>
             <td class="fw-bold text-danger">-5.97%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">65.4</td>
             <td style="color: #00d2ff;">$14.2</td>
             <td style="color: #ff9f43;">$9.65</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('META')">
             <td><div class="ticker-badge">META</div></td>
-            <td class="fw-bold">$675.03</td>
+            <td class="fw-bold text-white">$675.03</td>
             <td class="fw-bold text-success">2.41%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">65.3</td>
             <td style="color: #00d2ff;">$691.52</td>
             <td style="color: #ff9f43;">$641.95</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('MP')">
             <td><div class="ticker-badge">MP</div></td>
-            <td class="fw-bold">$60.73</td>
+            <td class="fw-bold text-white">$60.73</td>
             <td class="fw-bold text-danger">-4.09%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">64.5</td>
             <td style="color: #00d2ff;">$69.43</td>
             <td style="color: #ff9f43;">$53.91</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('FUBO')">
             <td><div class="ticker-badge">FUBO</div></td>
-            <td class="fw-bold">$12.01</td>
+            <td class="fw-bold text-white">$12.01</td>
             <td class="fw-bold text-danger">-2.12%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">64.2</td>
             <td style="color: #00d2ff;">$14.54</td>
             <td style="color: #ff9f43;">$9.96</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('RGTI')">
             <td><div class="ticker-badge">RGTI</div></td>
-            <td class="fw-bold">$16.61</td>
+            <td class="fw-bold text-white">$16.61</td>
             <td class="fw-bold text-danger">-1.48%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">63.8</td>
             <td style="color: #00d2ff;">$20.17</td>
             <td style="color: #ff9f43;">$13.96</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('RDDT')">
             <td><div class="ticker-badge">RDDT</div></td>
-            <td class="fw-bold">$154.89</td>
+            <td class="fw-bold text-white">$154.89</td>
             <td class="fw-bold text-success">1.26%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">61.7</td>
             <td style="color: #00d2ff;">$168.7</td>
             <td style="color: #ff9f43;">$139.81</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('FISV')">
             <td><div class="ticker-badge">FISV</div></td>
-            <td class="fw-bold">$60.84</td>
+            <td class="fw-bold text-white">$60.84</td>
             <td class="fw-bold text-danger">-1.15%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">61.3</td>
             <td style="color: #00d2ff;">$65.29</td>
             <td style="color: #ff9f43;">$57.45</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('NNE')">
             <td><div class="ticker-badge">NNE</div></td>
-            <td class="fw-bold">$24.5</td>
+            <td class="fw-bold text-white">$24.5</td>
             <td class="fw-bold text-danger">-3.3%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">61.3</td>
             <td style="color: #00d2ff;">$28.33</td>
             <td style="color: #ff9f43;">$20.51</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CRWD')">
             <td><div class="ticker-badge">CRWD</div></td>
-            <td class="fw-bold">$448.13</td>
+            <td class="fw-bold text-white">$448.13</td>
             <td class="fw-bold text-success">0.62%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">61.2</td>
             <td style="color: #00d2ff;">$467.95</td>
             <td style="color: #ff9f43;">$406.53</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('PANW')">
             <td><div class="ticker-badge">PANW</div></td>
-            <td class="fw-bold">$178.54</td>
+            <td class="fw-bold text-white">$178.54</td>
             <td class="fw-bold text-success">3.08%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">60.5</td>
             <td style="color: #00d2ff;">$181.52</td>
             <td style="color: #ff9f43;">$163.63</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('OPEN')">
             <td><div class="ticker-badge">OPEN</div></td>
-            <td class="fw-bold">$5.51</td>
+            <td class="fw-bold text-white">$5.51</td>
             <td class="fw-bold text-success">5.56%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">60.2</td>
             <td style="color: #00d2ff;">$6.0</td>
             <td style="color: #ff9f43;">$4.82</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('BBAI')">
             <td><div class="ticker-badge">BBAI</div></td>
-            <td class="fw-bold">$3.7</td>
+            <td class="fw-bold text-white">$3.7</td>
             <td class="fw-bold text-danger">-0.8%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">59.9</td>
             <td style="color: #00d2ff;">$4.13</td>
             <td style="color: #ff9f43;">$3.24</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('TSLA')">
             <td><div class="ticker-badge">TSLA</div></td>
-            <td class="fw-bold">$376.3</td>
+            <td class="fw-bold text-white">$376.3</td>
             <td class="fw-bold text-success">0.69%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">59.6</td>
             <td style="color: #00d2ff;">$409.28</td>
             <td style="color: #ff9f43;">$347.43</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CMG')">
             <td><div class="ticker-badge">CMG</div></td>
-            <td class="fw-bold">$34.21</td>
+            <td class="fw-bold text-white">$34.21</td>
             <td class="fw-bold text-success">0.91%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">59.6</td>
             <td style="color: #00d2ff;">$37.08</td>
             <td style="color: #ff9f43;">$32.16</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('DDOG')">
             <td><div class="ticker-badge">DDOG</div></td>
-            <td class="fw-bold">$129.48</td>
+            <td class="fw-bold text-white">$129.48</td>
             <td class="fw-bold text-success">1.27%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">59.1</td>
             <td style="color: #00d2ff;">$135.96</td>
             <td style="color: #ff9f43;">$116.27</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('NOW')">
             <td><div class="ticker-badge">NOW</div></td>
-            <td class="fw-bold">$90.17</td>
+            <td class="fw-bold text-white">$90.17</td>
             <td class="fw-bold text-success">6.36%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">58.9</td>
             <td style="color: #00d2ff;">$106.58</td>
             <td style="color: #ff9f43;">$79.25</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('APP')">
             <td><div class="ticker-badge">APP</div></td>
-            <td class="fw-bold">$448.29</td>
+            <td class="fw-bold text-white">$448.29</td>
             <td class="fw-bold text-danger">-1.29%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">58.8</td>
             <td style="color: #00d2ff;">$491.99</td>
             <td style="color: #ff9f43;">$395.52</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('SHOP')">
             <td><div class="ticker-badge">SHOP</div></td>
-            <td class="fw-bold">$125.83</td>
+            <td class="fw-bold text-white">$125.83</td>
             <td class="fw-bold text-success">1.29%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">58.7</td>
             <td style="color: #00d2ff;">$137.3</td>
             <td style="color: #ff9f43;">$114.32</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('HL')">
             <td><div class="ticker-badge">HL</div></td>
-            <td class="fw-bold">$18.8</td>
+            <td class="fw-bold text-white">$18.8</td>
             <td class="fw-bold text-success">2.01%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">58.6</td>
             <td style="color: #00d2ff;">$21.05</td>
             <td style="color: #ff9f43;">$17.18</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CRCL')">
             <td><div class="ticker-badge">CRCL</div></td>
-            <td class="fw-bold">$99.66</td>
+            <td class="fw-bold text-white">$99.66</td>
             <td class="fw-bold text-danger">-0.35%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">57.4</td>
             <td style="color: #00d2ff;">$111.2</td>
             <td style="color: #ff9f43;">$84.25</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('BMNR')">
             <td><div class="ticker-badge">BMNR</div></td>
-            <td class="fw-bold">$22.14</td>
+            <td class="fw-bold text-white">$22.14</td>
             <td class="fw-bold text-success">0.64%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">57.2</td>
             <td style="color: #00d2ff;">$24.11</td>
             <td style="color: #ff9f43;">$19.74</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CTKB')">
             <td><div class="ticker-badge">CTKB</div></td>
-            <td class="fw-bold">$4.4</td>
+            <td class="fw-bold text-white">$4.4</td>
             <td class="fw-bold text-success">3.29%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">55.0</td>
             <td style="color: #00d2ff;">$4.85</td>
             <td style="color: #ff9f43;">$4.01</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('AMPY')">
             <td><div class="ticker-badge">AMPY</div></td>
-            <td class="fw-bold">$5.84</td>
+            <td class="fw-bold text-white">$5.84</td>
             <td class="fw-bold text-danger">-0.85%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">54.1</td>
             <td style="color: #00d2ff;">$6.7</td>
             <td style="color: #ff9f43;">$5.33</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('ASTS')">
             <td><div class="ticker-badge">ASTS</div></td>
-            <td class="fw-bold">$76.4</td>
+            <td class="fw-bold text-white">$76.4</td>
             <td class="fw-bold text-danger">-2.98%</td>
             <td><span class="score-dot score-2">2</span></td>
             <td class="fw-bold" style="color: #f0b90b;">49.6</td>
             <td style="color: #00d2ff;">$104.15</td>
             <td style="color: #ff9f43;">$62.29</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('NFLX')">
             <td><div class="ticker-badge">NFLX</div></td>
-            <td class="fw-bold">$92.44</td>
+            <td class="fw-bold text-white">$92.44</td>
             <td class="fw-bold text-danger">-0.41%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">39.3</td>
             <td style="color: #00d2ff;">$108.95</td>
             <td style="color: #ff9f43;">$87.46</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('MNDY')">
             <td><div class="ticker-badge">MNDY</div></td>
-            <td class="fw-bold">$67.79</td>
+            <td class="fw-bold text-white">$67.79</td>
             <td class="fw-bold text-success">4.94%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">36.0</td>
             <td style="color: #00d2ff;">$73.58</td>
             <td style="color: #ff9f43;">$59.87</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('ZS')">
             <td><div class="ticker-badge">ZS</div></td>
-            <td class="fw-bold">$135.5</td>
+            <td class="fw-bold text-white">$135.5</td>
             <td class="fw-bold text-success">1.9%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">34.6</td>
             <td style="color: #00d2ff;">$150.5</td>
             <td style="color: #ff9f43;">$120.7</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('INTU')">
             <td><div class="ticker-badge">INTU</div></td>
-            <td class="fw-bold">$395.95</td>
+            <td class="fw-bold text-white">$395.95</td>
             <td class="fw-bold text-success">3.3%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">33.2</td>
             <td style="color: #00d2ff;">$435.24</td>
             <td style="color: #ff9f43;">$361.78</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('LLY')">
             <td><div class="ticker-badge">LLY</div></td>
-            <td class="fw-bold">$883.96</td>
+            <td class="fw-bold text-white">$883.96</td>
             <td class="fw-bold text-danger">-3.67%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">32.9</td>
             <td style="color: #00d2ff;">$976.68</td>
             <td style="color: #ff9f43;">$833.83</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('CRM')">
             <td><div class="ticker-badge">CRM</div></td>
-            <td class="fw-bold">$178.16</td>
+            <td class="fw-bold text-white">$178.16</td>
             <td class="fw-bold text-success">2.8%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">32.5</td>
             <td style="color: #00d2ff;">$193.56</td>
             <td style="color: #ff9f43;">$164.24</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('PLTR')">
             <td><div class="ticker-badge">PLTR</div></td>
-            <td class="fw-bold">$143.09</td>
+            <td class="fw-bold text-white">$143.09</td>
             <td class="fw-bold text-success">1.07%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">30.1</td>
             <td style="color: #00d2ff;">$156.28</td>
             <td style="color: #ff9f43;">$129.12</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('FIG')">
             <td><div class="ticker-badge">FIG</div></td>
-            <td class="fw-bold">$17.47</td>
+            <td class="fw-bold text-white">$17.47</td>
             <td class="fw-bold text-success">0.87%</td>
             <td><span class="score-dot score-1">1</span></td>
             <td class="fw-bold" style="color: #f0b90b;">29.9</td>
             <td style="color: #00d2ff;">$23.15</td>
             <td style="color: #ff9f43;">$14.11</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr>
         <tr onclick="showChart('NKE')">
             <td><div class="ticker-badge">NKE</div></td>
-            <td class="fw-bold">$44.69</td>
+            <td class="fw-bold text-white">$44.69</td>
             <td class="fw-bold text-danger">-0.2%</td>
             <td><span class="score-dot score-0">0</span></td>
             <td class="fw-bold" style="color: #f0b90b;">14.7</td>
             <td style="color: #00d2ff;">$53.11</td>
             <td style="color: #ff9f43;">$42.23</td>
-            <td>-</td>
+            <td class="text-white">-</td>
         </tr></tbody>
                 </table>
             </div>
         </div>
         <div class="modal fade" id="chartModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary"><h5 class="modal-title" id="modalTitle">Chart Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>Live Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
             <div class="modal-body" style="height: 750px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
         </div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -853,7 +853,6 @@
         <script>
             $(document).ready(function() { $('#stockTable').DataTable({ "order": [[4, "desc"]], "pageLength": 50, "language": { "search": "חיפוש:" } }); });
             function showChart(ticker) {
-                document.getElementById('modalTitle').innerText = ticker + " - Live View";
                 new bootstrap.Modal(document.getElementById('chartModal')).show();
                 new TradingView.widget({ "autosize": true, "symbol": ticker, "interval": "D", "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "en", "container_id": "tv_widget" });
             }
