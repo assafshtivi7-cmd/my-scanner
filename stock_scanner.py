@@ -69,7 +69,6 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
         adx_val = calc_adx(df)
         rs_vs_spy = round(((curr_p - float(close.iloc[-22])) / float(close.iloc[-22]) - spy_ret) * 100, 2)
         rank = (score * 25) + (adx_val / 2) + min(rs_vs_spy / 4, 12)
-
         prev = prev_scores.get(ticker)
         trend = f"↑ ({prev})" if prev and score > prev else f"↓ ({prev})" if prev and score < prev else "-"
 
@@ -84,7 +83,7 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
 
 # --- תצוגה ---
 def generate_html(results, market_summary):
-    # תיקון שעה לשעון ישראל
+    # שעון ישראל (UTC+3)
     israel_time = datetime.now(timezone(timedelta(hours=3))).strftime("%d/%m/%Y %H:%M")
     
     m_cards = "".join([f'''
@@ -98,7 +97,7 @@ def generate_html(results, market_summary):
     
     rows = "".join([f'''
         <tr onclick="showChart('{s['Ticker']}')">
-            <td><div class="ticker-badge">{s['Ticker']}</div></td>
+            <td><div class="ticker-box">{s['Ticker']}</div></td>
             <td class="fw-bold text-white">${s['Price']}</td>
             <td class="fw-bold text-{'success' if s['Day_Chg_%'] > 0 else 'danger'}">{s['Day_Chg_%']}%</td>
             <td><span class="score-dot score-{s['SCORE']}">{s['SCORE']}</span></td>
@@ -121,7 +120,8 @@ def generate_html(results, market_summary):
             body {{ background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }}
             .navbar {{ background-color: var(--card); border-bottom: 2px solid var(--accent); }}
             .index-card {{ background: var(--card); border-radius: 12px; border: 1px solid #333; }}
-            .ticker-badge {{ background: var(--accent) !important; padding: 5px 12px; border-radius: 6px; color: #000 !important; font-weight: 800; display: inline-block; min-width: 85px; text-decoration: none; }}
+            /* תיקון קריטי לטיקר */
+            .ticker-box {{ background-color: #f0b90b !important; color: #000000 !important; padding: 6px 14px; border-radius: 6px; font-weight: 800 !important; display: inline-block; min-width: 90px; border: none; }}
             .table {{ background-color: var(--card); color: var(--text); border-radius: 12px; overflow: hidden; }}
             .score-dot {{ width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }}
             .score-4 {{ background: #0ecb81; color: #fff; }} .score-3 {{ background: #f0b90b; color: #000; }}
@@ -132,7 +132,7 @@ def generate_html(results, market_summary):
     <body>
         <nav class="navbar mb-4 py-3 shadow"><div class="container d-flex justify-content-between align-items-center">
             <span class="h4 mb-0 fw-bold">⚡ ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
-            <span class="badge bg-dark">עדכון אחרון: {israel_time}</span>
+            <span class="badge bg-dark">IDT: {israel_time}</span>
         </div></nav>
         <div class="container">
             <div class="row mb-4">{m_cards}</div>
@@ -144,7 +144,7 @@ def generate_html(results, market_summary):
             </div>
         </div>
         <div class="modal fade" id="chartModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>ניתוח גרף חי</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>Real-Time Chart</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
             <div class="modal-body" style="height: 750px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
         </div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -166,33 +166,21 @@ def create_styled_excel(df, file_name):
     writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
     df.to_excel(writer, index=False, sheet_name='Scanner')
     workbook, worksheet = writer.book, writer.sheets['Scanner']
-    
-    # פורמטים
     header_f = workbook.add_format({'bold': True, 'bg_color': '#FFFF00', 'border': 1, 'align': 'center'})
     green_f = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100', 'align': 'center'})
-    
-    # החלת כותרות
     for col_num, value in enumerate(df.columns.values):
         worksheet.write(0, col_num, value, header_f)
-    
-    # צביעה מותנית (בדיוק כמו שרצית)
     last_row = len(df)
-    # SCORE >= 4
     worksheet.conditional_format(1, 2, last_row, 2, {'type': 'cell', 'criteria': '>=', 'value': 4, 'format': green_f})
-    # Power_Rank - סקאלת צבעים
     worksheet.conditional_format(1, 3, last_row, 3, {'type': '3_color_scale'})
-    # TREND - כל שורה עם חץ למעלה נצבעת בירוק
     worksheet.conditional_format(1, 10, last_row, 10, {'type': 'text', 'criteria': 'containing', 'value': '↑', 'format': green_f})
-    
     writer.close()
 
-# --- הרצה ראשית ---
 if __name__ == "__main__":
     try:
         spy_df = yf.download('SPY', period='1mo', progress=False)
         spy_ret = float((spy_df['Close'].iloc[-1] - spy_df['Close'].iloc[0]) / spy_df['Close'].iloc[0])
     except: spy_ret = 0
-    
     prev_scores = json.load(open(DB_FILE)) if os.path.exists(DB_FILE) else {}
     results = []
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
@@ -200,7 +188,6 @@ if __name__ == "__main__":
         for f in as_completed(futures):
             res = f.result(); 
             if res: results.append(res)
-
     m_summary = []
     for n, t in MARKET_INDICES.items():
         try:
@@ -208,24 +195,19 @@ if __name__ == "__main__":
             p, c = h['Close'].iloc[-1], ((h['Close'].iloc[-1]-h['Close'].iloc[-2])/h['Close'].iloc[-2])*100
             m_summary.append({"name": n, "price": f"{p:,.2f}", "change": f"{c:+.2f}%", "color": "success" if c>=0 else "danger"})
         except: continue
-
     results.sort(key=lambda x: (x['SCORE'], x['Power_Rank']), reverse=True)
     f_name = f"Master_Scanner_{datetime.now().strftime('%Y-%m-%d')}.xlsx"
     create_styled_excel(pd.DataFrame(results), f_name)
     generate_html(results, m_summary)
     json.dump({r['Ticker']: int(r['SCORE']) for r in results}, open(DB_FILE, "w"))
-    
     try:
         pwd = os.getenv("APP_PASSWORD").replace(" ", "")
-        msg = MIMEMultipart()
-        msg['Subject'] = f"🚀 COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
+        msg = MIMEMultipart(); msg['Subject'] = f"🚀 COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
         msg['From'], msg['To'] = MY_EMAIL, MY_EMAIL
-        msg.attach(MIMEText("אסף, הדוח והאתר מוכנים. כל הבאגים תוקנו - שעה, צבעים וטיקרים.", "plain"))
+        msg.attach(MIMEText("הדוח והאתר מוכנים. תיקון צבעים ושעון ישראל בוצע.", "plain"))
         with open(f_name, "rb") as f:
-            part = MIMEBase("application", "octet-stream")
-            part.set_payload(f.read()); encoders.encode_base64(part)
-            part.add_header("Content-Disposition", f"attachment; filename={f_name}")
-            msg.attach(part)
+            part = MIMEBase("application", "octet-stream"); part.set_payload(f.read()); encoders.encode_base64(part)
+            part.add_header("Content-Disposition", f"attachment; filename={f_name}"); msg.attach(part)
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(MY_EMAIL, pwd); server.send_message(msg)
         print("Success!")
