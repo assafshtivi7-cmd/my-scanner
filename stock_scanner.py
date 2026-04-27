@@ -8,7 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email import encoders
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # --- הגדרות אישיות ---
@@ -84,7 +84,9 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
 
 # --- תצוגה ---
 def generate_html(results, market_summary):
-    now = datetime.now().strftime("%d/%m/%Y %H:%M")
+    # תיקון שעה לשעון ישראל
+    israel_time = datetime.now(timezone(timedelta(hours=3))).strftime("%d/%m/%Y %H:%M")
+    
     m_cards = "".join([f'''
         <div class="col-md-3 mb-3">
             <div class="index-card text-center p-3">
@@ -119,7 +121,7 @@ def generate_html(results, market_summary):
             body {{ background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }}
             .navbar {{ background-color: var(--card); border-bottom: 2px solid var(--accent); }}
             .index-card {{ background: var(--card); border-radius: 12px; border: 1px solid #333; }}
-            .ticker-badge {{ background: var(--accent); padding: 5px 12px; border-radius: 6px; color: #000; font-weight: 800; display: inline-block; min-width: 80px; }}
+            .ticker-badge {{ background: var(--accent) !important; padding: 5px 12px; border-radius: 6px; color: #000 !important; font-weight: 800; display: inline-block; min-width: 85px; text-decoration: none; }}
             .table {{ background-color: var(--card); color: var(--text); border-radius: 12px; overflow: hidden; }}
             .score-dot {{ width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }}
             .score-4 {{ background: #0ecb81; color: #fff; }} .score-3 {{ background: #f0b90b; color: #000; }}
@@ -130,7 +132,7 @@ def generate_html(results, market_summary):
     <body>
         <nav class="navbar mb-4 py-3 shadow"><div class="container d-flex justify-content-between align-items-center">
             <span class="h4 mb-0 fw-bold">⚡ ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
-            <span class="badge bg-dark">{now}</span>
+            <span class="badge bg-dark">עדכון אחרון: {israel_time}</span>
         </div></nav>
         <div class="container">
             <div class="row mb-4">{m_cards}</div>
@@ -142,7 +144,7 @@ def generate_html(results, market_summary):
             </div>
         </div>
         <div class="modal fade" id="chartModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>Live Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>ניתוח גרף חי</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
             <div class="modal-body" style="height: 750px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
         </div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -165,24 +167,26 @@ def create_styled_excel(df, file_name):
     df.to_excel(writer, index=False, sheet_name='Scanner')
     workbook, worksheet = writer.book, writer.sheets['Scanner']
     
-    # הגדרת פורמטים
+    # פורמטים
     header_f = workbook.add_format({'bold': True, 'bg_color': '#FFFF00', 'border': 1, 'align': 'center'})
     green_f = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100', 'align': 'center'})
     
+    # החלת כותרות
     for col_num, value in enumerate(df.columns.values):
         worksheet.write(0, col_num, value, header_f)
     
-    # החלת צביעה מותנית
+    # צביעה מותנית (בדיוק כמו שרצית)
     last_row = len(df)
     # SCORE >= 4
     worksheet.conditional_format(1, 2, last_row, 2, {'type': 'cell', 'criteria': '>=', 'value': 4, 'format': green_f})
-    # Power_Rank - סקאלה
+    # Power_Rank - סקאלת צבעים
     worksheet.conditional_format(1, 3, last_row, 3, {'type': '3_color_scale'})
-    # TREND - חץ למעלה נצבע בירוק
-    worksheet.conditional_format(1, 9, last_row, 9, {'type': 'text', 'criteria': 'containing', 'value': '↑', 'format': green_f})
+    # TREND - כל שורה עם חץ למעלה נצבעת בירוק
+    worksheet.conditional_format(1, 10, last_row, 10, {'type': 'text', 'criteria': 'containing', 'value': '↑', 'format': green_f})
     
     writer.close()
 
+# --- הרצה ראשית ---
 if __name__ == "__main__":
     try:
         spy_df = yf.download('SPY', period='1mo', progress=False)
@@ -216,7 +220,7 @@ if __name__ == "__main__":
         msg = MIMEMultipart()
         msg['Subject'] = f"🚀 COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
         msg['From'], msg['To'] = MY_EMAIL, MY_EMAIL
-        msg.attach(MIMEText("אסף, הדוח והאתר מוכנים בגרסת ה-Ultimate. הטיקרים והצבעים תוקנו.", "plain"))
+        msg.attach(MIMEText("אסף, הדוח והאתר מוכנים. כל הבאגים תוקנו - שעה, צבעים וטיקרים.", "plain"))
         with open(f_name, "rb") as f:
             part = MIMEBase("application", "octet-stream")
             part.set_payload(f.read()); encoders.encode_base64(part)
