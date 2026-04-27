@@ -11,7 +11,7 @@
             body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
             .navbar { background-color: var(--card); border-bottom: 2px solid var(--accent); }
             .index-card { background: var(--card); border-radius: 12px; border: 1px solid #333; }
-            .ticker-badge { background: var(--accent); padding: 5px 12px; border-radius: 6px; color: #000; font-weight: 800; display: inline-block; min-width: 80px; }
+            .ticker-badge { background: var(--accent) !important; padding: 5px 12px; border-radius: 6px; color: #000 !important; font-weight: 800; display: inline-block; min-width: 85px; text-decoration: none; }
             .table { background-color: var(--card); color: var(--text); border-radius: 12px; overflow: hidden; }
             .score-dot { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }
             .score-4 { background: #0ecb81; color: #fff; } .score-3 { background: #f0b90b; color: #000; }
@@ -22,7 +22,7 @@
     <body>
         <nav class="navbar mb-4 py-3 shadow"><div class="container d-flex justify-content-between align-items-center">
             <span class="h4 mb-0 fw-bold">⚡ ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
-            <span class="badge bg-dark">27/04/2026 06:57</span>
+            <span class="badge bg-dark">עדכון אחרון: 27/04/2026 10:04</span>
         </div></nav>
         <div class="container">
             <div class="row mb-4">
@@ -43,8 +43,8 @@
         <div class="col-md-3 mb-3">
             <div class="index-card text-center p-3">
                 <small class="text-muted d-block mb-1 text-uppercase">BITCOIN</small>
-                <div class="h3 mb-0 fw-bold" style="color: #fff;">77,732.80</div>
-                <div class="text-danger small fw-bold">-1.18%</div>
+                <div class="h3 mb-0 fw-bold" style="color: #fff;">77,719.93</div>
+                <div class="text-danger small fw-bold">-1.19%</div>
             </div>
         </div>
         <div class="col-md-3 mb-3">
@@ -842,7 +842,7 @@
             </div>
         </div>
         <div class="modal fade" id="chartModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>Live Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>ניתוח גרף חי</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
             <div class="modal-body" style="height: 750px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
         </div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
