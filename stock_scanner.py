@@ -27,7 +27,6 @@ WATCHLIST = [
     'HUN','SNDK','WULF','RDDT','ONDS','PANW','INTU','CRCL'
 ]
 
-# הוספנו את ה-VIX
 MARKET_INDICES = {
     "S&P 500": "^GSPC", 
     "NASDAQ": "^IXIC", 
@@ -37,27 +36,31 @@ MARKET_INDICES = {
 
 # --- לוגיקה טכנית ---
 def calc_rsi(close, period=14):
-    delta = close.diff()
-    gain = delta.clip(lower=0).ewm(alpha=1/period, adjust=False).mean()
-    loss = (-delta.clip(upper=0)).ewm(alpha=1/period, adjust=False).mean()
-    rs = gain / loss.replace(0, np.nan)
-    return round(float((100 - (100 / (1 + rs))).iloc[-1]), 1)
+    try:
+        delta = close.diff()
+        gain = delta.clip(lower=0).ewm(alpha=1/period, adjust=False).mean()
+        loss = (-delta.clip(upper=0)).ewm(alpha=1/period, adjust=False).mean()
+        rs = gain / loss.replace(0, np.nan)
+        return round(float((100 - (100 / (1 + rs))).iloc[-1]), 1)
+    except: return 50
 
 def calc_adx(df, period=14):
-    h, l, c = df['High'], df['Low'], df['Close'].squeeze()
-    tr = pd.concat([h-l, (h-c.shift()).abs(), (l-c.shift()).abs()], axis=1).max(axis=1)
-    pdm = (h.diff()).clip(lower=0)
-    mdm = (-l.diff()).clip(lower=0)
-    atr = tr.ewm(alpha=1/period, adjust=False).mean()
-    pdi = 100 * pdm.ewm(alpha=1/period, adjust=False).mean() / atr.replace(0, np.nan)
-    mdi = 100 * mdm.ewm(alpha=1/period, adjust=False).mean() / atr.replace(0, np.nan)
-    dx = 100 * (pdi - mdi).abs() / (pdi + mdi).replace(0, np.nan)
-    return round(float(dx.ewm(alpha=1/period, adjust=False).mean().iloc[-1]), 1)
+    try:
+        h, l, c = df['High'], df['Low'], df['Close'].squeeze()
+        tr = pd.concat([h-l, (h-c.shift()).abs(), (l-c.shift()).abs()], axis=1).max(axis=1)
+        pdm = (h.diff()).clip(lower=0)
+        mdm = (-l.diff()).clip(lower=0)
+        atr = tr.ewm(alpha=1/period, adjust=False).mean()
+        pdi = 100 * pdm.ewm(alpha=1/period, adjust=False).mean() / atr.replace(0, np.nan)
+        mdi = 100 * mdm.ewm(alpha=1/period, adjust=False).mean() / atr.replace(0, np.nan)
+        dx = 100 * (pdi - mdi).abs() / (pdi + mdi).replace(0, np.nan)
+        return round(float(dx.ewm(alpha=1/period, adjust=False).mean().iloc[-1]), 1)
+    except: return 20
 
 def analyze_ticker(ticker, spy_ret, prev_scores):
     try:
         df = yf.Ticker(ticker).history(period="1y")
-        if len(df) < 50: return None
+        if df.empty or len(df) < 22: return None
         close = df['Close'].squeeze()
         curr_p = float(close.iloc[-1])
         ema9, ema21 = close.ewm(span=9).mean().iloc[-1], close.ewm(span=21).mean().iloc[-1]
@@ -87,8 +90,6 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
 # --- יצירת ה-HTML המפואר ---
 def generate_html(results, market_summary):
     now = datetime.now().strftime("%d/%m/%Y %H:%M")
-    
-    # כרטיסי מדדים (כולל VIX)
     m_cards = "".join([f'''
         <div class="col-md-3 mb-3">
             <div class="card text-center shadow-sm border-{m["color"]}">
@@ -100,7 +101,6 @@ def generate_html(results, market_summary):
             </div>
         </div>''' for m in market_summary])
     
-    # טבלת מניות
     rows = "".join([f'''
         <tr onclick="showChart('{s['Ticker']}')" style="cursor: pointer;">
             <td><span class="fw-bold text-primary">{s['Ticker']}</span></td>
@@ -122,24 +122,20 @@ def generate_html(results, market_summary):
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             body {{ background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma; }}
-            .navbar {{ background: #1a2a6c; background: linear-gradient(to right, #b21f1f, #fdbb2d, #1a2a6c); }}
+            .navbar {{ background: linear-gradient(to right, #b21f1f, #fdbb2d, #1a2a6c); }}
             .table-hover tbody tr:hover {{ background-color: #e9ecef; transition: 0.3s; }}
             #chartModal .modal-dialog {{ max-width: 90%; }}
             .logo-box {{ background: white; padding: 5px 15px; border-radius: 8px; display: inline-block; }}
         </style>
     </head>
     <body>
-        <nav class="navbar navbar-dark shadow mb-4">
-            <div class="container text-center py-2">
-                <div class="logo-box">
-                    <h4 class="mb-0 fw-bold text-dark">📊 ASSAF SHTIVI | <span class="text-primary">COMMAND CENTER</span></h4>
-                </div>
+        <nav class="navbar navbar-dark shadow mb-4 text-center py-2">
+            <div class="logo-box">
+                <h4 class="mb-0 fw-bold text-dark">📊 ASSAF SHTIVI | <span class="text-primary">COMMAND CENTER</span></h4>
             </div>
         </nav>
-
         <div class="container">
             <div class="row mb-4">{m_cards}</div>
-            
             <div class="card shadow-lg">
                 <div class="card-header bg-white py-3">
                     <h5 class="mb-0 fw-bold">🔍 סורק מניות חכם - {now}</h5>
@@ -148,30 +144,19 @@ def generate_html(results, market_summary):
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0 text-center">
                         <thead class="table-light">
-                            <tr>
-                                <th>Ticker</th><th>Price</th><th>שינוי</th><th>Score</th><th>Rank</th><th>פריצה</th><th>Stop Loss</th><th>מגמה</th>
-                            </tr>
+                            <tr><th>Ticker</th><th>Price</th><th>שינוי</th><th>Score</th><th>Rank</th><th>פריצה</th><th>Stop Loss</th><th>מגמה</th></tr>
                         </thead>
                         <tbody>{rows}</tbody>
                     </table>
                 </div>
             </div>
         </div>
-
         <div class="modal fade" id="chartModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Stock View</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" style="height: 600px;">
-                        <div id="tradingview_widget" style="height: 100%;"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title" id="modalTitle">Stock View</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body" style="height: 600px;"><div id="tradingview_widget" style="height: 100%;"></div></div>
+            </div></div>
         </div>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
         <script>
@@ -191,7 +176,9 @@ def generate_html(results, market_summary):
     with open("index.html", "w", encoding="utf-8") as f: f.write(html)
 
 def send_full_email(file_path):
-    pwd = os.getenv("APP_PASSWORD").replace(" ", "")
+    pwd = os.getenv("APP_PASSWORD")
+    if not pwd: return
+    clean_pwd = pwd.replace(" ", "")
     msg = MIMEMultipart()
     msg['Subject'] = f"📊 COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
     msg['From'], msg['To'] = MY_EMAIL, MY_EMAIL
@@ -203,13 +190,16 @@ def send_full_email(file_path):
         part.add_header("Content-Disposition", f"attachment; filename={os.path.basename(file_path)}")
         msg.attach(part)
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(MY_EMAIL, pwd)
+        server.login(MY_EMAIL, clean_pwd)
         server.send_message(msg)
 
 # --- הרצה ---
 if __name__ == "__main__":
-    spy = yf.download('SPY', period='1mo', progress=False)['Close'].squeeze()
-    spy_ret = float((spy.iloc[-1] - spy.iloc[0]) / spy.iloc[0])
+    try:
+        spy_df = yf.download('SPY', period='1mo', progress=False)
+        spy_ret = float((spy_df['Close'].iloc[-1] - spy_df['Close'].iloc[0]) / spy_df['Close'].iloc[0]) if not spy_df.empty else 0
+    except: spy_ret = 0
+    
     prev_scores = json.load(open(DB_FILE)) if os.path.exists(DB_FILE) else {}
     results = []
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
@@ -220,9 +210,12 @@ if __name__ == "__main__":
     
     m_summary = []
     for n, t in MARKET_INDICES.items():
-        h = yf.Ticker(t).history(period="2d")
-        p, c = h['Close'].iloc[-1], ((h['Close'].iloc[-1]-h['Close'].iloc[-2])/h['Close'].iloc[-2])*100
-        m_summary.append({"name": n, "price": f"{p:,.2f}", "change": f"{c:+.2f}%", "color": "success" if c>=0 else "danger"})
+        try:
+            h = yf.Ticker(t).history(period="2d")
+            if h.empty or len(h) < 2: continue
+            p, c = h['Close'].iloc[-1], ((h['Close'].iloc[-1]-h['Close'].iloc[-2])/h['Close'].iloc[-2])*100
+            m_summary.append({"name": n, "price": f"{p:,.2f}", "change": f"{c:+.2f}%", "color": "success" if c>=0 else "danger"})
+        except: continue
 
     results.sort(key=lambda x: (x['SCORE'], x['Power_Rank']), reverse=True)
     f_name = f"Master_Scanner_{datetime.now().strftime('%Y-%m-%d')}.xlsx"
