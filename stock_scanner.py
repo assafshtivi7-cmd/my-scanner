@@ -11,7 +11,7 @@ from email import encoders
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# --- הגדרות ---
+# --- הגדרות אישיות ---
 MY_EMAIL = "assafshtivi7@gmail.com"
 DB_FILE = "last_run.json"
 MAX_WORKERS = 10 
@@ -28,10 +28,8 @@ WATCHLIST = [
 ]
 
 MARKET_INDICES = {
-    "S&P 500": "^GSPC", 
-    "NASDAQ": "^IXIC", 
-    "BITCOIN": "BTC-USD",
-    "VIX (VOLATILITY)": "^VIX"
+    "S&P 500": "^GSPC", "NASDAQ": "^IXIC", 
+    "BITCOIN": "BTC-USD", "VIX": "^VIX"
 }
 
 # --- לוגיקה טכנית ---
@@ -84,26 +82,27 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
         }
     except: return None
 
+# --- פונקציות תצוגה ---
 def generate_html(results, market_summary):
     now = datetime.now().strftime("%d/%m/%Y %H:%M")
     m_cards = "".join([f'''
         <div class="col-md-3 mb-3">
             <div class="index-card text-center p-3">
-                <small class="text-muted d-block mb-1">{m["name"]}</small>
-                <div class="h3 mb-0 fw-bold">{m["price"]}</div>
+                <small class="text-muted d-block mb-1 text-uppercase">{m["name"]}</small>
+                <div class="h3 mb-0 fw-bold" style="color: #fff;">{m["price"]}</div>
                 <div class="text-{m["color"]} small fw-bold">{m["change"]}</div>
             </div>
         </div>''' for m in market_summary])
     
     rows = "".join([f'''
         <tr onclick="showChart('{s['Ticker']}')">
-            <td><div class="d-flex align-items-center justify-content-center"><span class="ticker-badge">{s['Ticker']}</span></div></td>
-            <td>${s['Price']}</td>
+            <td><div class="ticker-badge">{s['Ticker']}</div></td>
+            <td class="fw-bold">${s['Price']}</td>
             <td class="fw-bold text-{'success' if s['Day_Chg_%'] > 0 else 'danger'}">{s['Day_Chg_%']}%</td>
             <td><span class="score-dot score-{s['SCORE']}">{s['SCORE']}</span></td>
-            <td class="fw-bold">{s['Power_Rank']}</td>
-            <td class="text-info">${s['Breakout']}</td>
-            <td class="text-warning">${s['Stop_Loss']}</td>
+            <td class="fw-bold" style="color: #f0b90b;">{s['Power_Rank']}</td>
+            <td style="color: #00d2ff;">${s['Breakout']}</td>
+            <td style="color: #ff9f43;">${s['Stop_Loss']}</td>
             <td>{s['TREND']}</td>
         </tr>''' for s in results])
 
@@ -116,28 +115,26 @@ def generate_html(results, market_summary):
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
         <style>
-            :root {{ --bg-color: #0b0e11; --card-bg: #1e2329; --text-main: #eaecef; --accent: #f0b90b; }}
-            body {{ background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; }}
-            .navbar {{ background-color: var(--card-bg); border-bottom: 1px solid #333; }}
-            .index-card {{ background: var(--card-bg); border-radius: 12px; border: 1px solid #333; }}
-            .ticker-badge {{ background: #2b3139; padding: 4px 12px; border-radius: 6px; color: var(--accent); font-weight: bold; }}
-            .table {{ background-color: var(--card-bg); color: var(--text-main); border-color: #333; border-radius: 12px; overflow: hidden; }}
-            .table thead {{ background-color: #2b3139; }}
-            .score-dot {{ width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }}
+            :root {{ --bg: #0b0e11; --card: #1e2329; --text: #eaecef; --accent: #f0b90b; }}
+            body {{ background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }}
+            .navbar {{ background-color: var(--card); border-bottom: 2px solid var(--accent); }}
+            .index-card {{ background: var(--card); border-radius: 12px; border: 1px solid #333; }}
+            .ticker-badge {{ background: #2b3139; padding: 5px 15px; border-radius: 6px; color: var(--accent); font-weight: 800; display: inline-block; min-width: 80px; }}
+            .table {{ background-color: var(--card); color: var(--text); border-radius: 12px; overflow: hidden; }}
+            .score-dot {{ width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }}
             .score-4 {{ background: #0ecb81; color: #fff; }} .score-3 {{ background: #f0b90b; color: #000; }}
-            .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter {{ color: var(--text-main) !important; margin-bottom: 15px; }}
-            tr:hover {{ background-color: #2b3139 !important; cursor: pointer; transition: 0.2s; }}
-            .modal-content {{ background-color: var(--card-bg); color: var(--text-main); }}
+            tr:hover {{ background-color: #2b3139 !important; cursor: pointer; }}
+            .dataTables_filter input {{ background: #2b3139 !important; color: white !important; border: 1px solid #444; }}
         </style>
     </head>
     <body>
-        <nav class="navbar mb-4 py-3 shadow-sm"><div class="container d-flex justify-content-between align-items-center">
-            <span class="h4 mb-0 fw-bold text-uppercase" style="letter-spacing: 2px;">⚡ ASSAF SHTIVI <span style="color: var(--accent);">PRO SCANNER</span></span>
-            <span class="text-muted small">{now}</span>
+        <nav class="navbar mb-4 py-3 shadow"><div class="container d-flex justify-content-between align-items-center">
+            <span class="h4 mb-0 fw-bold" style="letter-spacing: 1px;">📊 ASSAF SHTIVI <span style="color: var(--accent);">COMMAND CENTER</span></span>
+            <span class="badge bg-secondary">{now}</span>
         </div></nav>
         <div class="container">
             <div class="row mb-4">{m_cards}</div>
-            <div class="card p-4 shadow" style="background: var(--card-bg); border: none; border-radius: 16px;">
+            <div class="card p-4 shadow-lg" style="background: var(--card); border: none; border-radius: 16px;">
                 <table id="stockTable" class="table table-hover text-center align-middle">
                     <thead><tr><th>Ticker</th><th>Price</th><th>Daily %</th><th>Score</th><th>Rank</th><th>Breakout</th><th>Stop Loss</th><th>Trend</th></tr></thead>
                     <tbody>{rows}</tbody>
@@ -145,8 +142,8 @@ def generate_html(results, market_summary):
             </div>
         </div>
         <div class="modal fade" id="chartModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content"><div class="modal-header border-secondary"><h5 class="modal-title" id="modalTitle">Chart</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-            <div class="modal-body" style="height: 700px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
+            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary"><h5 class="modal-title" id="modalTitle">Chart Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body" style="height: 750px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
         </div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -154,9 +151,9 @@ def generate_html(results, market_summary):
         <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
         <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
         <script>
-            $(document).ready(function() {{ $('#stockTable').DataTable({{ "order": [[4, "desc"]], "pageLength": 25, "language": {{ "search": "חיפוש מניה:" }} }}); }});
+            $(document).ready(function() {{ $('#stockTable').DataTable({{ "order": [[4, "desc"]], "pageLength": 50, "language": {{ "search": "חיפוש:" }} }}); }});
             function showChart(ticker) {{
-                document.getElementById('modalTitle').innerText = ticker + " - Real-Time Analysis";
+                document.getElementById('modalTitle').innerText = ticker + " - Live View";
                 new bootstrap.Modal(document.getElementById('chartModal')).show();
                 new TradingView.widget({{ "autosize": true, "symbol": ticker, "interval": "D", "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "en", "container_id": "tv_widget" }});
             }}
@@ -164,23 +161,26 @@ def generate_html(results, market_summary):
     </body></html>'''
     with open("index.html", "w", encoding="utf-8") as f: f.write(html)
 
-def send_full_email(file_path):
-    pwd = os.getenv("APP_PASSWORD")
-    if not pwd: return
-    msg = MIMEMultipart()
-    msg['Subject'] = f"🚀 PRO COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
-    msg['From'], msg['To'] = MY_EMAIL, MY_EMAIL
-    msg.attach(MIMEText("אסף, האתר שודרג לגרסת ה-PRO. מצורף קובץ האקסל המלא.", "plain"))
-    with open(file_path, "rb") as f:
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(f.read())
-        encoders.encode_base64(part)
-        part.add_header("Content-Disposition", f"attachment; filename={os.path.basename(file_path)}")
-        msg.attach(part)
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(MY_EMAIL, pwd.replace(" ", ""))
-        server.send_message(msg)
+def create_styled_excel(df, file_name):
+    writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Scanner')
+    workbook, worksheet = writer.book, writer.sheets['Scanner']
+    
+    # פורמטים
+    header_f = workbook.add_format({'bold': True, 'bg_color': '#1E2329', 'font_color': '#FFFFFF', 'border': 1, 'align': 'center'})
+    green_f = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'})
+    
+    for col_num, value in enumerate(df.columns.values):
+        worksheet.write(0, col_num, value, header_f)
+    
+    # צביעה מותנית (Score >= 4)
+    worksheet.conditional_format(1, 2, len(df), 2, {'type': 'cell', 'criteria': '>=', 'value': 4, 'format': green_f})
+    # סקאלת צבעים ל-Rank
+    worksheet.conditional_format(1, 3, len(df), 3, {'type': '3_color_scale'})
+    
+    writer.close()
 
+# --- הרצה ראשית ---
 if __name__ == "__main__":
     try:
         spy_df = yf.download('SPY', period='1mo', progress=False)
@@ -198,15 +198,34 @@ if __name__ == "__main__":
     m_summary = []
     for n, t in MARKET_INDICES.items():
         try:
-            h = yf.Ticker(t).history(period="5d")
+            h = yf.Ticker(t).history(period="7d")
             p, c = h['Close'].iloc[-1], ((h['Close'].iloc[-1]-h['Close'].iloc[-2])/h['Close'].iloc[-2])*100
             m_summary.append({"name": n, "price": f"{p:,.2f}", "change": f"{c:+.2f}%", "color": "success" if c>=0 else "danger"})
         except: continue
 
     results.sort(key=lambda x: (x['SCORE'], x['Power_Rank']), reverse=True)
+    
+    # יצירת הקבצים
     f_name = f"Master_Scanner_{datetime.now().strftime('%Y-%m-%d')}.xlsx"
-    pd.DataFrame(results).to_excel(f_name, index=False)
+    create_styled_excel(pd.DataFrame(results), f_name)
     generate_html(results, m_summary)
+    
+    # שמירת היסטוריה
     json.dump({r['Ticker']: int(r['SCORE']) for r in results}, open(DB_FILE, "w"))
-    try: send_full_email(f_name); print("Success!")
+    
+    # שליחת מייל
+    try:
+        pwd = os.getenv("APP_PASSWORD").replace(" ", "")
+        msg = MIMEMultipart()
+        msg['Subject'] = f"🚀 COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
+        msg['From'], msg['To'] = MY_EMAIL, MY_EMAIL
+        msg.attach(MIMEText("הדוח המעודכן מוכן. האתר שודרג לגרסה המלאה.", "plain"))
+        with open(f_name, "rb") as f:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(f.read()); encoders.encode_base64(part)
+            part.add_header("Content-Disposition", f"attachment; filename={f_name}")
+            msg.attach(part)
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(MY_EMAIL, pwd); server.send_message(msg)
+        print("Success!")
     except Exception as e: print(f"Error: {e}")
