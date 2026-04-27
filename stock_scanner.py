@@ -120,8 +120,20 @@ def generate_html(results, market_summary):
             body {{ background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }}
             .navbar {{ background-color: var(--card); border-bottom: 2px solid var(--accent); }}
             .index-card {{ background: var(--card); border-radius: 12px; border: 1px solid #333; }}
-            /* תיקון קריטי לטיקר */
-            .ticker-box {{ background-color: #f0b90b !important; color: #000000 !important; padding: 6px 14px; border-radius: 6px; font-weight: 800 !important; display: inline-block; min-width: 90px; border: none; }}
+            
+            /* תיקון אולטימטיבי לטיקר - שחור על זהב */
+            .ticker-box {{ 
+                background-color: #f0b90b !important; 
+                color: #000000 !important; 
+                padding: 6px 14px !important; 
+                border-radius: 6px !important; 
+                font-weight: 900 !important; 
+                display: inline-block !important; 
+                min-width: 90px !important; 
+                border: 2px solid #000 !important;
+                text-align: center !important;
+            }}
+            
             .table {{ background-color: var(--card); color: var(--text); border-radius: 12px; overflow: hidden; }}
             .score-dot {{ width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }}
             .score-4 {{ background: #0ecb81; color: #fff; }} .score-3 {{ background: #f0b90b; color: #000; }}
@@ -144,7 +156,7 @@ def generate_html(results, market_summary):
             </div>
         </div>
         <div class="modal fade" id="chartModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>Real-Time Chart</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-content" style="background: #161a1e;"><div class="modal-header border-secondary text-white"><h5>Live Analysis</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
             <div class="modal-body" style="height: 750px;"><div id="tv_widget" style="height: 100%;"></div></div></div>
         </div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -204,7 +216,7 @@ if __name__ == "__main__":
         pwd = os.getenv("APP_PASSWORD").replace(" ", "")
         msg = MIMEMultipart(); msg['Subject'] = f"🚀 COMMAND CENTER REPORT - {datetime.now().strftime('%d/%m/%Y')}"
         msg['From'], msg['To'] = MY_EMAIL, MY_EMAIL
-        msg.attach(MIMEText("הדוח והאתר מוכנים. תיקון צבעים ושעון ישראל בוצע.", "plain"))
+        msg.attach(MIMEText("הדוח והאתר מוכנים. תיקון צבעים (שחור על זהב) ושעון ישראל בוצע.", "plain"))
         with open(f_name, "rb") as f:
             part = MIMEBase("application", "octet-stream"); part.set_payload(f.read()); encoders.encode_base64(part)
             part.add_header("Content-Disposition", f"attachment; filename={f_name}"); msg.attach(part)
