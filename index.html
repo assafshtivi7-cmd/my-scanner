@@ -1,1 +1,867 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>דשבורד אסף</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head><body class="bg-light"><div class="container py-4 text-center"><h1>דוח סורק מניות</h1><p>26/04/2026 15:58</p><div class="row"><div class="col-md-4 mb-3"><div class="card text-center border-success"><div class="card-body"><h6>S&P 500</h6><h3>7,165.08</h3><span class="badge bg-success">+0.80%</span></div></div></div><div class="col-md-4 mb-3"><div class="card text-center border-success"><div class="card-body"><h6>NASDAQ</h6><h3>24,836.60</h3><span class="badge bg-success">+1.63%</span></div></div></div><div class="col-md-4 mb-3"><div class="card text-center border-success"><div class="card-body"><h6>Bitcoin</h6><h3>78,066.01</h3><span class="badge bg-success">+0.58%</span></div></div></div></div><h4 class="mt-4">🔥 מניות מובילות (Power Rank)</h4><div class="row"><div class="col-md-4"><div class="card bg-success text-white mb-3"><div class="card-body">🚀 BEN: Rank 163.6</div></div></div><div class="col-md-4"><div class="card bg-success text-white mb-3"><div class="card-body">🚀 SNDK: Rank 150.6</div></div></div><div class="col-md-4"><div class="card bg-success text-white mb-3"><div class="card-body">🚀 GOOG: Rank 142.0</div></div></div></div><div class="card mt-4"><div class="card-header bg-dark text-white"><h5>Top 15 Stocks</h5></div><table class="table mb-0"><thead><tr><th>מניה</th><th>מחיר</th><th>שינוי</th><th>Score</th><th>Rank</th><th>סטטוס</th></tr></thead><tbody><tr><td><strong>BEN</strong></td><td>27.12</td><td class='text-success'>1.12%</td><td>5</td><td>163.6</td><td>⚠️ REV</td></tr><tr><td><strong>SNDK</strong></td><td>989.9</td><td class='text-success'>6.16%</td><td>4</td><td>150.6</td><td>⚠️ REV</td></tr><tr><td><strong>GOOG</strong></td><td>342.32</td><td class='text-success'>1.35%</td><td>4</td><td>142.0</td><td>⚠️ REV</td></tr><tr><td><strong>MU</strong></td><td>496.72</td><td class='text-success'>3.11%</td><td>4</td><td>141.6</td><td>⚠️ REV</td></tr><tr><td><strong>NVDA</strong></td><td>208.27</td><td class='text-success'>4.32%</td><td>4</td><td>138.8</td><td>⚠️ REV</td></tr><tr><td><strong>VRT</strong></td><td>323.46</td><td class='text-success'>0.53%</td><td>4</td><td>138.3</td><td>⚠️ REV</td></tr><tr><td><strong>IREN</strong></td><td>50.64</td><td class='text-danger'>-2.65%</td><td>4</td><td>137.6</td><td>⚠️ REV</td></tr><tr><td><strong>NEM</strong></td><td>120.7</td><td class='text-success'>8.68%</td><td>4</td><td>135.0</td><td>⚠️ REV</td></tr><tr><td><strong>AAPL</strong></td><td>271.06</td><td class='text-danger'>-0.87%</td><td>4</td><td>131.7</td><td>⚠️ REV</td></tr><tr><td><strong>ASML</strong></td><td>1457.7</td><td class='text-success'>2.81%</td><td>4</td><td>131.0</td><td>⚠️ REV</td></tr><tr><td><strong>ON</strong></td><td>98.4</td><td class='text-success'>0.63%</td><td>4</td><td>129.3</td><td>-</td></tr><tr><td><strong>EQIX</strong></td><td>1108.76</td><td class='text-danger'>-0.59%</td><td>4</td><td>125.3</td><td>-</td></tr><tr><td><strong>CNC</strong></td><td>41.82</td><td class='text-success'>1.78%</td><td>4</td><td>115.3</td><td>-</td></tr><tr><td><strong>ALLY</strong></td><td>44.18</td><td class='text-danger'>-1.87%</td><td>4</td><td>114.5</td><td>-</td></tr><tr><td><strong>HUN</strong></td><td>13.62</td><td class='text-success'>0.52%</td><td>4</td><td>113.4</td><td>-</td></tr></tbody></table></div></div></body></html>
+
+    <!DOCTYPE html>
+    <html lang="he" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>ASSAF SHTIVI | COMMAND CENTER</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma; }
+            .navbar { background: linear-gradient(to right, #b21f1f, #fdbb2d, #1a2a6c); }
+            .table-hover tbody tr:hover { background-color: #e9ecef; transition: 0.3s; }
+            #chartModal .modal-dialog { max-width: 90%; }
+            .logo-box { background: white; padding: 5px 15px; border-radius: 8px; display: inline-block; }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-dark shadow mb-4 text-center py-2">
+            <div class="logo-box">
+                <h4 class="mb-0 fw-bold text-dark">📊 ASSAF SHTIVI | <span class="text-primary">COMMAND CENTER</span></h4>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow-sm border-success">
+                <div class="card-body">
+                    <small class="text-uppercase text-muted">S&P 500</small>
+                    <h3 class="fw-bold">7,165.08</h3>
+                    <span class="badge bg-success">+0.80%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow-sm border-success">
+                <div class="card-body">
+                    <small class="text-uppercase text-muted">NASDAQ</small>
+                    <h3 class="fw-bold">24,836.60</h3>
+                    <span class="badge bg-success">+1.63%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow-sm border-danger">
+                <div class="card-body">
+                    <small class="text-uppercase text-muted">VIX (Volatility)</small>
+                    <h3 class="fw-bold">18.71</h3>
+                    <span class="badge bg-danger">-3.11%</span>
+                </div>
+            </div>
+        </div></div>
+            <div class="card shadow-lg">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">🔍 סורק מניות חכם - 27/04/2026 05:36</h5>
+                    <small class="text-muted">לחץ על מניה כדי לפתוח גרף חי</small>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 text-center">
+                        <thead class="table-light">
+                            <tr><th>Ticker</th><th>Price</th><th>שינוי</th><th>Score</th><th>Rank</th><th>פריצה</th><th>Stop Loss</th><th>מגמה</th></tr>
+                        </thead>
+                        <tbody>
+        <tr onclick="showChart('CNC')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CNC</span></td>
+            <td>$41.82</td>
+            <td class="text-success">1.78%</td>
+            <td><span class="badge bg-dark">4</span></td>
+            <td>117.4</td>
+            <td class="text-info fw-bold">41.88</td>
+            <td class="text-warning">39.35</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('BEN')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">BEN</span></td>
+            <td>$27.12</td>
+            <td class="text-success">1.12%</td>
+            <td><span class="badge bg-dark">4</span></td>
+            <td>115.8</td>
+            <td class="text-info fw-bold">28.28</td>
+            <td class="text-warning">25.66</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('IREN')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">IREN</span></td>
+            <td>$50.64</td>
+            <td class="text-danger">-2.65%</td>
+            <td><span class="badge bg-dark">4</span></td>
+            <td>114.8</td>
+            <td class="text-info fw-bold">54.14</td>
+            <td class="text-warning">43.81</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('NEM')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">NEM</span></td>
+            <td>$120.7</td>
+            <td class="text-success">8.68%</td>
+            <td><span class="badge bg-dark">4</span></td>
+            <td>112.2</td>
+            <td class="text-info fw-bold">122.0</td>
+            <td class="text-warning">112.88</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('INTC')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">INTC</span></td>
+            <td>$82.54</td>
+            <td class="text-success">23.6%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>107.2</td>
+            <td class="text-info fw-bold">85.22</td>
+            <td class="text-warning">75.65</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('AMD')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">AMD</span></td>
+            <td>$347.81</td>
+            <td class="text-success">13.91%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>106.3</td>
+            <td class="text-info fw-bold">352.99</td>
+            <td class="text-warning">326.56</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('ON')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">ON</span></td>
+            <td>$98.4</td>
+            <td class="text-success">0.63%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>104.5</td>
+            <td class="text-info fw-bold">100.3</td>
+            <td class="text-warning">92.15</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('SNDK')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">SNDK</span></td>
+            <td>$989.9</td>
+            <td class="text-success">6.16%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>102.8</td>
+            <td class="text-info fw-bold">1002.09</td>
+            <td class="text-warning">880.23</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('NVTS')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">NVTS</span></td>
+            <td>$17.28</td>
+            <td class="text-danger">-6.65%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>102.7</td>
+            <td class="text-info fw-bold">19.79</td>
+            <td class="text-warning">14.54</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('EQIX')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">EQIX</span></td>
+            <td>$1108.76</td>
+            <td class="text-danger">-0.59%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>102.4</td>
+            <td class="text-info fw-bold">1128.68</td>
+            <td class="text-warning">1067.06</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('CRML')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CRML</span></td>
+            <td>$11.51</td>
+            <td class="text-success">8.18%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>97.7</td>
+            <td class="text-info fw-bold">13.75</td>
+            <td class="text-warning">9.24</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('OKLO')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">OKLO</span></td>
+            <td>$71.0</td>
+            <td class="text-danger">-7.14%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>96.5</td>
+            <td class="text-info fw-bold">81.5</td>
+            <td class="text-warning">59.03</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('CVNA')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CVNA</span></td>
+            <td>$409.08</td>
+            <td class="text-success">1.5%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>96.4</td>
+            <td class="text-info fw-bold">416.88</td>
+            <td class="text-warning">371.73</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('GOOG')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">GOOG</span></td>
+            <td>$342.32</td>
+            <td class="text-success">1.35%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>94.2</td>
+            <td class="text-info fw-bold">343.69</td>
+            <td class="text-warning">328.87</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('MU')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">MU</span></td>
+            <td>$496.72</td>
+            <td class="text-success">3.11%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>93.8</td>
+            <td class="text-info fw-bold">506.99</td>
+            <td class="text-warning">452.39</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('ALLY')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">ALLY</span></td>
+            <td>$44.18</td>
+            <td class="text-danger">-1.87%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>91.7</td>
+            <td class="text-info fw-bold">47.02</td>
+            <td class="text-warning">41.89</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('CLSK')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CLSK</span></td>
+            <td>$12.76</td>
+            <td class="text-success">4.33%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>91.7</td>
+            <td class="text-info fw-bold">13.23</td>
+            <td class="text-warning">11.33</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('NVDA')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">NVDA</span></td>
+            <td>$208.27</td>
+            <td class="text-success">4.32%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>90.9</td>
+            <td class="text-info fw-bold">210.95</td>
+            <td class="text-warning">198.44</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('VRT')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">VRT</span></td>
+            <td>$323.46</td>
+            <td class="text-success">0.53%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>90.5</td>
+            <td class="text-info fw-bold">330.3</td>
+            <td class="text-warning">299.27</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('HUN')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">HUN</span></td>
+            <td>$13.62</td>
+            <td class="text-success">0.52%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>90.5</td>
+            <td class="text-info fw-bold">14.22</td>
+            <td class="text-warning">12.31</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('WULF')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">WULF</span></td>
+            <td>$20.01</td>
+            <td class="text-danger">-1.77%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>89.7</td>
+            <td class="text-info fw-bold">21.6</td>
+            <td class="text-warning">17.21</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('RIVN')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">RIVN</span></td>
+            <td>$16.52</td>
+            <td class="text-danger">-2.54%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>87.1</td>
+            <td class="text-info fw-bold">18.07</td>
+            <td class="text-warning">15.1</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('OSS')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">OSS</span></td>
+            <td>$9.71</td>
+            <td class="text-danger">-0.72%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>87.0</td>
+            <td class="text-info fw-bold">11.28</td>
+            <td class="text-warning">8.21</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('BTG')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">BTG</span></td>
+            <td>$4.97</td>
+            <td class="text-success">0.4%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>86.0</td>
+            <td class="text-info fw-bold">5.12</td>
+            <td class="text-warning">4.6</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('UUUU')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">UUUU</span></td>
+            <td>$20.32</td>
+            <td class="text-danger">-7.26%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>85.6</td>
+            <td class="text-info fw-bold">23.13</td>
+            <td class="text-warning">17.32</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('AAPL')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">AAPL</span></td>
+            <td>$271.06</td>
+            <td class="text-danger">-0.87%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>83.9</td>
+            <td class="text-info fw-bold">275.77</td>
+            <td class="text-warning">260.17</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('ASML')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">ASML</span></td>
+            <td>$1457.7</td>
+            <td class="text-success">2.81%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>83.1</td>
+            <td class="text-info fw-bold">1531.98</td>
+            <td class="text-warning">1369.61</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('TCMD')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">TCMD</span></td>
+            <td>$25.07</td>
+            <td class="text-success">2.54%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>82.5</td>
+            <td class="text-info fw-bold">27.07</td>
+            <td class="text-warning">22.94</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('MRNA')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">MRNA</span></td>
+            <td>$50.73</td>
+            <td class="text-danger">-4.01%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>82.2</td>
+            <td class="text-info fw-bold">56.2</td>
+            <td class="text-warning">45.45</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('ONDS')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">ONDS</span></td>
+            <td>$10.55</td>
+            <td class="text-success">0.09%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>81.7</td>
+            <td class="text-info fw-bold">11.61</td>
+            <td class="text-warning">9.09</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('SEDG')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">SEDG</span></td>
+            <td>$45.83</td>
+            <td class="text-danger">-3.23%</td>
+            <td><span class="badge bg-dark">3</span></td>
+            <td>80.8</td>
+            <td class="text-info fw-bold">53.75</td>
+            <td class="text-warning">38.84</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('WDC')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">WDC</span></td>
+            <td>$404.0</td>
+            <td class="text-success">0.22%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>78.0</td>
+            <td class="text-info fw-bold">416.37</td>
+            <td class="text-warning">368.71</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('AFRM')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">AFRM</span></td>
+            <td>$63.72</td>
+            <td class="text-success">1.17%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>76.7</td>
+            <td class="text-info fw-bold">68.74</td>
+            <td class="text-warning">57.58</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('BULL')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">BULL</span></td>
+            <td>$6.9</td>
+            <td class="text-danger">-0.14%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>75.8</td>
+            <td class="text-info fw-bold">7.52</td>
+            <td class="text-warning">6.18</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('AVGO')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">AVGO</span></td>
+            <td>$422.76</td>
+            <td class="text-success">0.67%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>75.5</td>
+            <td class="text-info fw-bold">429.31</td>
+            <td class="text-warning">400.54</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('IONQ')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">IONQ</span></td>
+            <td>$42.69</td>
+            <td class="text-danger">-2.15%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>74.4</td>
+            <td class="text-info fw-bold">49.13</td>
+            <td class="text-warning">36.23</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('AMZN')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">AMZN</span></td>
+            <td>$263.99</td>
+            <td class="text-success">3.49%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>72.0</td>
+            <td class="text-info fw-bold">264.5</td>
+            <td class="text-warning">251.73</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('MSFT')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">MSFT</span></td>
+            <td>$424.62</td>
+            <td class="text-success">2.13%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>69.1</td>
+            <td class="text-info fw-bold">433.7</td>
+            <td class="text-warning">404.78</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('MSTR')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">MSTR</span></td>
+            <td>$171.02</td>
+            <td class="text-danger">-0.84%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>68.3</td>
+            <td class="text-info fw-bold">183.25</td>
+            <td class="text-warning">153.3</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('QBTS')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">QBTS</span></td>
+            <td>$18.49</td>
+            <td class="text-danger">-4.25%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>67.4</td>
+            <td class="text-info fw-bold">22.49</td>
+            <td class="text-warning">15.49</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('ORCL')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">ORCL</span></td>
+            <td>$173.28</td>
+            <td class="text-danger">-1.7%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>67.1</td>
+            <td class="text-info fw-bold">189.18</td>
+            <td class="text-warning">157.11</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('SOFI')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">SOFI</span></td>
+            <td>$18.44</td>
+            <td class="text-success">0.66%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>66.5</td>
+            <td class="text-info fw-bold">20.13</td>
+            <td class="text-warning">16.92</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('HOOD')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">HOOD</span></td>
+            <td>$84.71</td>
+            <td class="text-success">1.4%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>66.0</td>
+            <td class="text-info fw-bold">93.32</td>
+            <td class="text-warning">76.21</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('BX')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">BX</span></td>
+            <td>$121.65</td>
+            <td class="text-danger">-0.56%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>66.0</td>
+            <td class="text-info fw-bold">133.25</td>
+            <td class="text-warning">112.92</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('SMR')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">SMR</span></td>
+            <td>$11.96</td>
+            <td class="text-danger">-5.97%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>65.4</td>
+            <td class="text-info fw-bold">14.2</td>
+            <td class="text-warning">9.65</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('META')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">META</span></td>
+            <td>$675.03</td>
+            <td class="text-success">2.41%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>65.3</td>
+            <td class="text-info fw-bold">691.52</td>
+            <td class="text-warning">641.95</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('CAT')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CAT</span></td>
+            <td>$830.79</td>
+            <td class="text-danger">-0.53%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>64.6</td>
+            <td class="text-info fw-bold">845.27</td>
+            <td class="text-warning">792.4</td>
+            <td>↓</td>
+        </tr>
+        <tr onclick="showChart('MP')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">MP</span></td>
+            <td>$60.73</td>
+            <td class="text-danger">-4.09%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>64.5</td>
+            <td class="text-info fw-bold">69.43</td>
+            <td class="text-warning">53.91</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('FUBO')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">FUBO</span></td>
+            <td>$12.01</td>
+            <td class="text-danger">-2.12%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>64.2</td>
+            <td class="text-info fw-bold">14.54</td>
+            <td class="text-warning">9.96</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('RGTI')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">RGTI</span></td>
+            <td>$16.61</td>
+            <td class="text-danger">-1.48%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>63.8</td>
+            <td class="text-info fw-bold">20.17</td>
+            <td class="text-warning">13.96</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('RDDT')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">RDDT</span></td>
+            <td>$154.89</td>
+            <td class="text-success">1.26%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>61.7</td>
+            <td class="text-info fw-bold">168.7</td>
+            <td class="text-warning">139.81</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('FISV')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">FISV</span></td>
+            <td>$60.84</td>
+            <td class="text-danger">-1.15%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>61.3</td>
+            <td class="text-info fw-bold">65.29</td>
+            <td class="text-warning">57.45</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('NNE')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">NNE</span></td>
+            <td>$24.5</td>
+            <td class="text-danger">-3.3%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>61.3</td>
+            <td class="text-info fw-bold">28.33</td>
+            <td class="text-warning">20.51</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('CRWD')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CRWD</span></td>
+            <td>$448.13</td>
+            <td class="text-success">0.62%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>61.2</td>
+            <td class="text-info fw-bold">467.95</td>
+            <td class="text-warning">406.53</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('PANW')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">PANW</span></td>
+            <td>$178.54</td>
+            <td class="text-success">3.08%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>60.5</td>
+            <td class="text-info fw-bold">181.52</td>
+            <td class="text-warning">163.63</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('OPEN')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">OPEN</span></td>
+            <td>$5.51</td>
+            <td class="text-success">5.56%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>60.2</td>
+            <td class="text-info fw-bold">6.0</td>
+            <td class="text-warning">4.82</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('BBAI')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">BBAI</span></td>
+            <td>$3.7</td>
+            <td class="text-danger">-0.8%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>59.9</td>
+            <td class="text-info fw-bold">4.13</td>
+            <td class="text-warning">3.24</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('TSLA')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">TSLA</span></td>
+            <td>$376.3</td>
+            <td class="text-success">0.69%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>59.6</td>
+            <td class="text-info fw-bold">409.28</td>
+            <td class="text-warning">347.43</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('CMG')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CMG</span></td>
+            <td>$34.21</td>
+            <td class="text-success">0.91%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>59.6</td>
+            <td class="text-info fw-bold">37.08</td>
+            <td class="text-warning">32.16</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('DDOG')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">DDOG</span></td>
+            <td>$129.48</td>
+            <td class="text-success">1.27%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>59.1</td>
+            <td class="text-info fw-bold">135.96</td>
+            <td class="text-warning">116.27</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('NOW')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">NOW</span></td>
+            <td>$90.17</td>
+            <td class="text-success">6.36%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>58.9</td>
+            <td class="text-info fw-bold">106.58</td>
+            <td class="text-warning">79.25</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('APP')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">APP</span></td>
+            <td>$448.29</td>
+            <td class="text-danger">-1.29%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>58.8</td>
+            <td class="text-info fw-bold">491.99</td>
+            <td class="text-warning">395.52</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('SHOP')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">SHOP</span></td>
+            <td>$125.83</td>
+            <td class="text-success">1.29%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>58.7</td>
+            <td class="text-info fw-bold">137.3</td>
+            <td class="text-warning">114.32</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('HL')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">HL</span></td>
+            <td>$18.8</td>
+            <td class="text-success">2.01%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>58.6</td>
+            <td class="text-info fw-bold">21.05</td>
+            <td class="text-warning">17.18</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('CRCL')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CRCL</span></td>
+            <td>$99.66</td>
+            <td class="text-danger">-0.35%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>57.4</td>
+            <td class="text-info fw-bold">111.2</td>
+            <td class="text-warning">84.25</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('BMNR')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">BMNR</span></td>
+            <td>$22.14</td>
+            <td class="text-success">0.64%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>57.2</td>
+            <td class="text-info fw-bold">24.11</td>
+            <td class="text-warning">19.74</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('AMPY')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">AMPY</span></td>
+            <td>$5.84</td>
+            <td class="text-danger">-0.85%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>54.1</td>
+            <td class="text-info fw-bold">6.7</td>
+            <td class="text-warning">5.33</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('ASTS')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">ASTS</span></td>
+            <td>$76.4</td>
+            <td class="text-danger">-2.98%</td>
+            <td><span class="badge bg-dark">2</span></td>
+            <td>49.6</td>
+            <td class="text-info fw-bold">104.15</td>
+            <td class="text-warning">62.29</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('NFLX')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">NFLX</span></td>
+            <td>$92.44</td>
+            <td class="text-danger">-0.41%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>39.3</td>
+            <td class="text-info fw-bold">108.95</td>
+            <td class="text-warning">87.46</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('MNDY')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">MNDY</span></td>
+            <td>$67.79</td>
+            <td class="text-success">4.94%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>36.0</td>
+            <td class="text-info fw-bold">73.58</td>
+            <td class="text-warning">59.87</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('ZS')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">ZS</span></td>
+            <td>$135.5</td>
+            <td class="text-success">1.9%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>34.6</td>
+            <td class="text-info fw-bold">150.5</td>
+            <td class="text-warning">120.7</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('INTU')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">INTU</span></td>
+            <td>$395.95</td>
+            <td class="text-success">3.3%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>33.2</td>
+            <td class="text-info fw-bold">435.24</td>
+            <td class="text-warning">361.78</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('LLY')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">LLY</span></td>
+            <td>$883.96</td>
+            <td class="text-danger">-3.67%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>32.9</td>
+            <td class="text-info fw-bold">976.68</td>
+            <td class="text-warning">833.83</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('CRM')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CRM</span></td>
+            <td>$178.16</td>
+            <td class="text-success">2.8%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>32.5</td>
+            <td class="text-info fw-bold">193.56</td>
+            <td class="text-warning">164.24</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('PLTR')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">PLTR</span></td>
+            <td>$143.09</td>
+            <td class="text-success">1.07%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>30.1</td>
+            <td class="text-info fw-bold">156.28</td>
+            <td class="text-warning">129.12</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('CTKB')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">CTKB</span></td>
+            <td>$4.4</td>
+            <td class="text-success">3.29%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>30.0</td>
+            <td class="text-info fw-bold">4.85</td>
+            <td class="text-warning">4.01</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('FIG')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">FIG</span></td>
+            <td>$17.47</td>
+            <td class="text-success">0.87%</td>
+            <td><span class="badge bg-dark">1</span></td>
+            <td>29.9</td>
+            <td class="text-info fw-bold">23.15</td>
+            <td class="text-warning">14.11</td>
+            <td>-</td>
+        </tr>
+        <tr onclick="showChart('NKE')" style="cursor: pointer;">
+            <td><span class="fw-bold text-primary">NKE</span></td>
+            <td>$44.69</td>
+            <td class="text-danger">-0.2%</td>
+            <td><span class="badge bg-dark">0</span></td>
+            <td>14.7</td>
+            <td class="text-info fw-bold">53.11</td>
+            <td class="text-warning">42.23</td>
+            <td>-</td>
+        </tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="chartModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title" id="modalTitle">Stock View</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body" style="height: 600px;"><div id="tradingview_widget" style="height: 100%;"></div></div>
+            </div></div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+        <script>
+            function showChart(ticker) {
+                document.getElementById('modalTitle').innerText = ticker + " - Live Chart";
+                var myModal = new bootstrap.Modal(document.getElementById('chartModal'));
+                myModal.show();
+                new TradingView.widget({
+                    "autosize": true, "symbol": ticker, "interval": "D", "timezone": "Etc/UTC",
+                    "theme": "light", "style": "1", "locale": "en", "toolbar_bg": "#f1f3f6",
+                    "enable_publishing": false, "allow_symbol_change": true, "container_id": "tradingview_widget"
+                });
+            }
+        </script>
+    </body>
+    </html>
