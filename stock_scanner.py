@@ -67,8 +67,13 @@ def analyze_ticker(ticker, spy_ret, prev_scores):
         rvol = float(df['Volume'].iloc[-1] / df['Volume'].rolling(20).mean().iloc[-1])
         rsi_val = calc_rsi(close)
         
-        is_rev = (close.diff().where(close.diff()<0,0).rolling(14).mean().abs() > close.diff().where(close.diff()>0,0).rolling(14).mean()).iloc[-15:].any() and curr_p > ema9
-        score = sum([ema9 > ema21, rvol > 1.2, curr_p > close.rolling(200).mean().iloc[-1], 40 < rsi_val < 70])
+        # חישוב ה-SCORE תוך המרה למספר פשוט של פייתון
+        score = int(sum([
+            ema9 > ema21, 
+            rvol > 1.2, 
+            curr_p > close.rolling(200).mean().iloc[-1], 
+            40 < rsi_val < 70
+        ]))
 
         adx_val = calc_adx(df)
         rs_vs_spy = round(((curr_p - float(close.iloc[-22])) / float(close.iloc[-22]) - spy_ret) * 100, 2)
@@ -221,6 +226,10 @@ if __name__ == "__main__":
     f_name = f"Master_Scanner_{datetime.now().strftime('%Y-%m-%d')}.xlsx"
     pd.DataFrame(results).to_excel(f_name, index=False)
     generate_html(results, m_summary)
-    json.dump({r['Ticker']: r['SCORE'] for r in results}, open(DB_FILE, "w"))
+    
+    # התיקון הקריטי: המרה ל-int רגיל לפני שמירת ה-JSON
+    history_data = {r['Ticker']: int(r['SCORE']) for r in results}
+    json.dump(history_data, open(DB_FILE, "w"))
+    
     try: send_full_email(f_name); print("Success!")
     except Exception as e: print(f"Error: {e}")
