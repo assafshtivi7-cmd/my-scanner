@@ -148,32 +148,33 @@ def generate_html(results, market_summary):
     il_tz       = timezone(timedelta(hours=3))
     israel_time = datetime.now(il_tz).strftime("%d/%m/%Y %H:%M")
 
-    m_cards = "".join([f'''<div class="idx {'up-card' if m['color']=='up' else 'dn-card'}">
-      <div class="idx-bar {'up-bar' if m['color']=='up' else 'dn-bar'}"></div>
-      <div class="idx-label">{m['name']}</div>
-      <div class="idx-val">{m['price']}</div>
-      <div class="idx-chg {'up' if m['color']=='up' else 'dn'}">{m['change']}</div>
+    m_cards = "".join([f'''<div class="idx">
+      <div class="idx-acc {{"up-acc" if m["color"]=="up" else "dn-acc"}}"></div>
+      <div class="{{"idx-glow-up" if m["color"]=="up" else "idx-glow-dn"}}"></div>
+      <div class="idx-lbl">{m["name"]}</div>
+      <div class="idx-val">{m["price"]}</div>
+      <div class="idx-chg {{"green" if m["color"]=="up" else "red"}}">{m["change"]}</div>
     </div>''' for m in market_summary])
 
     def score_cls(s):
-        return {4: "s4", 3: "s3", 2: "s2"}.get(s, "s1")
+        return {4:"s4", 3:"s3", 2:"s2"}.get(s, "s1")
 
     def trend_cls(t):
-        if "↑" in t: return "trend-up"
-        if "↓" in t: return "trend-dn"
-        return "trend-flat"
+        if "\u2191" in t: return "tr-up"
+        if "\u2193" in t: return "tr-dn"
+        return "tr-flat"
 
-    rows = "".join([f'''<tr onclick="openChart('{s['Ticker']}')">
-      <td><span class="ticker">{s['Ticker']}</span></td>
-      <td class="price">${s['Price']:,.2f}</td>
-      <td class="{'chg-up' if s['Day_Chg_%'] > 0 else 'chg-dn'}">{s['Day_Chg_%']:+.2f}%</td>
-      <td><span class="score-circle {score_cls(s['SCORE'])}">{s['SCORE']}</span></td>
-      <td class="rank">{s['Power_Rank']}</td>
-      <td class="adx">{s['ADX']}</td>
-      <td class="rsi-col">{s['RSI']}</td>
-      <td class="breakout">${s['Breakout']:,.2f}</td>
-      <td class="stop">${s['Stop_Loss']:,.2f}</td>
-      <td class="{trend_cls(s['TREND'])}">{s['TREND']}</td>
+    rows = "".join([f'''<tr onclick="openChart(\'{s["Ticker"]}\')" >
+      <td><span class="tkr">{s["Ticker"]}</span></td>
+      <td class="px">${s["Price"]:,.2f}</td>
+      <td class="{{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}}">{s["Day_Chg_%"]:+.2f}%</td>
+      <td><span class="{score_cls(s["SCORE"])}">{s["SCORE"]}</span></td>
+      <td class="rank-val">{s["Power_Rank"]}</td>
+      <td class="adx-val">{s["ADX"]}</td>
+      <td class="rsi-val">{s["RSI"]}</td>
+      <td class="bk-val">${s["Breakout"]:,.2f}</td>
+      <td class="sl-val">${s["Stop_Loss"]:,.2f}</td>
+      <td class="{trend_cls(s["TREND"])}">{s["TREND"]}</td>
     </tr>''' for s in results])
 
     html = f'''<!DOCTYPE html>
@@ -183,121 +184,119 @@ def generate_html(results, market_summary):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SHTIVI | COMMAND CENTER</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <style>
 *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
-:root{{
-  --bg:#080c10;--surface:#0a0e14;--panel:#0d1420;--border:#1a2332;
-  --gold:#c9aa71;--gold-dim:#7a6540;--text:#cbd5e1;--muted:#3a4a5c;
-  --up:#3fb950;--dn:#f85149;
-  --mono:'IBM Plex Mono','SF Mono','Fira Code',monospace;
-}}
-html,body{{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:12px;min-height:100vh}}
+html,body{{background:#07090d;color:#c8d4e0;font-family:'IBM Plex Mono','SF Mono',monospace;font-size:12px;min-height:100vh}}
 
-/* ── Topbar — גבוה יותר, טקסט גדול יותר ── */
-.topbar{{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 24px rgba(0,0,0,0.5)}}
-.brand{{display:flex;align-items:center;gap:14px;font-size:16px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#e2e8f0}}
-.brand-accent{{color:var(--gold)}}
-.live-dot{{width:9px;height:9px;border-radius:50%;background:var(--up);box-shadow:0 0 10px var(--up),0 0 20px rgba(63,185,80,0.3);animation:blink 2.4s ease-in-out infinite;flex-shrink:0}}
-@keyframes blink{{0%,100%{{opacity:1}}50%{{opacity:0.3}}}}
-.timestamp{{font-size:12px;color:var(--muted);border:1px solid var(--border);padding:5px 15px;border-radius:5px;letter-spacing:0.07em;background:rgba(255,255,255,0.02)}}
+/* ── Topbar ── */
+.topbar{{background:#080b10;border-bottom:1px solid #141d2a;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;box-shadow:0 1px 30px rgba(0,0,0,0.6)}}
+.brand{{display:flex;align-items:center;gap:12px}}
+.brand-name{{font-size:15px;font-weight:700;letter-spacing:0.16em;color:#dde3ec;text-transform:uppercase}}
+.brand-sub{{font-size:15px;font-weight:700;letter-spacing:0.16em;color:#e8b84b;text-transform:uppercase}}
+.live-dot{{width:8px;height:8px;border-radius:50%;background:#34d058;box-shadow:0 0 0 3px rgba(52,208,88,0.15);animation:pulse 2.4s ease-in-out infinite;flex-shrink:0}}
+@keyframes pulse{{0%,100%{{opacity:1;box-shadow:0 0 0 3px rgba(52,208,88,0.15)}}50%{{opacity:0.4;box-shadow:0 0 0 6px rgba(52,208,88,0.05)}}}}
+.ts-pill{{font-size:11px;color:#3d5068;border:1px solid #141d2a;padding:5px 14px;border-radius:6px;letter-spacing:0.06em;background:rgba(255,255,255,0.015)}}
 
-/* ── Index Cards — גדולים ויפים יותר ── */
-.indices{{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border-bottom:1px solid var(--border);background:var(--border)}}
-.idx{{
-  background:var(--surface);
-  padding:24px 30px;
-  position:relative;
-  overflow:hidden;
-  transition:background 0.2s;
-}}
-.idx:hover{{background:#0e1622}}
-/* פס צבע שמאלי ← gradient */
-.idx-bar{{position:absolute;top:0;left:0;bottom:0;width:3px}}
-.up-bar{{background:linear-gradient(180deg,var(--up) 0%,rgba(63,185,80,0.15) 100%)}}
-.dn-bar{{background:linear-gradient(180deg,var(--dn) 0%,rgba(248,81,73,0.15) 100%)}}
-/* glow פינה עליונה-שמאלית */
-.idx.up-card::after{{content:'';position:absolute;top:-20px;left:-20px;width:140px;height:140px;background:radial-gradient(circle,rgba(63,185,80,0.08) 0%,transparent 70%);pointer-events:none}}
-.idx.dn-card::after{{content:'';position:absolute;top:-20px;left:-20px;width:140px;height:140px;background:radial-gradient(circle,rgba(248,81,73,0.08) 0%,transparent 70%);pointer-events:none}}
-.idx-label{{font-size:10px;letter-spacing:0.22em;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:10px}}
-.idx-val{{font-size:28px;font-weight:700;color:#eaf0f6;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1.1}}
-.idx-chg{{font-size:14px;font-weight:600;margin-top:6px;letter-spacing:0.02em}}
-.up{{color:var(--up)}}.dn{{color:var(--dn)}}
+/* ── Index Cards ── */
+.indices{{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #141d2a;background:#141d2a;gap:1px}}
+.idx{{background:#080b10;padding:22px 26px;position:relative;overflow:hidden;transition:background 0.18s}}
+.idx:hover{{background:#0b0f18}}
+.idx-acc{{position:absolute;top:0;left:0;bottom:0;width:3px}}
+.up-acc{{background:linear-gradient(to bottom,#34d058 0%,rgba(52,208,88,0.08) 100%)}}
+.dn-acc{{background:linear-gradient(to bottom,#ff4d4d 0%,rgba(255,77,77,0.08) 100%)}}
+.idx-glow-up{{position:absolute;top:0;left:0;width:180px;height:180px;background:radial-gradient(circle at 5% 0%,rgba(52,208,88,0.09) 0%,transparent 65%);pointer-events:none}}
+.idx-glow-dn{{position:absolute;top:0;left:0;width:180px;height:180px;background:radial-gradient(circle at 5% 0%,rgba(255,77,77,0.09) 0%,transparent 65%);pointer-events:none}}
+.idx-lbl{{font-size:9px;letter-spacing:0.24em;color:#2e4258;text-transform:uppercase;font-weight:700;margin-bottom:10px;position:relative}}
+.idx-val{{font-size:28px;font-weight:700;color:#eaf0f8;letter-spacing:-0.025em;font-variant-numeric:tabular-nums;position:relative;line-height:1}}
+.idx-chg{{font-size:13px;font-weight:600;margin-top:8px;position:relative;letter-spacing:0.02em}}
+.green{{color:#34d058}}.red{{color:#ff4d4d}}
 
-/* ── Content ── */
-.content{{padding:20px 28px 48px}}
-.tbl-header{{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}}
-.section-label{{font-size:9px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:9px}}
-.section-label::before{{content:'';display:block;width:3px;height:12px;background:var(--gold);border-radius:1px;flex-shrink:0}}
-.count-pill{{font-size:9px;color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:20px;letter-spacing:0.07em}}
+/* ── Body ── */
+.body{{padding:20px 26px 48px}}
+.scanner-bar{{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}}
+.scanner-lbl{{display:flex;align-items:center;gap:9px;font-size:9px;letter-spacing:0.24em;color:#e8b84b;text-transform:uppercase;font-weight:700}}
+.scanner-lbl::before{{content:'';width:3px;height:14px;background:linear-gradient(to bottom,#e8b84b,#7a5e18);border-radius:2px;flex-shrink:0}}
+.count-badge{{font-size:9px;color:#2e4258;border:1px solid #141d2a;padding:2px 10px;border-radius:20px;letter-spacing:0.07em}}
 
-/* ── DataTables ── */
-.dataTables_wrapper{{color:var(--text)}}
+/* ── DataTables overrides ── */
+.dataTables_wrapper{{color:#c8d4e0}}
 .dataTables_wrapper .dataTables_filter,.dataTables_wrapper .dataTables_length{{margin-bottom:12px}}
-.dataTables_wrapper .dataTables_filter label,.dataTables_wrapper .dataTables_length label{{font-size:10px;color:var(--muted);letter-spacing:0.06em;display:flex;align-items:center;gap:8px}}
-.dataTables_wrapper .dataTables_filter input,.dataTables_wrapper .dataTables_length select{{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-family:var(--mono);font-size:11px;outline:none}}
-.dataTables_wrapper .dataTables_filter input:focus{{border-color:var(--gold-dim)}}
-.dataTables_wrapper .dataTables_info{{font-size:10px;color:var(--muted);padding-top:10px}}
+.dataTables_wrapper .dataTables_filter label,.dataTables_wrapper .dataTables_length label{{font-size:10px;color:#3d5068;display:flex;align-items:center;gap:8px;letter-spacing:0.05em}}
+.dataTables_wrapper .dataTables_filter input,.dataTables_wrapper .dataTables_length select{{background:#0d1420;color:#c8d4e0;border:1px solid #141d2a;border-radius:5px;padding:5px 10px;font-family:inherit;font-size:11px;outline:none;transition:border-color 0.15s}}
+.dataTables_wrapper .dataTables_filter input:focus{{border-color:#4a3a10}}
+.dataTables_wrapper .dataTables_info{{font-size:10px;color:#2e4258;padding-top:10px}}
 .dataTables_wrapper .dataTables_paginate{{padding-top:10px}}
-.dataTables_wrapper .paginate_button{{font-family:var(--mono)!important;font-size:10px!important;color:var(--muted)!important;border:1px solid var(--border)!important;border-radius:4px!important;padding:3px 8px!important;margin:0 2px!important;background:transparent!important}}
-.dataTables_wrapper .paginate_button:hover{{background:var(--panel)!important;color:var(--gold)!important;border-color:var(--gold-dim)!important}}
-.dataTables_wrapper .paginate_button.current,.dataTables_wrapper .paginate_button.current:hover{{background:var(--panel)!important;color:var(--gold)!important;border-color:var(--gold)!important}}
+.dataTables_wrapper .paginate_button{{font-family:inherit!important;font-size:10px!important;color:#3d5068!important;border:1px solid #141d2a!important;border-radius:4px!important;padding:3px 8px!important;margin:0 2px!important;background:transparent!important}}
+.dataTables_wrapper .paginate_button:hover{{background:#0d1420!important;color:#e8b84b!important;border-color:#4a3a10!important}}
+.dataTables_wrapper .paginate_button.current,.dataTables_wrapper .paginate_button.current:hover{{background:#0d1420!important;color:#e8b84b!important;border-color:#e8b84b!important}}
 
 /* ── Table ── */
-.table-wrap{{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden}}
+.tbl-wrap{{border:1px solid #141d2a;border-radius:10px;overflow:hidden;background:#080b10}}
 #stockTable{{width:100%!important;border-collapse:collapse;margin:0!important}}
-#stockTable thead th{{background:var(--surface)!important;color:var(--muted)!important;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;border:none!important;border-bottom:1px solid var(--border)!important;padding:11px 12px!important;white-space:nowrap;cursor:pointer}}
-#stockTable thead th:hover{{color:var(--gold)!important}}
-#stockTable tbody tr{{border-bottom:1px solid rgba(26,35,50,0.6);cursor:pointer;transition:background 0.1s}}
-#stockTable tbody tr:hover{{background:rgba(201,170,113,0.04)!important}}
-#stockTable tbody td{{border:none!important;padding:9px 12px!important;vertical-align:middle;text-align:right;color:#6b7a8d;font-variant-numeric:tabular-nums;font-size:12px}}
-#stockTable tbody td:first-child{{text-align:left}}
+#stockTable thead th{{background:#060810!important;color:#1e3048!important;font-size:8px!important;font-weight:700!important;letter-spacing:0.2em!important;text-transform:uppercase!important;border:none!important;border-bottom:1px solid #141d2a!important;padding:10px 12px!important;white-space:nowrap!important;cursor:pointer!important}}
+#stockTable thead th:hover{{color:#e8b84b!important}}
+#stockTable tbody tr{{border-bottom:1px solid rgba(20,29,42,0.8)!important;cursor:pointer;transition:background 0.1s}}
+#stockTable tbody tr:hover{{background:rgba(232,184,75,0.035)!important}}
+#stockTable tbody td{{border:none!important;padding:10px 12px!important;vertical-align:middle!important;text-align:right!important;font-variant-numeric:tabular-nums!important;font-size:11px!important}}
+#stockTable tbody td:first-child{{text-align:left!important}}
 
-/* ── Cells ── */
-.ticker{{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:#000!important;font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:0.07em;padding:3px 9px;border-radius:4px;min-width:60px;pointer-events:none;user-select:none}}
-tr:hover .ticker,tr:focus .ticker,tr:active .ticker{{background:var(--gold)!important;color:#000!important}}
-.price{{color:#c8d4e0!important;font-weight:600}}.rank{{color:var(--gold)!important;font-weight:700}}
-.adx{{color:#7aa6c8!important}}.rsi-col{{color:#8892a4!important}}
-.breakout{{color:#7ab8c8!important}}.stop{{color:#c87171!important}}
-.chg-up{{color:var(--up)!important;font-weight:600}}.chg-dn{{color:var(--dn)!important;font-weight:600}}
-.trend-up{{color:var(--up)!important;font-weight:600;font-size:11px}}
-.trend-dn{{color:var(--dn)!important;font-weight:600;font-size:11px}}
-.trend-flat{{color:var(--border)!important;font-size:13px}}
-.score-circle{{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--mono)}}
-.s4{{background:rgba(63,185,80,0.1);color:var(--up);border:1px solid rgba(63,185,80,0.3)}}
-.s3{{background:rgba(201,170,113,0.1);color:var(--gold);border:1px solid rgba(201,170,113,0.25)}}
-.s2{{background:rgba(26,35,50,0.8);color:#4a6080;border:1px solid var(--border)}}
-.s1{{background:rgba(248,81,73,0.08);color:var(--dn);border:1px solid rgba(248,81,73,0.2)}}
+/* ── Cell types ── */
+.tkr{{display:inline-flex;align-items:center;justify-content:center;background:#e8b84b;color:#0a0700!important;font-size:10px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:5px;min-width:60px;pointer-events:none;user-select:none;font-family:inherit}}
+tr:hover .tkr,tr:active .tkr{{background:#e8b84b!important;color:#0a0700!important}}
+.px{{color:#d4dde8!important;font-weight:600}}
+.rank-val{{color:#e8b84b!important;font-weight:700;font-size:12px!important}}
+.adx-val{{color:#5b9bd5!important}}
+.rsi-val{{color:#6a7a8a!important}}
+.bk-val{{color:#4aacbf!important}}
+.sl-val{{color:#cc5555!important}}
+.up-pct{{color:#34d058!important;font-weight:600}}
+.dn-pct{{color:#ff4d4d!important;font-weight:600}}
+.tr-up{{color:#34d058!important;font-weight:600}}
+.tr-dn{{color:#ff4d4d!important;font-weight:600}}
+.tr-flat{{color:#1a2a3a!important;font-size:13px!important}}
+
+/* ── Score circles ── */
+.s4{{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(52,208,88,0.12);color:#34d058;border:1px solid rgba(52,208,88,0.28)}}
+.s3{{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(232,184,75,0.12);color:#e8b84b;border:1px solid rgba(232,184,75,0.28)}}
+.s2{{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(20,29,42,0.9);color:#3d5068;border:1px solid #141d2a}}
+.s1{{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(255,77,77,0.08);color:#ff4d4d;border:1px solid rgba(255,77,77,0.2)}}
 
 /* ── Modal ── */
-.modal-content{{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}}
-.modal-header{{background:var(--panel);border-bottom:1px solid var(--border);padding:13px 20px;display:flex;align-items:center;justify-content:space-between}}
-.modal-title{{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold)}}
-.modal-close{{background:none;border:1px solid var(--border);color:var(--muted);font-size:13px;cursor:pointer;border-radius:4px;padding:2px 8px;font-family:var(--mono);transition:all 0.15s}}
-.modal-close:hover{{border-color:var(--muted);color:var(--text)}}
+.modal-content{{background:#080b10;border:1px solid #141d2a;border-radius:12px;overflow:hidden}}
+.modal-header{{background:#060810;border-bottom:1px solid #141d2a;padding:13px 20px;display:flex;align-items:center;justify-content:space-between}}
+.modal-title{{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#e8b84b}}
+.modal-close{{background:none;border:1px solid #141d2a;color:#3d5068;font-size:13px;cursor:pointer;border-radius:4px;padding:2px 8px;font-family:inherit;transition:all 0.15s}}
+.modal-close:hover{{border-color:#3d5068;color:#c8d4e0}}
 .modal-body{{padding:0;height:580px}}
-::-webkit-scrollbar{{width:5px;height:5px}}
-::-webkit-scrollbar-track{{background:var(--bg)}}
-::-webkit-scrollbar-thumb{{background:var(--border);border-radius:3px}}
+
+::-webkit-scrollbar{{width:4px;height:4px}}
+::-webkit-scrollbar-track{{background:#07090d}}
+::-webkit-scrollbar-thumb{{background:#141d2a;border-radius:2px}}
+::-webkit-scrollbar-thumb:hover{{background:#2e4258}}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="brand"><div class="live-dot"></div>Assaf Shtivi &nbsp;<span class="brand-accent">Command Center</span></div>
-  <div class="timestamp">IDT {israel_time}</div>
+  <div class="brand">
+    <div class="live-dot"></div>
+    <span class="brand-name">Assaf Shtivi</span>
+    <span class="brand-sub">Command Center</span>
+  </div>
+  <div class="ts-pill">IDT {israel_time}</div>
 </div>
 
 <div class="indices">{m_cards}</div>
 
-<div class="content">
-  <div class="tbl-header">
-    <div class="section-label">Watchlist Scanner</div>
-    <div class="count-pill">{len(results)} stocks</div>
+<div class="body">
+  <div class="scanner-bar">
+    <div class="scanner-lbl">Watchlist Scanner</div>
+    <div class="count-badge">{len(results)} stocks</div>
   </div>
-  <div class="table-wrap">
+  <div class="tbl-wrap">
     <table id="stockTable" class="table table-hover text-center align-middle mb-0">
       <thead><tr>
         <th style="text-align:left">Ticker</th>
@@ -314,7 +313,7 @@ tr:hover .ticker,tr:focus .ticker,tr:active .ticker{{background:var(--gold)!impo
     <div class="modal-content">
       <div class="modal-header">
         <span class="modal-title" id="chartModalLabel">Live Chart</span>
-        <button class="modal-close" data-bs-dismiss="modal">✕</button>
+        <button class="modal-close" data-bs-dismiss="modal">&#x2715;</button>
       </div>
       <div class="modal-body"><div id="tv_chart_container" style="height:100%;"></div></div>
     </div>
@@ -330,19 +329,19 @@ tr:hover .ticker,tr:focus .ticker,tr:active .ticker{{background:var(--gold)!impo
 $(document).ready(function(){{
   $('#stockTable').DataTable({{
     order:[[4,'desc']],pageLength:50,lengthMenu:[25,50,100],
-    language:{{search:'',searchPlaceholder:'חפש טיקר...'}},
+    language:{{search:'',searchPlaceholder:'\u05d7\u05e4\u05e9 \u05d8\u05d9\u05e7\u05e8...'}},
     columnDefs:[{{targets:'_all',className:''}}]
   }});
 }});
 var chartModal=new bootstrap.Modal(document.getElementById('chartModal'));
 function openChart(ticker){{
-  document.getElementById('chartModalLabel').textContent=ticker+' — Live Analysis';
+  document.getElementById('chartModalLabel').textContent=ticker+' \u2014 Live Analysis';
   document.getElementById('tv_chart_container').innerHTML='';
   chartModal.show();
   setTimeout(function(){{
     new TradingView.widget({{
       autosize:true,symbol:ticker,interval:'D',timezone:'Asia/Jerusalem',
-      theme:'dark',style:'1',locale:'en',toolbar_bg:'#0a0e14',
+      theme:'dark',style:'1',locale:'en',toolbar_bg:'#080b10',
       hide_side_toolbar:false,allow_symbol_change:true,
       container_id:'tv_chart_container'
     }});
@@ -356,7 +355,7 @@ document.getElementById('chartModal').addEventListener('hidden.bs.modal',functio
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
-    print("✅ index.html נוצר")
+    print("\u2705 index.html \u05e0\u05d5\u05e6\u05e8")
 
 
 # ─── Excel — תוקן: conditional formatting עובד נכון ────────────────────────────
