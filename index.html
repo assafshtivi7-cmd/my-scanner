@@ -5,1005 +5,1007 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SHTIVI | COMMAND CENTER</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#080c10;--surface:#0a0e14;--panel:#0d1420;--border:#1a2332;
-  --gold:#c9aa71;--gold-dim:#7a6540;--text:#cbd5e1;--muted:#3a4a5c;
-  --up:#3fb950;--dn:#f85149;
-  --mono:'IBM Plex Mono','SF Mono','Fira Code',monospace;
-}
-html,body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:12px;min-height:100vh}
+html,body{background:#07090d;color:#c8d4e0;font-family:'IBM Plex Mono','SF Mono',monospace;font-size:12px;min-height:100vh}
 
-/* ── Topbar — גבוה יותר, טקסט גדול יותר ── */
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 24px rgba(0,0,0,0.5)}
-.brand{display:flex;align-items:center;gap:14px;font-size:16px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#e2e8f0}
-.brand-accent{color:var(--gold)}
-.live-dot{width:9px;height:9px;border-radius:50%;background:var(--up);box-shadow:0 0 10px var(--up),0 0 20px rgba(63,185,80,0.3);animation:blink 2.4s ease-in-out infinite;flex-shrink:0}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.timestamp{font-size:12px;color:var(--muted);border:1px solid var(--border);padding:5px 15px;border-radius:5px;letter-spacing:0.07em;background:rgba(255,255,255,0.02)}
+/* ── Topbar ── */
+.topbar{background:#080b10;border-bottom:1px solid #141d2a;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;box-shadow:0 1px 30px rgba(0,0,0,0.6)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-name{font-size:15px;font-weight:700;letter-spacing:0.16em;color:#dde3ec;text-transform:uppercase}
+.brand-sub{font-size:15px;font-weight:700;letter-spacing:0.16em;color:#e8b84b;text-transform:uppercase}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#34d058;box-shadow:0 0 0 3px rgba(52,208,88,0.15);animation:pulse 2.4s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 3px rgba(52,208,88,0.15)}50%{opacity:0.4;box-shadow:0 0 0 6px rgba(52,208,88,0.05)}}
+.ts-pill{font-size:11px;color:#3d5068;border:1px solid #141d2a;padding:5px 14px;border-radius:6px;letter-spacing:0.06em;background:rgba(255,255,255,0.015)}
 
-/* ── Index Cards — גדולים ויפים יותר ── */
-.indices{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border-bottom:1px solid var(--border);background:var(--border)}
-.idx{
-  background:var(--surface);
-  padding:24px 30px;
-  position:relative;
-  overflow:hidden;
-  transition:background 0.2s;
-}
-.idx:hover{background:#0e1622}
-/* פס צבע שמאלי ← gradient */
-.idx-bar{position:absolute;top:0;left:0;bottom:0;width:3px}
-.up-bar{background:linear-gradient(180deg,var(--up) 0%,rgba(63,185,80,0.15) 100%)}
-.dn-bar{background:linear-gradient(180deg,var(--dn) 0%,rgba(248,81,73,0.15) 100%)}
-/* glow פינה עליונה-שמאלית */
-.idx.up-card::after{content:'';position:absolute;top:-20px;left:-20px;width:140px;height:140px;background:radial-gradient(circle,rgba(63,185,80,0.08) 0%,transparent 70%);pointer-events:none}
-.idx.dn-card::after{content:'';position:absolute;top:-20px;left:-20px;width:140px;height:140px;background:radial-gradient(circle,rgba(248,81,73,0.08) 0%,transparent 70%);pointer-events:none}
-.idx-label{font-size:10px;letter-spacing:0.22em;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:10px}
-.idx-val{font-size:28px;font-weight:700;color:#eaf0f6;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1.1}
-.idx-chg{font-size:14px;font-weight:600;margin-top:6px;letter-spacing:0.02em}
-.up{color:var(--up)}.dn{color:var(--dn)}
+/* ── Index Cards ── */
+.indices{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #141d2a;background:#141d2a;gap:1px}
+.idx{background:#080b10;padding:22px 26px;position:relative;overflow:hidden;transition:background 0.18s}
+.idx:hover{background:#0b0f18}
+.idx-acc{position:absolute;top:0;left:0;bottom:0;width:3px}
+.up-acc{background:linear-gradient(to bottom,#34d058 0%,rgba(52,208,88,0.08) 100%)}
+.dn-acc{background:linear-gradient(to bottom,#ff4d4d 0%,rgba(255,77,77,0.08) 100%)}
+.idx-glow-up{position:absolute;top:0;left:0;width:180px;height:180px;background:radial-gradient(circle at 5% 0%,rgba(52,208,88,0.09) 0%,transparent 65%);pointer-events:none}
+.idx-glow-dn{position:absolute;top:0;left:0;width:180px;height:180px;background:radial-gradient(circle at 5% 0%,rgba(255,77,77,0.09) 0%,transparent 65%);pointer-events:none}
+.idx-lbl{font-size:9px;letter-spacing:0.24em;color:#2e4258;text-transform:uppercase;font-weight:700;margin-bottom:10px;position:relative}
+.idx-val{font-size:28px;font-weight:700;color:#eaf0f8;letter-spacing:-0.025em;font-variant-numeric:tabular-nums;position:relative;line-height:1}
+.idx-chg{font-size:13px;font-weight:600;margin-top:8px;position:relative;letter-spacing:0.02em}
+.green{color:#34d058}.red{color:#ff4d4d}
 
-/* ── Content ── */
-.content{padding:20px 28px 48px}
-.tbl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.section-label{font-size:9px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:9px}
-.section-label::before{content:'';display:block;width:3px;height:12px;background:var(--gold);border-radius:1px;flex-shrink:0}
-.count-pill{font-size:9px;color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:20px;letter-spacing:0.07em}
+/* ── Body ── */
+.body{padding:20px 26px 48px}
+.scanner-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.scanner-lbl{display:flex;align-items:center;gap:9px;font-size:9px;letter-spacing:0.24em;color:#e8b84b;text-transform:uppercase;font-weight:700}
+.scanner-lbl::before{content:'';width:3px;height:14px;background:linear-gradient(to bottom,#e8b84b,#7a5e18);border-radius:2px;flex-shrink:0}
+.count-badge{font-size:9px;color:#2e4258;border:1px solid #141d2a;padding:2px 10px;border-radius:20px;letter-spacing:0.07em}
 
-/* ── DataTables ── */
-.dataTables_wrapper{color:var(--text)}
+/* ── DataTables overrides ── */
+.dataTables_wrapper{color:#c8d4e0}
 .dataTables_wrapper .dataTables_filter,.dataTables_wrapper .dataTables_length{margin-bottom:12px}
-.dataTables_wrapper .dataTables_filter label,.dataTables_wrapper .dataTables_length label{font-size:10px;color:var(--muted);letter-spacing:0.06em;display:flex;align-items:center;gap:8px}
-.dataTables_wrapper .dataTables_filter input,.dataTables_wrapper .dataTables_length select{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-family:var(--mono);font-size:11px;outline:none}
-.dataTables_wrapper .dataTables_filter input:focus{border-color:var(--gold-dim)}
-.dataTables_wrapper .dataTables_info{font-size:10px;color:var(--muted);padding-top:10px}
+.dataTables_wrapper .dataTables_filter label,.dataTables_wrapper .dataTables_length label{font-size:10px;color:#3d5068;display:flex;align-items:center;gap:8px;letter-spacing:0.05em}
+.dataTables_wrapper .dataTables_filter input,.dataTables_wrapper .dataTables_length select{background:#0d1420;color:#c8d4e0;border:1px solid #141d2a;border-radius:5px;padding:5px 10px;font-family:inherit;font-size:11px;outline:none;transition:border-color 0.15s}
+.dataTables_wrapper .dataTables_filter input:focus{border-color:#4a3a10}
+.dataTables_wrapper .dataTables_info{font-size:10px;color:#2e4258;padding-top:10px}
 .dataTables_wrapper .dataTables_paginate{padding-top:10px}
-.dataTables_wrapper .paginate_button{font-family:var(--mono)!important;font-size:10px!important;color:var(--muted)!important;border:1px solid var(--border)!important;border-radius:4px!important;padding:3px 8px!important;margin:0 2px!important;background:transparent!important}
-.dataTables_wrapper .paginate_button:hover{background:var(--panel)!important;color:var(--gold)!important;border-color:var(--gold-dim)!important}
-.dataTables_wrapper .paginate_button.current,.dataTables_wrapper .paginate_button.current:hover{background:var(--panel)!important;color:var(--gold)!important;border-color:var(--gold)!important}
+.dataTables_wrapper .paginate_button{font-family:inherit!important;font-size:10px!important;color:#3d5068!important;border:1px solid #141d2a!important;border-radius:4px!important;padding:3px 8px!important;margin:0 2px!important;background:transparent!important}
+.dataTables_wrapper .paginate_button:hover{background:#0d1420!important;color:#e8b84b!important;border-color:#4a3a10!important}
+.dataTables_wrapper .paginate_button.current,.dataTables_wrapper .paginate_button.current:hover{background:#0d1420!important;color:#e8b84b!important;border-color:#e8b84b!important}
 
 /* ── Table ── */
-.table-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.tbl-wrap{border:1px solid #141d2a;border-radius:10px;overflow:hidden;background:#080b10}
 #stockTable{width:100%!important;border-collapse:collapse;margin:0!important}
-#stockTable thead th{background:var(--surface)!important;color:var(--muted)!important;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;border:none!important;border-bottom:1px solid var(--border)!important;padding:11px 12px!important;white-space:nowrap;cursor:pointer}
-#stockTable thead th:hover{color:var(--gold)!important}
-#stockTable tbody tr{border-bottom:1px solid rgba(26,35,50,0.6);cursor:pointer;transition:background 0.1s}
-#stockTable tbody tr:hover{background:rgba(201,170,113,0.04)!important}
-#stockTable tbody td{border:none!important;padding:9px 12px!important;vertical-align:middle;text-align:right;color:#6b7a8d;font-variant-numeric:tabular-nums;font-size:12px}
-#stockTable tbody td:first-child{text-align:left}
+#stockTable thead th{background:#060810!important;color:#1e3048!important;font-size:8px!important;font-weight:700!important;letter-spacing:0.2em!important;text-transform:uppercase!important;border:none!important;border-bottom:1px solid #141d2a!important;padding:10px 12px!important;white-space:nowrap!important;cursor:pointer!important}
+#stockTable thead th:hover{color:#e8b84b!important}
+#stockTable tbody tr{border-bottom:1px solid rgba(20,29,42,0.8)!important;cursor:pointer;transition:background 0.1s}
+#stockTable tbody tr:hover{background:rgba(232,184,75,0.035)!important}
+#stockTable tbody td{border:none!important;padding:10px 12px!important;vertical-align:middle!important;text-align:right!important;font-variant-numeric:tabular-nums!important;font-size:11px!important}
+#stockTable tbody td:first-child{text-align:left!important}
 
-/* ── Cells ── */
-.ticker{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:#000!important;font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:0.07em;padding:3px 9px;border-radius:4px;min-width:60px;pointer-events:none;user-select:none}
-tr:hover .ticker,tr:focus .ticker,tr:active .ticker{background:var(--gold)!important;color:#000!important}
-.price{color:#c8d4e0!important;font-weight:600}.rank{color:var(--gold)!important;font-weight:700}
-.adx{color:#7aa6c8!important}.rsi-col{color:#8892a4!important}
-.breakout{color:#7ab8c8!important}.stop{color:#c87171!important}
-.chg-up{color:var(--up)!important;font-weight:600}.chg-dn{color:var(--dn)!important;font-weight:600}
-.trend-up{color:var(--up)!important;font-weight:600;font-size:11px}
-.trend-dn{color:var(--dn)!important;font-weight:600;font-size:11px}
-.trend-flat{color:var(--border)!important;font-size:13px}
-.score-circle{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--mono)}
-.s4{background:rgba(63,185,80,0.1);color:var(--up);border:1px solid rgba(63,185,80,0.3)}
-.s3{background:rgba(201,170,113,0.1);color:var(--gold);border:1px solid rgba(201,170,113,0.25)}
-.s2{background:rgba(26,35,50,0.8);color:#4a6080;border:1px solid var(--border)}
-.s1{background:rgba(248,81,73,0.08);color:var(--dn);border:1px solid rgba(248,81,73,0.2)}
+/* ── Cell types ── */
+.tkr{display:inline-flex;align-items:center;justify-content:center;background:#e8b84b;color:#0a0700!important;font-size:10px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:5px;min-width:60px;pointer-events:none;user-select:none;font-family:inherit}
+tr:hover .tkr,tr:active .tkr{background:#e8b84b!important;color:#0a0700!important}
+.px{color:#d4dde8!important;font-weight:600}
+.rank-val{color:#e8b84b!important;font-weight:700;font-size:12px!important}
+.adx-val{color:#5b9bd5!important}
+.rsi-val{color:#6a7a8a!important}
+.bk-val{color:#4aacbf!important}
+.sl-val{color:#cc5555!important}
+.up-pct{color:#34d058!important;font-weight:600}
+.dn-pct{color:#ff4d4d!important;font-weight:600}
+.tr-up{color:#34d058!important;font-weight:600}
+.tr-dn{color:#ff4d4d!important;font-weight:600}
+.tr-flat{color:#1a2a3a!important;font-size:13px!important}
+
+/* ── Score circles ── */
+.s4{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(52,208,88,0.12);color:#34d058;border:1px solid rgba(52,208,88,0.28)}
+.s3{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(232,184,75,0.12);color:#e8b84b;border:1px solid rgba(232,184,75,0.28)}
+.s2{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(20,29,42,0.9);color:#3d5068;border:1px solid #141d2a}
+.s1{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(255,77,77,0.08);color:#ff4d4d;border:1px solid rgba(255,77,77,0.2)}
 
 /* ── Modal ── */
-.modal-content{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.modal-header{background:var(--panel);border-bottom:1px solid var(--border);padding:13px 20px;display:flex;align-items:center;justify-content:space-between}
-.modal-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold)}
-.modal-close{background:none;border:1px solid var(--border);color:var(--muted);font-size:13px;cursor:pointer;border-radius:4px;padding:2px 8px;font-family:var(--mono);transition:all 0.15s}
-.modal-close:hover{border-color:var(--muted);color:var(--text)}
+.modal-content{background:#080b10;border:1px solid #141d2a;border-radius:12px;overflow:hidden}
+.modal-header{background:#060810;border-bottom:1px solid #141d2a;padding:13px 20px;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#e8b84b}
+.modal-close{background:none;border:1px solid #141d2a;color:#3d5068;font-size:13px;cursor:pointer;border-radius:4px;padding:2px 8px;font-family:inherit;transition:all 0.15s}
+.modal-close:hover{border-color:#3d5068;color:#c8d4e0}
 .modal-body{padding:0;height:580px}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:#07090d}
+::-webkit-scrollbar-thumb{background:#141d2a;border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:#2e4258}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="brand"><div class="live-dot"></div>Assaf Shtivi &nbsp;<span class="brand-accent">Command Center</span></div>
-  <div class="timestamp">IDT 29/04/2026 09:38</div>
+  <div class="brand">
+    <div class="live-dot"></div>
+    <span class="brand-name">Assaf Shtivi</span>
+    <span class="brand-sub">Command Center</span>
+  </div>
+  <div class="ts-pill">IDT 29/04/2026 09:51</div>
 </div>
 
-<div class="indices"><div class="idx dn-card">
-      <div class="idx-bar dn-bar"></div>
-      <div class="idx-label">S&P 500</div>
+<div class="indices"><div class="idx">
+      <div class="idx-acc {"up-acc" if m["color"]=="up" else "dn-acc"}"></div>
+      <div class="{"idx-glow-up" if m["color"]=="up" else "idx-glow-dn"}"></div>
+      <div class="idx-lbl">S&P 500</div>
       <div class="idx-val">7,139</div>
-      <div class="idx-chg dn">-0.49%</div>
-    </div><div class="idx dn-card">
-      <div class="idx-bar dn-bar"></div>
-      <div class="idx-label">NASDAQ</div>
+      <div class="idx-chg {"green" if m["color"]=="up" else "red"}">-0.49%</div>
+    </div><div class="idx">
+      <div class="idx-acc {"up-acc" if m["color"]=="up" else "dn-acc"}"></div>
+      <div class="{"idx-glow-up" if m["color"]=="up" else "idx-glow-dn"}"></div>
+      <div class="idx-lbl">NASDAQ</div>
       <div class="idx-val">24,664</div>
-      <div class="idx-chg dn">-0.90%</div>
-    </div><div class="idx dn-card">
-      <div class="idx-bar dn-bar"></div>
-      <div class="idx-label">BITCOIN</div>
-      <div class="idx-val">77,040</div>
-      <div class="idx-chg dn">-0.42%</div>
-    </div><div class="idx dn-card">
-      <div class="idx-bar dn-bar"></div>
-      <div class="idx-label">VIX (FEAR)</div>
+      <div class="idx-chg {"green" if m["color"]=="up" else "red"}">-0.90%</div>
+    </div><div class="idx">
+      <div class="idx-acc {"up-acc" if m["color"]=="up" else "dn-acc"}"></div>
+      <div class="{"idx-glow-up" if m["color"]=="up" else "idx-glow-dn"}"></div>
+      <div class="idx-lbl">BITCOIN</div>
+      <div class="idx-val">77,001</div>
+      <div class="idx-chg {"green" if m["color"]=="up" else "red"}">+0.85%</div>
+    </div><div class="idx">
+      <div class="idx-acc {"up-acc" if m["color"]=="up" else "dn-acc"}"></div>
+      <div class="{"idx-glow-up" if m["color"]=="up" else "idx-glow-dn"}"></div>
+      <div class="idx-lbl">VIX (FEAR)</div>
       <div class="idx-val">17.83</div>
-      <div class="idx-chg dn">-1.05%</div>
+      <div class="idx-chg {"green" if m["color"]=="up" else "red"}">-1.05%</div>
     </div></div>
 
-<div class="content">
-  <div class="tbl-header">
-    <div class="section-label">Watchlist Scanner</div>
-    <div class="count-pill">78 stocks</div>
+<div class="body">
+  <div class="scanner-bar">
+    <div class="scanner-lbl">Watchlist Scanner</div>
+    <div class="count-badge">78 stocks</div>
   </div>
-  <div class="table-wrap">
+  <div class="tbl-wrap">
     <table id="stockTable" class="table table-hover text-center align-middle mb-0">
       <thead><tr>
         <th style="text-align:left">Ticker</th>
         <th>Price</th><th>Day %</th><th>Score</th><th>Rank</th>
         <th>ADX</th><th>RSI</th><th>Breakout</th><th>Stop Loss</th><th>Trend</th>
       </tr></thead>
-      <tbody><tr onclick="openChart('NVTS')">
-      <td><span class="ticker">NVTS</span></td>
-      <td class="price">$15.12</td>
-      <td class="chg-dn">-17.38%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">128.6</td>
-      <td class="adx">33.2</td>
-      <td class="rsi-col">60.3</td>
-      <td class="breakout">$19.79</td>
-      <td class="stop">$11.92</td>
-      <td class="trend-up">↑ (3)</td>
-    </tr><tr onclick="openChart('EQIX')">
-      <td><span class="ticker">EQIX</span></td>
-      <td class="price">$1,076.40</td>
-      <td class="chg-dn">-1.23%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">126.0</td>
-      <td class="adx">46.1</td>
-      <td class="rsi-col">61.8</td>
-      <td class="breakout">$1,128.68</td>
-      <td class="stop">$1,032.99</td>
-      <td class="trend-up">↑ (3)</td>
-    </tr><tr onclick="openChart('AVGO')">
-      <td><span class="ticker">AVGO</span></td>
-      <td class="price">$399.83</td>
-      <td class="chg-dn">-4.39%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">125.2</td>
-      <td class="adx">34.0</td>
-      <td class="rsi-col">62.3</td>
-      <td class="breakout">$429.31</td>
-      <td class="stop">$378.28</td>
-      <td class="trend-up">↑ (3)</td>
-    </tr><tr onclick="openChart('CRML')">
-      <td><span class="ticker">CRML</span></td>
-      <td class="price">$11.86</td>
-      <td class="chg-dn">-17.92%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">125.1</td>
-      <td class="adx">26.2</td>
-      <td class="rsi-col">56.1</td>
-      <td class="breakout">$14.51</td>
-      <td class="stop">$9.09</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('GOOG')">
-      <td><span class="ticker">GOOG</span></td>
-      <td class="price">$347.50</td>
-      <td class="chg-dn">-0.29%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">122.3</td>
-      <td class="adx">31.1</td>
-      <td class="rsi-col">71.3</td>
-      <td class="breakout">$350.90</td>
-      <td class="stop">$334.00</td>
-      <td class="trend-up">↑ (3)</td>
-    </tr><tr onclick="openChart('BEN')">
-      <td><span class="ticker">BEN</span></td>
-      <td class="price">$29.46</td>
-      <td class="chg-up">+6.86%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">120.6</td>
-      <td class="adx">25.6</td>
-      <td class="rsi-col">74.4</td>
-      <td class="breakout">$29.47</td>
-      <td class="stop">$27.83</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('NVDA')">
-      <td><span class="ticker">NVDA</span></td>
-      <td class="price">$213.17</td>
-      <td class="chg-dn">-1.59%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">120.3</td>
-      <td class="adx">26.9</td>
-      <td class="rsi-col">71.0</td>
-      <td class="breakout">$216.83</td>
-      <td class="stop">$202.42</td>
-      <td class="trend-up">↑ (3)</td>
-    </tr><tr onclick="openChart('VRT')">
-      <td><span class="ticker">VRT</span></td>
-      <td class="price">$305.03</td>
-      <td class="chg-dn">-5.40%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">115.8</td>
-      <td class="adx">20.8</td>
-      <td class="rsi-col">56.9</td>
-      <td class="breakout">$330.30</td>
-      <td class="stop">$278.14</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('IREN')">
-      <td><span class="ticker">IREN</span></td>
-      <td class="price">$44.44</td>
-      <td class="chg-dn">-8.11%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">115.2</td>
-      <td class="adx">17.1</td>
-      <td class="rsi-col">50.6</td>
-      <td class="breakout">$54.14</td>
-      <td class="stop">$37.57</td>
-      <td class="trend-up">↑ (3)</td>
-    </tr><tr onclick="openChart('NEM')">
-      <td><span class="ticker">NEM</span></td>
-      <td class="price">$109.90</td>
-      <td class="chg-dn">-5.32%</td>
-      <td><span class="score-circle s4">4</span></td>
-      <td class="rank">108.9</td>
-      <td class="adx">14.0</td>
-      <td class="rsi-col">46.2</td>
-      <td class="breakout">$122.00</td>
-      <td class="stop">$102.13</td>
-      <td class="trend-up">↑ (3)</td>
-    </tr><tr onclick="openChart('AMD')">
-      <td><span class="ticker">AMD</span></td>
-      <td class="price">$323.21</td>
-      <td class="chg-dn">-3.41%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">107.7</td>
-      <td class="adx">41.3</td>
-      <td class="rsi-col">73.5</td>
-      <td class="breakout">$352.99</td>
-      <td class="stop">$298.49</td>
-      <td class="trend-up">↑ (2)</td>
-    </tr><tr onclick="openChart('ON')">
-      <td><span class="ticker">ON</span></td>
-      <td class="price">$93.30</td>
-      <td class="chg-dn">-4.83%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">106.3</td>
-      <td class="adx">38.7</td>
-      <td class="rsi-col">75.4</td>
-      <td class="breakout">$100.30</td>
-      <td class="stop">$86.58</td>
-      <td class="trend-up">↑ (2)</td>
-    </tr><tr onclick="openChart('WDC')">
-      <td><span class="ticker">WDC</span></td>
-      <td class="price">$390.99</td>
-      <td class="chg-dn">-2.43%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">104.8</td>
-      <td class="adx">38.7</td>
-      <td class="rsi-col">69.1</td>
-      <td class="breakout">$416.37</td>
-      <td class="stop">$354.67</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('SNDK')">
-      <td><span class="ticker">SNDK</span></td>
-      <td class="price">$1,002.35</td>
-      <td class="chg-dn">-6.34%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">104.7</td>
-      <td class="adx">35.3</td>
-      <td class="rsi-col">64.1</td>
-      <td class="breakout">$1,070.66</td>
-      <td class="stop">$887.60</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('AMZN')">
-      <td><span class="ticker">AMZN</span></td>
-      <td class="price">$259.70</td>
-      <td class="chg-dn">-0.54%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">99.3</td>
-      <td class="adx">33.5</td>
-      <td class="rsi-col">73.7</td>
-      <td class="breakout">$264.50</td>
-      <td class="stop">$247.89</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('MU')">
-      <td><span class="ticker">MU</span></td>
-      <td class="price">$504.29</td>
-      <td class="chg-dn">-3.86%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">97.7</td>
-      <td class="adx">24.7</td>
-      <td class="rsi-col">66.0</td>
-      <td class="breakout">$531.36</td>
-      <td class="stop">$457.15</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CVNA')">
-      <td><span class="ticker">CVNA</span></td>
-      <td class="price">$406.42</td>
-      <td class="chg-dn">-0.08%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">96.8</td>
-      <td class="adx">26.3</td>
-      <td class="rsi-col">66.5</td>
-      <td class="breakout">$416.88</td>
-      <td class="stop">$370.03</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('WULF')">
-      <td><span class="ticker">WULF</span></td>
-      <td class="price">$20.80</td>
-      <td class="chg-dn">-2.94%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">95.2</td>
-      <td class="adx">20.6</td>
-      <td class="rsi-col">61.6</td>
-      <td class="breakout">$21.60</td>
-      <td class="stop">$18.04</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('INTC')">
-      <td><span class="ticker">INTC</span></td>
-      <td class="price">$84.52</td>
-      <td class="chg-dn">-0.55%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">94.0</td>
-      <td class="adx">44.0</td>
-      <td class="rsi-col">82.2</td>
-      <td class="breakout">$87.10</td>
-      <td class="stop">$77.37</td>
-      <td class="trend-up">↑ (2)</td>
-    </tr><tr onclick="openChart('SOFI')">
-      <td><span class="ticker">SOFI</span></td>
-      <td class="price">$18.36</td>
-      <td class="chg-dn">-2.13%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">93.0</td>
-      <td class="adx">25.8</td>
-      <td class="rsi-col">53.3</td>
-      <td class="breakout">$20.13</td>
-      <td class="stop">$16.93</td>
-      <td class="trend-up">↑ (2)</td>
-    </tr><tr onclick="openChart('ALLY')">
-      <td><span class="ticker">ALLY</span></td>
-      <td class="price">$44.41</td>
-      <td class="chg-up">+0.02%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">92.9</td>
-      <td class="adx">27.1</td>
-      <td class="rsi-col">62.1</td>
-      <td class="breakout">$47.02</td>
-      <td class="stop">$42.10</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('BBAI')">
-      <td><span class="ticker">BBAI</span></td>
-      <td class="price">$4.12</td>
-      <td class="chg-up">+10.46%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">91.9</td>
-      <td class="adx">18.2</td>
-      <td class="rsi-col">60.5</td>
-      <td class="breakout">$4.16</td>
-      <td class="stop">$3.64</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CAT')">
-      <td><span class="ticker">CAT</span></td>
-      <td class="price">$817.87</td>
-      <td class="chg-dn">-1.32%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">90.5</td>
-      <td class="adx">22.0</td>
-      <td class="rsi-col">65.0</td>
-      <td class="breakout">$845.27</td>
-      <td class="stop">$779.29</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('OSS')">
-      <td><span class="ticker">OSS</span></td>
-      <td class="price">$9.27</td>
-      <td class="chg-dn">-6.83%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">90.4</td>
-      <td class="adx">20.4</td>
-      <td class="rsi-col">50.6</td>
-      <td class="breakout">$11.28</td>
-      <td class="stop">$7.68</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('HUN')">
-      <td><span class="ticker">HUN</span></td>
-      <td class="price">$13.66</td>
-      <td class="chg-dn">-0.44%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">90.0</td>
-      <td class="adx">26.1</td>
-      <td class="rsi-col">56.1</td>
-      <td class="breakout">$14.22</td>
-      <td class="stop">$12.47</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('RDDT')">
-      <td><span class="ticker">RDDT</span></td>
-      <td class="price">$147.93</td>
-      <td class="chg-dn">-7.66%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">88.9</td>
-      <td class="adx">17.1</td>
-      <td class="rsi-col">48.2</td>
-      <td class="breakout">$168.70</td>
-      <td class="stop">$132.78</td>
-      <td class="trend-up">↑ (2)</td>
-    </tr><tr onclick="openChart('UUUU')">
-      <td><span class="ticker">UUUU</span></td>
-      <td class="price">$20.59</td>
-      <td class="chg-dn">-3.42%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">87.8</td>
-      <td class="adx">17.2</td>
-      <td class="rsi-col">52.6</td>
-      <td class="breakout">$23.13</td>
-      <td class="stop">$17.60</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('RIVN')">
-      <td><span class="ticker">RIVN</span></td>
-      <td class="price">$16.14</td>
-      <td class="chg-dn">-3.47%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">87.6</td>
-      <td class="adx">20.6</td>
-      <td class="rsi-col">49.8</td>
-      <td class="breakout">$18.07</td>
-      <td class="stop">$14.78</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('OPEN')">
-      <td><span class="ticker">OPEN</span></td>
-      <td class="price">$5.48</td>
-      <td class="chg-up">+1.67%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">87.3</td>
-      <td class="adx">17.5</td>
-      <td class="rsi-col">59.7</td>
-      <td class="breakout">$6.00</td>
-      <td class="stop">$4.77</td>
-      <td class="trend-up">↑ (2)</td>
-    </tr><tr onclick="openChart('ONDS')">
-      <td><span class="ticker">ONDS</span></td>
-      <td class="price">$10.48</td>
-      <td class="chg-dn">-4.29%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">86.0</td>
-      <td class="adx">12.4</td>
-      <td class="rsi-col">53.5</td>
-      <td class="breakout">$11.61</td>
-      <td class="stop">$9.01</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CNC')">
-      <td><span class="ticker">CNC</span></td>
-      <td class="price">$49.57</td>
-      <td class="chg-up">+13.95%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">84.9</td>
-      <td class="adx">25.8</td>
-      <td class="rsi-col">82.9</td>
-      <td class="breakout">$49.99</td>
-      <td class="stop">$46.29</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('ASML')">
-      <td><span class="ticker">ASML</span></td>
-      <td class="price">$1,384.56</td>
-      <td class="chg-dn">-3.34%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">83.9</td>
-      <td class="adx">14.5</td>
-      <td class="rsi-col">46.8</td>
-      <td class="breakout">$1,528.64</td>
-      <td class="stop">$1,297.41</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('AAPL')">
-      <td><span class="ticker">AAPL</span></td>
-      <td class="price">$270.71</td>
-      <td class="chg-up">+1.16%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">83.7</td>
-      <td class="adx">12.9</td>
-      <td class="rsi-col">58.3</td>
-      <td class="breakout">$275.77</td>
-      <td class="stop">$260.66</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CTKB')">
-      <td><span class="ticker">CTKB</span></td>
-      <td class="price">$4.57</td>
-      <td class="chg-up">+2.47%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">83.4</td>
-      <td class="adx">14.0</td>
-      <td class="rsi-col">52.2</td>
-      <td class="breakout">$4.85</td>
-      <td class="stop">$4.20</td>
-      <td class="trend-up">↑ (2)</td>
-    </tr><tr onclick="openChart('SEDG')">
-      <td><span class="ticker">SEDG</span></td>
-      <td class="price">$44.29</td>
-      <td class="chg-dn">-6.52%</td>
-      <td><span class="score-circle s3">3</span></td>
-      <td class="rank">79.7</td>
-      <td class="adx">16.7</td>
-      <td class="rsi-col">51.7</td>
-      <td class="breakout">$53.75</td>
-      <td class="stop">$37.49</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('BULL')">
-      <td><span class="ticker">BULL</span></td>
-      <td class="price">$7.10</td>
-      <td class="chg-dn">-0.56%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">80.1</td>
-      <td class="adx">36.5</td>
-      <td class="rsi-col">70.1</td>
-      <td class="breakout">$7.52</td>
-      <td class="stop">$6.34</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('AFRM')">
-      <td><span class="ticker">AFRM</span></td>
-      <td class="price">$63.16</td>
-      <td class="chg-dn">-3.02%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">78.5</td>
-      <td class="adx">33.0</td>
-      <td class="rsi-col">62.6</td>
-      <td class="breakout">$68.74</td>
-      <td class="stop">$57.14</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('IONQ')">
-      <td><span class="ticker">IONQ</span></td>
-      <td class="price">$43.08</td>
-      <td class="chg-dn">-1.73%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">77.4</td>
-      <td class="adx">30.8</td>
-      <td class="rsi-col">60.4</td>
-      <td class="breakout">$49.13</td>
-      <td class="stop">$36.51</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('OKLO')">
-      <td><span class="ticker">OKLO</span></td>
-      <td class="price">$69.09</td>
-      <td class="chg-dn">-9.01%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">74.2</td>
-      <td class="adx">29.6</td>
-      <td class="rsi-col">56.6</td>
-      <td class="breakout">$81.50</td>
-      <td class="stop">$56.61</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('MSTR')">
-      <td><span class="ticker">MSTR</span></td>
-      <td class="price">$165.71</td>
-      <td class="chg-dn">-2.06%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">70.9</td>
-      <td class="adx">26.0</td>
-      <td class="rsi-col">61.2</td>
-      <td class="breakout">$183.25</td>
-      <td class="stop">$147.80</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('MSFT')">
-      <td><span class="ticker">MSFT</span></td>
-      <td class="price">$429.25</td>
-      <td class="chg-up">+1.04%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">70.5</td>
-      <td class="adx">30.9</td>
-      <td class="rsi-col">65.4</td>
-      <td class="breakout">$433.70</td>
-      <td class="stop">$409.61</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('QBTS')">
-      <td><span class="ticker">QBTS</span></td>
-      <td class="price">$18.11</td>
-      <td class="chg-dn">-3.67%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">69.5</td>
-      <td class="adx">23.9</td>
-      <td class="rsi-col">50.4</td>
-      <td class="breakout">$22.49</td>
-      <td class="stop">$15.11</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('META')">
-      <td><span class="ticker">META</span></td>
-      <td class="price">$671.34</td>
-      <td class="chg-dn">-1.07%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">68.6</td>
-      <td class="adx">23.4</td>
-      <td class="rsi-col">59.5</td>
-      <td class="breakout">$691.52</td>
-      <td class="stop">$641.74</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CLSK')">
-      <td><span class="ticker">CLSK</span></td>
-      <td class="price">$11.79</td>
-      <td class="chg-dn">-3.76%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">68.4</td>
-      <td class="adx">18.8</td>
-      <td class="rsi-col">58.4</td>
-      <td class="breakout">$13.23</td>
-      <td class="stop">$10.37</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('SMR')">
-      <td><span class="ticker">SMR</span></td>
-      <td class="price">$11.82</td>
-      <td class="chg-dn">-6.56%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">67.4</td>
-      <td class="adx">27.4</td>
-      <td class="rsi-col">50.6</td>
-      <td class="breakout">$14.20</td>
-      <td class="stop">$9.47</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('HOOD')">
-      <td><span class="ticker">HOOD</span></td>
-      <td class="price">$82.07</td>
-      <td class="chg-dn">-2.24%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">66.7</td>
-      <td class="adx">21.3</td>
-      <td class="rsi-col">53.0</td>
-      <td class="breakout">$93.32</td>
-      <td class="stop">$74.24</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('ORCL')">
-      <td><span class="ticker">ORCL</span></td>
-      <td class="price">$165.96</td>
-      <td class="chg-dn">-4.05%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">66.7</td>
-      <td class="adx">23.7</td>
-      <td class="rsi-col">52.6</td>
-      <td class="breakout">$189.18</td>
-      <td class="stop">$149.91</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('RGTI')">
-      <td><span class="ticker">RGTI</span></td>
-      <td class="price">$16.39</td>
-      <td class="chg-dn">-3.08%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">65.6</td>
-      <td class="adx">19.7</td>
-      <td class="rsi-col">48.3</td>
-      <td class="breakout">$20.17</td>
-      <td class="stop">$13.84</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('MP')">
-      <td><span class="ticker">MP</span></td>
-      <td class="price">$61.70</td>
-      <td class="chg-dn">-4.96%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">64.9</td>
-      <td class="adx">20.3</td>
-      <td class="rsi-col">53.7</td>
-      <td class="breakout">$69.43</td>
-      <td class="stop">$54.34</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('BX')">
-      <td><span class="ticker">BX</span></td>
-      <td class="price">$121.52</td>
-      <td class="chg-up">+0.96%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">64.8</td>
-      <td class="adx">23.4</td>
-      <td class="rsi-col">51.3</td>
-      <td class="breakout">$133.25</td>
-      <td class="stop">$112.84</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CRWD')">
-      <td><span class="ticker">CRWD</span></td>
-      <td class="price">$454.99</td>
-      <td class="chg-up">+0.08%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">63.2</td>
-      <td class="adx">14.9</td>
-      <td class="rsi-col">60.9</td>
-      <td class="breakout">$467.95</td>
-      <td class="stop">$417.10</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('PANW')">
-      <td><span class="ticker">PANW</span></td>
-      <td class="price">$180.99</td>
-      <td class="chg-dn">-1.04%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">62.9</td>
-      <td class="adx">14.3</td>
-      <td class="rsi-col">61.0</td>
-      <td class="breakout">$186.00</td>
-      <td class="stop">$166.88</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('FISV')">
-      <td><span class="ticker">FISV</span></td>
-      <td class="price">$61.60</td>
-      <td class="chg-up">+0.54%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">62.6</td>
-      <td class="adx">18.1</td>
-      <td class="rsi-col">56.9</td>
-      <td class="breakout">$65.29</td>
-      <td class="stop">$58.34</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('NNE')">
-      <td><span class="ticker">NNE</span></td>
-      <td class="price">$23.71</td>
-      <td class="chg-dn">-7.96%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">62.1</td>
-      <td class="adx">15.8</td>
-      <td class="rsi-col">49.8</td>
-      <td class="breakout">$28.33</td>
-      <td class="stop">$19.68</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('DDOG')">
-      <td><span class="ticker">DDOG</span></td>
-      <td class="price">$131.55</td>
-      <td class="chg-dn">-0.84%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">61.8</td>
-      <td class="adx">16.2</td>
-      <td class="rsi-col">60.0</td>
-      <td class="breakout">$136.00</td>
-      <td class="stop">$118.76</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('APP')">
-      <td><span class="ticker">APP</span></td>
-      <td class="price">$449.03</td>
-      <td class="chg-dn">-2.45%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">61.7</td>
-      <td class="adx">14.6</td>
-      <td class="rsi-col">51.2</td>
-      <td class="breakout">$491.99</td>
-      <td class="stop">$402.28</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('TSLA')">
-      <td><span class="ticker">TSLA</span></td>
-      <td class="price">$376.02</td>
-      <td class="chg-dn">-0.70%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">60.1</td>
-      <td class="adx">18.2</td>
-      <td class="rsi-col">48.8</td>
-      <td class="breakout">$409.28</td>
-      <td class="stop">$348.45</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('BMNR')">
-      <td><span class="ticker">BMNR</span></td>
-      <td class="price">$21.48</td>
-      <td class="chg-dn">-0.32%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">59.8</td>
-      <td class="adx">11.2</td>
-      <td class="rsi-col">49.6</td>
-      <td class="breakout">$24.11</td>
-      <td class="stop">$19.11</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CMG')">
-      <td><span class="ticker">CMG</span></td>
-      <td class="price">$32.87</td>
-      <td class="chg-dn">-2.29%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">59.1</td>
-      <td class="adx">15.0</td>
-      <td class="rsi-col">40.1</td>
-      <td class="breakout">$37.08</td>
-      <td class="stop">$30.88</td>
-      <td class="trend-up">↑ (1)</td>
-    </tr><tr onclick="openChart('SHOP')">
-      <td><span class="ticker">SHOP</span></td>
-      <td class="price">$122.05</td>
-      <td class="chg-dn">-1.75%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">58.6</td>
-      <td class="adx">12.6</td>
-      <td class="rsi-col">48.3</td>
-      <td class="breakout">$137.30</td>
-      <td class="stop">$110.93</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('HL')">
-      <td><span class="ticker">HL</span></td>
-      <td class="price">$17.84</td>
-      <td class="chg-dn">-4.19%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">58.1</td>
-      <td class="adx">16.4</td>
-      <td class="rsi-col">40.6</td>
-      <td class="breakout">$21.05</td>
-      <td class="stop">$16.47</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('TCMD')">
-      <td><span class="ticker">TCMD</span></td>
-      <td class="price">$23.57</td>
-      <td class="chg-dn">-2.76%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">55.9</td>
-      <td class="adx">17.1</td>
-      <td class="rsi-col">36.5</td>
-      <td class="breakout">$27.07</td>
-      <td class="stop">$21.36</td>
-      <td class="trend-up">↑ (1)</td>
-    </tr><tr onclick="openChart('AMPY')">
-      <td><span class="ticker">AMPY</span></td>
-      <td class="price">$6.16</td>
-      <td class="chg-up">+2.67%</td>
-      <td><span class="score-circle s2">2</span></td>
-      <td class="rank">54.9</td>
-      <td class="adx">12.9</td>
-      <td class="rsi-col">57.1</td>
-      <td class="breakout">$6.66</td>
-      <td class="stop">$5.70</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('FUBO')">
-      <td><span class="ticker">FUBO</span></td>
-      <td class="price">$11.49</td>
-      <td class="chg-dn">-0.95%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">41.0</td>
-      <td class="adx">20.1</td>
-      <td class="rsi-col">40.8</td>
-      <td class="breakout">$14.54</td>
-      <td class="stop">$9.75</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('NFLX')">
-      <td><span class="ticker">NFLX</span></td>
-      <td class="price">$92.27</td>
-      <td class="chg-up">+0.98%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">37.9</td>
-      <td class="adx">26.5</td>
-      <td class="rsi-col">41.3</td>
-      <td class="breakout">$108.95</td>
-      <td class="stop">$87.39</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('MNDY')">
-      <td><span class="ticker">MNDY</span></td>
-      <td class="price">$67.25</td>
-      <td class="chg-dn">-1.13%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">35.3</td>
-      <td class="adx">20.1</td>
-      <td class="rsi-col">47.2</td>
-      <td class="breakout">$73.58</td>
-      <td class="stop">$59.37</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('NOW')">
-      <td><span class="ticker">NOW</span></td>
-      <td class="price">$90.49</td>
-      <td class="chg-up">+0.04%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">34.8</td>
-      <td class="adx">24.1</td>
-      <td class="rsi-col">41.8</td>
-      <td class="breakout">$106.58</td>
-      <td class="stop">$80.14</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('ZS')">
-      <td><span class="ticker">ZS</span></td>
-      <td class="price">$136.07</td>
-      <td class="chg-up">+1.46%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">34.5</td>
-      <td class="adx">17.9</td>
-      <td class="rsi-col">47.3</td>
-      <td class="breakout">$150.50</td>
-      <td class="stop">$122.96</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('INTU')">
-      <td><span class="ticker">INTU</span></td>
-      <td class="price">$400.38</td>
-      <td class="chg-up">+2.68%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">33.0</td>
-      <td class="adx">17.8</td>
-      <td class="rsi-col">48.6</td>
-      <td class="breakout">$435.24</td>
-      <td class="stop">$369.12</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('MRNA')">
-      <td><span class="ticker">MRNA</span></td>
-      <td class="price">$47.14</td>
-      <td class="chg-dn">-3.20%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">32.8</td>
-      <td class="adx">18.0</td>
-      <td class="rsi-col">37.8</td>
-      <td class="breakout">$56.20</td>
-      <td class="stop">$41.78</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CRCL')">
-      <td><span class="ticker">CRCL</span></td>
-      <td class="price">$94.35</td>
-      <td class="chg-dn">-1.14%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">32.7</td>
-      <td class="adx">15.1</td>
-      <td class="rsi-col">45.5</td>
-      <td class="breakout">$111.20</td>
-      <td class="stop">$80.14</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('CRM')">
-      <td><span class="ticker">CRM</span></td>
-      <td class="price">$181.32</td>
-      <td class="chg-up">+0.63%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">32.6</td>
-      <td class="adx">14.5</td>
-      <td class="rsi-col">48.5</td>
-      <td class="breakout">$193.56</td>
-      <td class="stop">$168.20</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('PLTR')">
-      <td><span class="ticker">PLTR</span></td>
-      <td class="price">$141.18</td>
-      <td class="chg-dn">-1.34%</td>
-      <td><span class="score-circle s1">1</span></td>
-      <td class="rank">30.9</td>
-      <td class="adx">12.5</td>
-      <td class="rsi-col">46.8</td>
-      <td class="breakout">$156.28</td>
-      <td class="stop">$129.42</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('NKE')">
-      <td><span class="ticker">NKE</span></td>
-      <td class="price">$45.03</td>
-      <td class="chg-dn">-0.24%</td>
-      <td><span class="score-circle s1">0</span></td>
-      <td class="rank">14.9</td>
-      <td class="adx">36.0</td>
-      <td class="rsi-col">37.4</td>
-      <td class="breakout">$53.11</td>
-      <td class="stop">$42.74</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('LLY')">
-      <td><span class="ticker">LLY</span></td>
-      <td class="price">$874.00</td>
-      <td class="chg-up">+0.66%</td>
-      <td><span class="score-circle s1">0</span></td>
-      <td class="rank">9.9</td>
-      <td class="adx">20.0</td>
-      <td class="rsi-col">37.3</td>
-      <td class="breakout">$976.68</td>
-      <td class="stop">$827.34</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('BTG')">
-      <td><span class="ticker">BTG</span></td>
-      <td class="price">$4.39</td>
-      <td class="chg-dn">-3.30%</td>
-      <td><span class="score-circle s1">0</span></td>
-      <td class="rank">8.2</td>
-      <td class="adx">14.8</td>
-      <td class="rsi-col">38.6</td>
-      <td class="breakout">$5.12</td>
-      <td class="stop">$4.02</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('FIG')">
-      <td><span class="ticker">FIG</span></td>
-      <td class="price">$17.18</td>
-      <td class="chg-dn">-0.75%</td>
-      <td><span class="score-circle s1">0</span></td>
-      <td class="rank">5.3</td>
-      <td class="adx">18.1</td>
-      <td class="rsi-col">34.2</td>
-      <td class="breakout">$23.15</td>
-      <td class="stop">$14.18</td>
-      <td class="trend-flat">-</td>
-    </tr><tr onclick="openChart('ASTS')">
-      <td><span class="ticker">ASTS</span></td>
-      <td class="price">$71.88</td>
-      <td class="chg-dn">-6.89%</td>
-      <td><span class="score-circle s1">0</span></td>
-      <td class="rank">3.1</td>
-      <td class="adx">10.6</td>
-      <td class="rsi-col">38.0</td>
-      <td class="breakout">$104.15</td>
-      <td class="stop">$58.46</td>
-      <td class="trend-flat">-</td>
+      <tbody><tr onclick="openChart('NVTS')" >
+      <td><span class="tkr">NVTS</span></td>
+      <td class="px">$15.12</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-17.38%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">128.6</td>
+      <td class="adx-val">33.2</td>
+      <td class="rsi-val">60.3</td>
+      <td class="bk-val">$19.79</td>
+      <td class="sl-val">$11.92</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('EQIX')" >
+      <td><span class="tkr">EQIX</span></td>
+      <td class="px">$1,076.40</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.23%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">126.0</td>
+      <td class="adx-val">46.1</td>
+      <td class="rsi-val">61.8</td>
+      <td class="bk-val">$1,128.68</td>
+      <td class="sl-val">$1,032.99</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('AVGO')" >
+      <td><span class="tkr">AVGO</span></td>
+      <td class="px">$399.83</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-4.39%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">125.2</td>
+      <td class="adx-val">34.0</td>
+      <td class="rsi-val">62.3</td>
+      <td class="bk-val">$429.31</td>
+      <td class="sl-val">$378.28</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CRML')" >
+      <td><span class="tkr">CRML</span></td>
+      <td class="px">$11.86</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-17.92%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">125.1</td>
+      <td class="adx-val">26.2</td>
+      <td class="rsi-val">56.1</td>
+      <td class="bk-val">$14.51</td>
+      <td class="sl-val">$9.09</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('GOOG')" >
+      <td><span class="tkr">GOOG</span></td>
+      <td class="px">$347.50</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.29%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">122.3</td>
+      <td class="adx-val">31.1</td>
+      <td class="rsi-val">71.3</td>
+      <td class="bk-val">$350.90</td>
+      <td class="sl-val">$334.00</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('BEN')" >
+      <td><span class="tkr">BEN</span></td>
+      <td class="px">$29.46</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+6.86%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">120.6</td>
+      <td class="adx-val">25.6</td>
+      <td class="rsi-val">74.4</td>
+      <td class="bk-val">$29.47</td>
+      <td class="sl-val">$27.83</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('NVDA')" >
+      <td><span class="tkr">NVDA</span></td>
+      <td class="px">$213.17</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.59%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">120.3</td>
+      <td class="adx-val">26.9</td>
+      <td class="rsi-val">71.0</td>
+      <td class="bk-val">$216.83</td>
+      <td class="sl-val">$202.42</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('VRT')" >
+      <td><span class="tkr">VRT</span></td>
+      <td class="px">$305.03</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-5.40%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">115.8</td>
+      <td class="adx-val">20.8</td>
+      <td class="rsi-val">56.9</td>
+      <td class="bk-val">$330.30</td>
+      <td class="sl-val">$278.14</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('IREN')" >
+      <td><span class="tkr">IREN</span></td>
+      <td class="px">$44.44</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-8.11%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">115.2</td>
+      <td class="adx-val">17.1</td>
+      <td class="rsi-val">50.6</td>
+      <td class="bk-val">$54.14</td>
+      <td class="sl-val">$37.57</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('NEM')" >
+      <td><span class="tkr">NEM</span></td>
+      <td class="px">$109.90</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-5.32%</td>
+      <td><span class="s4">4</span></td>
+      <td class="rank-val">108.9</td>
+      <td class="adx-val">14.0</td>
+      <td class="rsi-val">46.2</td>
+      <td class="bk-val">$122.00</td>
+      <td class="sl-val">$102.13</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('AMD')" >
+      <td><span class="tkr">AMD</span></td>
+      <td class="px">$323.21</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.41%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">107.7</td>
+      <td class="adx-val">41.3</td>
+      <td class="rsi-val">73.5</td>
+      <td class="bk-val">$352.99</td>
+      <td class="sl-val">$298.49</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('ON')" >
+      <td><span class="tkr">ON</span></td>
+      <td class="px">$93.30</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-4.83%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">106.3</td>
+      <td class="adx-val">38.7</td>
+      <td class="rsi-val">75.4</td>
+      <td class="bk-val">$100.30</td>
+      <td class="sl-val">$86.58</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('WDC')" >
+      <td><span class="tkr">WDC</span></td>
+      <td class="px">$390.99</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.43%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">104.8</td>
+      <td class="adx-val">38.7</td>
+      <td class="rsi-val">69.1</td>
+      <td class="bk-val">$416.37</td>
+      <td class="sl-val">$354.67</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('SNDK')" >
+      <td><span class="tkr">SNDK</span></td>
+      <td class="px">$1,002.35</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-6.34%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">104.7</td>
+      <td class="adx-val">35.3</td>
+      <td class="rsi-val">64.1</td>
+      <td class="bk-val">$1,070.66</td>
+      <td class="sl-val">$887.60</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('AMZN')" >
+      <td><span class="tkr">AMZN</span></td>
+      <td class="px">$259.70</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.54%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">99.3</td>
+      <td class="adx-val">33.5</td>
+      <td class="rsi-val">73.7</td>
+      <td class="bk-val">$264.50</td>
+      <td class="sl-val">$247.89</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('MU')" >
+      <td><span class="tkr">MU</span></td>
+      <td class="px">$504.29</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.86%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">97.7</td>
+      <td class="adx-val">24.7</td>
+      <td class="rsi-val">66.0</td>
+      <td class="bk-val">$531.36</td>
+      <td class="sl-val">$457.15</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CVNA')" >
+      <td><span class="tkr">CVNA</span></td>
+      <td class="px">$406.42</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.08%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">96.8</td>
+      <td class="adx-val">26.3</td>
+      <td class="rsi-val">66.5</td>
+      <td class="bk-val">$416.88</td>
+      <td class="sl-val">$370.03</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('WULF')" >
+      <td><span class="tkr">WULF</span></td>
+      <td class="px">$20.80</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.94%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">95.2</td>
+      <td class="adx-val">20.6</td>
+      <td class="rsi-val">61.6</td>
+      <td class="bk-val">$21.60</td>
+      <td class="sl-val">$18.04</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('INTC')" >
+      <td><span class="tkr">INTC</span></td>
+      <td class="px">$84.52</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.55%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">94.0</td>
+      <td class="adx-val">44.0</td>
+      <td class="rsi-val">82.2</td>
+      <td class="bk-val">$87.10</td>
+      <td class="sl-val">$77.37</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('SOFI')" >
+      <td><span class="tkr">SOFI</span></td>
+      <td class="px">$18.36</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.13%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">93.0</td>
+      <td class="adx-val">25.8</td>
+      <td class="rsi-val">53.3</td>
+      <td class="bk-val">$20.13</td>
+      <td class="sl-val">$16.93</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('ALLY')" >
+      <td><span class="tkr">ALLY</span></td>
+      <td class="px">$44.41</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.02%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">92.9</td>
+      <td class="adx-val">27.1</td>
+      <td class="rsi-val">62.1</td>
+      <td class="bk-val">$47.02</td>
+      <td class="sl-val">$42.10</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('BBAI')" >
+      <td><span class="tkr">BBAI</span></td>
+      <td class="px">$4.12</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+10.46%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">91.9</td>
+      <td class="adx-val">18.2</td>
+      <td class="rsi-val">60.5</td>
+      <td class="bk-val">$4.16</td>
+      <td class="sl-val">$3.64</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CAT')" >
+      <td><span class="tkr">CAT</span></td>
+      <td class="px">$817.87</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.32%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">90.5</td>
+      <td class="adx-val">22.0</td>
+      <td class="rsi-val">65.0</td>
+      <td class="bk-val">$845.27</td>
+      <td class="sl-val">$779.29</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('OSS')" >
+      <td><span class="tkr">OSS</span></td>
+      <td class="px">$9.27</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-6.83%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">90.4</td>
+      <td class="adx-val">20.4</td>
+      <td class="rsi-val">50.6</td>
+      <td class="bk-val">$11.28</td>
+      <td class="sl-val">$7.68</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('HUN')" >
+      <td><span class="tkr">HUN</span></td>
+      <td class="px">$13.66</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.44%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">90.0</td>
+      <td class="adx-val">26.1</td>
+      <td class="rsi-val">56.1</td>
+      <td class="bk-val">$14.22</td>
+      <td class="sl-val">$12.47</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('RDDT')" >
+      <td><span class="tkr">RDDT</span></td>
+      <td class="px">$147.93</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-7.66%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">88.9</td>
+      <td class="adx-val">17.1</td>
+      <td class="rsi-val">48.2</td>
+      <td class="bk-val">$168.70</td>
+      <td class="sl-val">$132.78</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('UUUU')" >
+      <td><span class="tkr">UUUU</span></td>
+      <td class="px">$20.59</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.42%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">87.8</td>
+      <td class="adx-val">17.2</td>
+      <td class="rsi-val">52.6</td>
+      <td class="bk-val">$23.13</td>
+      <td class="sl-val">$17.60</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('RIVN')" >
+      <td><span class="tkr">RIVN</span></td>
+      <td class="px">$16.14</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.47%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">87.6</td>
+      <td class="adx-val">20.6</td>
+      <td class="rsi-val">49.8</td>
+      <td class="bk-val">$18.07</td>
+      <td class="sl-val">$14.78</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('OPEN')" >
+      <td><span class="tkr">OPEN</span></td>
+      <td class="px">$5.48</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+1.67%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">87.3</td>
+      <td class="adx-val">17.5</td>
+      <td class="rsi-val">59.7</td>
+      <td class="bk-val">$6.00</td>
+      <td class="sl-val">$4.77</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('ONDS')" >
+      <td><span class="tkr">ONDS</span></td>
+      <td class="px">$10.48</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-4.29%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">86.0</td>
+      <td class="adx-val">12.4</td>
+      <td class="rsi-val">53.5</td>
+      <td class="bk-val">$11.61</td>
+      <td class="sl-val">$9.01</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CNC')" >
+      <td><span class="tkr">CNC</span></td>
+      <td class="px">$49.57</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+13.95%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">84.9</td>
+      <td class="adx-val">25.8</td>
+      <td class="rsi-val">82.9</td>
+      <td class="bk-val">$49.99</td>
+      <td class="sl-val">$46.29</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('ASML')" >
+      <td><span class="tkr">ASML</span></td>
+      <td class="px">$1,384.56</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.34%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">83.9</td>
+      <td class="adx-val">14.5</td>
+      <td class="rsi-val">46.8</td>
+      <td class="bk-val">$1,528.64</td>
+      <td class="sl-val">$1,297.41</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('AAPL')" >
+      <td><span class="tkr">AAPL</span></td>
+      <td class="px">$270.71</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+1.16%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">83.7</td>
+      <td class="adx-val">12.9</td>
+      <td class="rsi-val">58.3</td>
+      <td class="bk-val">$275.77</td>
+      <td class="sl-val">$260.66</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CTKB')" >
+      <td><span class="tkr">CTKB</span></td>
+      <td class="px">$4.57</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+2.47%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">83.4</td>
+      <td class="adx-val">14.0</td>
+      <td class="rsi-val">52.2</td>
+      <td class="bk-val">$4.85</td>
+      <td class="sl-val">$4.20</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('SEDG')" >
+      <td><span class="tkr">SEDG</span></td>
+      <td class="px">$44.29</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-6.52%</td>
+      <td><span class="s3">3</span></td>
+      <td class="rank-val">79.7</td>
+      <td class="adx-val">16.7</td>
+      <td class="rsi-val">51.7</td>
+      <td class="bk-val">$53.75</td>
+      <td class="sl-val">$37.49</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('BULL')" >
+      <td><span class="tkr">BULL</span></td>
+      <td class="px">$7.10</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.56%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">80.1</td>
+      <td class="adx-val">36.5</td>
+      <td class="rsi-val">70.1</td>
+      <td class="bk-val">$7.52</td>
+      <td class="sl-val">$6.34</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('AFRM')" >
+      <td><span class="tkr">AFRM</span></td>
+      <td class="px">$63.16</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.02%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">78.5</td>
+      <td class="adx-val">33.0</td>
+      <td class="rsi-val">62.6</td>
+      <td class="bk-val">$68.74</td>
+      <td class="sl-val">$57.14</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('IONQ')" >
+      <td><span class="tkr">IONQ</span></td>
+      <td class="px">$43.08</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.73%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">77.4</td>
+      <td class="adx-val">30.8</td>
+      <td class="rsi-val">60.4</td>
+      <td class="bk-val">$49.13</td>
+      <td class="sl-val">$36.51</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('OKLO')" >
+      <td><span class="tkr">OKLO</span></td>
+      <td class="px">$69.09</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-9.01%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">74.2</td>
+      <td class="adx-val">29.6</td>
+      <td class="rsi-val">56.6</td>
+      <td class="bk-val">$81.50</td>
+      <td class="sl-val">$56.61</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('MSTR')" >
+      <td><span class="tkr">MSTR</span></td>
+      <td class="px">$165.71</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.06%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">70.9</td>
+      <td class="adx-val">26.0</td>
+      <td class="rsi-val">61.2</td>
+      <td class="bk-val">$183.25</td>
+      <td class="sl-val">$147.80</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('MSFT')" >
+      <td><span class="tkr">MSFT</span></td>
+      <td class="px">$429.25</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+1.04%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">70.5</td>
+      <td class="adx-val">30.9</td>
+      <td class="rsi-val">65.4</td>
+      <td class="bk-val">$433.70</td>
+      <td class="sl-val">$409.61</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('QBTS')" >
+      <td><span class="tkr">QBTS</span></td>
+      <td class="px">$18.11</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.67%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">69.5</td>
+      <td class="adx-val">23.9</td>
+      <td class="rsi-val">50.4</td>
+      <td class="bk-val">$22.49</td>
+      <td class="sl-val">$15.11</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('META')" >
+      <td><span class="tkr">META</span></td>
+      <td class="px">$671.34</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.07%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">68.6</td>
+      <td class="adx-val">23.4</td>
+      <td class="rsi-val">59.5</td>
+      <td class="bk-val">$691.52</td>
+      <td class="sl-val">$641.74</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CLSK')" >
+      <td><span class="tkr">CLSK</span></td>
+      <td class="px">$11.79</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.76%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">68.4</td>
+      <td class="adx-val">18.8</td>
+      <td class="rsi-val">58.4</td>
+      <td class="bk-val">$13.23</td>
+      <td class="sl-val">$10.37</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('SMR')" >
+      <td><span class="tkr">SMR</span></td>
+      <td class="px">$11.82</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-6.56%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">67.4</td>
+      <td class="adx-val">27.4</td>
+      <td class="rsi-val">50.6</td>
+      <td class="bk-val">$14.20</td>
+      <td class="sl-val">$9.47</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('HOOD')" >
+      <td><span class="tkr">HOOD</span></td>
+      <td class="px">$82.07</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.24%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">66.7</td>
+      <td class="adx-val">21.3</td>
+      <td class="rsi-val">53.0</td>
+      <td class="bk-val">$93.32</td>
+      <td class="sl-val">$74.24</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('ORCL')" >
+      <td><span class="tkr">ORCL</span></td>
+      <td class="px">$165.96</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-4.05%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">66.7</td>
+      <td class="adx-val">23.7</td>
+      <td class="rsi-val">52.6</td>
+      <td class="bk-val">$189.18</td>
+      <td class="sl-val">$149.91</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('RGTI')" >
+      <td><span class="tkr">RGTI</span></td>
+      <td class="px">$16.39</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.08%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">65.6</td>
+      <td class="adx-val">19.7</td>
+      <td class="rsi-val">48.3</td>
+      <td class="bk-val">$20.17</td>
+      <td class="sl-val">$13.84</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('MP')" >
+      <td><span class="tkr">MP</span></td>
+      <td class="px">$61.70</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-4.96%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">64.9</td>
+      <td class="adx-val">20.3</td>
+      <td class="rsi-val">53.7</td>
+      <td class="bk-val">$69.43</td>
+      <td class="sl-val">$54.34</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('BX')" >
+      <td><span class="tkr">BX</span></td>
+      <td class="px">$121.52</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.96%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">64.8</td>
+      <td class="adx-val">23.4</td>
+      <td class="rsi-val">51.3</td>
+      <td class="bk-val">$133.25</td>
+      <td class="sl-val">$112.84</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CRWD')" >
+      <td><span class="tkr">CRWD</span></td>
+      <td class="px">$454.99</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.08%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">63.2</td>
+      <td class="adx-val">14.9</td>
+      <td class="rsi-val">60.9</td>
+      <td class="bk-val">$467.95</td>
+      <td class="sl-val">$417.10</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('PANW')" >
+      <td><span class="tkr">PANW</span></td>
+      <td class="px">$180.99</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.04%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">62.9</td>
+      <td class="adx-val">14.3</td>
+      <td class="rsi-val">61.0</td>
+      <td class="bk-val">$186.00</td>
+      <td class="sl-val">$166.88</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('FISV')" >
+      <td><span class="tkr">FISV</span></td>
+      <td class="px">$61.60</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.54%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">62.6</td>
+      <td class="adx-val">18.1</td>
+      <td class="rsi-val">56.9</td>
+      <td class="bk-val">$65.29</td>
+      <td class="sl-val">$58.34</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('NNE')" >
+      <td><span class="tkr">NNE</span></td>
+      <td class="px">$23.71</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-7.96%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">62.1</td>
+      <td class="adx-val">15.8</td>
+      <td class="rsi-val">49.8</td>
+      <td class="bk-val">$28.33</td>
+      <td class="sl-val">$19.68</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('DDOG')" >
+      <td><span class="tkr">DDOG</span></td>
+      <td class="px">$131.55</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.84%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">61.8</td>
+      <td class="adx-val">16.2</td>
+      <td class="rsi-val">60.0</td>
+      <td class="bk-val">$136.00</td>
+      <td class="sl-val">$118.76</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('APP')" >
+      <td><span class="tkr">APP</span></td>
+      <td class="px">$449.03</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.45%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">61.7</td>
+      <td class="adx-val">14.6</td>
+      <td class="rsi-val">51.2</td>
+      <td class="bk-val">$491.99</td>
+      <td class="sl-val">$402.28</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('TSLA')" >
+      <td><span class="tkr">TSLA</span></td>
+      <td class="px">$376.02</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.70%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">60.1</td>
+      <td class="adx-val">18.2</td>
+      <td class="rsi-val">48.8</td>
+      <td class="bk-val">$409.28</td>
+      <td class="sl-val">$348.45</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('BMNR')" >
+      <td><span class="tkr">BMNR</span></td>
+      <td class="px">$21.48</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.32%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">59.8</td>
+      <td class="adx-val">11.2</td>
+      <td class="rsi-val">49.6</td>
+      <td class="bk-val">$24.11</td>
+      <td class="sl-val">$19.11</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CMG')" >
+      <td><span class="tkr">CMG</span></td>
+      <td class="px">$32.87</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.29%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">59.1</td>
+      <td class="adx-val">15.0</td>
+      <td class="rsi-val">40.1</td>
+      <td class="bk-val">$37.08</td>
+      <td class="sl-val">$30.88</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('SHOP')" >
+      <td><span class="tkr">SHOP</span></td>
+      <td class="px">$122.05</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.75%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">58.6</td>
+      <td class="adx-val">12.6</td>
+      <td class="rsi-val">48.3</td>
+      <td class="bk-val">$137.30</td>
+      <td class="sl-val">$110.93</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('HL')" >
+      <td><span class="tkr">HL</span></td>
+      <td class="px">$17.84</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-4.19%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">58.1</td>
+      <td class="adx-val">16.4</td>
+      <td class="rsi-val">40.6</td>
+      <td class="bk-val">$21.05</td>
+      <td class="sl-val">$16.47</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('TCMD')" >
+      <td><span class="tkr">TCMD</span></td>
+      <td class="px">$23.57</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-2.76%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">55.9</td>
+      <td class="adx-val">17.1</td>
+      <td class="rsi-val">36.5</td>
+      <td class="bk-val">$27.07</td>
+      <td class="sl-val">$21.36</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('AMPY')" >
+      <td><span class="tkr">AMPY</span></td>
+      <td class="px">$6.16</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+2.67%</td>
+      <td><span class="s2">2</span></td>
+      <td class="rank-val">54.9</td>
+      <td class="adx-val">12.9</td>
+      <td class="rsi-val">57.1</td>
+      <td class="bk-val">$6.66</td>
+      <td class="sl-val">$5.70</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('FUBO')" >
+      <td><span class="tkr">FUBO</span></td>
+      <td class="px">$11.49</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.95%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">41.0</td>
+      <td class="adx-val">20.1</td>
+      <td class="rsi-val">40.8</td>
+      <td class="bk-val">$14.54</td>
+      <td class="sl-val">$9.75</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('NFLX')" >
+      <td><span class="tkr">NFLX</span></td>
+      <td class="px">$92.27</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.98%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">37.9</td>
+      <td class="adx-val">26.5</td>
+      <td class="rsi-val">41.3</td>
+      <td class="bk-val">$108.95</td>
+      <td class="sl-val">$87.39</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('MNDY')" >
+      <td><span class="tkr">MNDY</span></td>
+      <td class="px">$67.25</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.13%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">35.3</td>
+      <td class="adx-val">20.1</td>
+      <td class="rsi-val">47.2</td>
+      <td class="bk-val">$73.58</td>
+      <td class="sl-val">$59.37</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('NOW')" >
+      <td><span class="tkr">NOW</span></td>
+      <td class="px">$90.49</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.04%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">34.8</td>
+      <td class="adx-val">24.1</td>
+      <td class="rsi-val">41.8</td>
+      <td class="bk-val">$106.58</td>
+      <td class="sl-val">$80.14</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('ZS')" >
+      <td><span class="tkr">ZS</span></td>
+      <td class="px">$136.07</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+1.46%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">34.5</td>
+      <td class="adx-val">17.9</td>
+      <td class="rsi-val">47.3</td>
+      <td class="bk-val">$150.50</td>
+      <td class="sl-val">$122.96</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('INTU')" >
+      <td><span class="tkr">INTU</span></td>
+      <td class="px">$400.38</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+2.68%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">33.0</td>
+      <td class="adx-val">17.8</td>
+      <td class="rsi-val">48.6</td>
+      <td class="bk-val">$435.24</td>
+      <td class="sl-val">$369.12</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('MRNA')" >
+      <td><span class="tkr">MRNA</span></td>
+      <td class="px">$47.14</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.20%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">32.8</td>
+      <td class="adx-val">18.0</td>
+      <td class="rsi-val">37.8</td>
+      <td class="bk-val">$56.20</td>
+      <td class="sl-val">$41.78</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CRCL')" >
+      <td><span class="tkr">CRCL</span></td>
+      <td class="px">$94.35</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.14%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">32.7</td>
+      <td class="adx-val">15.1</td>
+      <td class="rsi-val">45.5</td>
+      <td class="bk-val">$111.20</td>
+      <td class="sl-val">$80.14</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('CRM')" >
+      <td><span class="tkr">CRM</span></td>
+      <td class="px">$181.32</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.63%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">32.6</td>
+      <td class="adx-val">14.5</td>
+      <td class="rsi-val">48.5</td>
+      <td class="bk-val">$193.56</td>
+      <td class="sl-val">$168.20</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('PLTR')" >
+      <td><span class="tkr">PLTR</span></td>
+      <td class="px">$141.18</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-1.34%</td>
+      <td><span class="s1">1</span></td>
+      <td class="rank-val">30.9</td>
+      <td class="adx-val">12.5</td>
+      <td class="rsi-val">46.8</td>
+      <td class="bk-val">$156.28</td>
+      <td class="sl-val">$129.42</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('NKE')" >
+      <td><span class="tkr">NKE</span></td>
+      <td class="px">$45.03</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.24%</td>
+      <td><span class="s1">0</span></td>
+      <td class="rank-val">14.9</td>
+      <td class="adx-val">36.0</td>
+      <td class="rsi-val">37.4</td>
+      <td class="bk-val">$53.11</td>
+      <td class="sl-val">$42.74</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('LLY')" >
+      <td><span class="tkr">LLY</span></td>
+      <td class="px">$874.00</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">+0.66%</td>
+      <td><span class="s1">0</span></td>
+      <td class="rank-val">9.9</td>
+      <td class="adx-val">20.0</td>
+      <td class="rsi-val">37.3</td>
+      <td class="bk-val">$976.68</td>
+      <td class="sl-val">$827.34</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('BTG')" >
+      <td><span class="tkr">BTG</span></td>
+      <td class="px">$4.39</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-3.30%</td>
+      <td><span class="s1">0</span></td>
+      <td class="rank-val">8.2</td>
+      <td class="adx-val">14.8</td>
+      <td class="rsi-val">38.6</td>
+      <td class="bk-val">$5.12</td>
+      <td class="sl-val">$4.02</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('FIG')" >
+      <td><span class="tkr">FIG</span></td>
+      <td class="px">$17.18</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-0.75%</td>
+      <td><span class="s1">0</span></td>
+      <td class="rank-val">5.3</td>
+      <td class="adx-val">18.1</td>
+      <td class="rsi-val">34.2</td>
+      <td class="bk-val">$23.15</td>
+      <td class="sl-val">$14.18</td>
+      <td class="tr-flat">-</td>
+    </tr><tr onclick="openChart('ASTS')" >
+      <td><span class="tkr">ASTS</span></td>
+      <td class="px">$71.88</td>
+      <td class="{"up-pct" if s["Day_Chg_%"]>0 else "dn-pct"}">-6.89%</td>
+      <td><span class="s1">0</span></td>
+      <td class="rank-val">3.1</td>
+      <td class="adx-val">10.6</td>
+      <td class="rsi-val">38.0</td>
+      <td class="bk-val">$104.15</td>
+      <td class="sl-val">$58.46</td>
+      <td class="tr-flat">-</td>
     </tr></tbody>
     </table>
   </div>
@@ -1014,7 +1016,7 @@ tr:hover .ticker,tr:focus .ticker,tr:active .ticker{background:var(--gold)!impor
     <div class="modal-content">
       <div class="modal-header">
         <span class="modal-title" id="chartModalLabel">Live Chart</span>
-        <button class="modal-close" data-bs-dismiss="modal">✕</button>
+        <button class="modal-close" data-bs-dismiss="modal">&#x2715;</button>
       </div>
       <div class="modal-body"><div id="tv_chart_container" style="height:100%;"></div></div>
     </div>
@@ -1042,7 +1044,7 @@ function openChart(ticker){
   setTimeout(function(){
     new TradingView.widget({
       autosize:true,symbol:ticker,interval:'D',timezone:'Asia/Jerusalem',
-      theme:'dark',style:'1',locale:'en',toolbar_bg:'#0a0e14',
+      theme:'dark',style:'1',locale:'en',toolbar_bg:'#080b10',
       hide_side_toolbar:false,allow_symbol_change:true,
       container_id:'tv_chart_container'
     });
