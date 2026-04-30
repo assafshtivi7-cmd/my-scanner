@@ -2,152 +2,412 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SHTIVI | COMMAND CENTER</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
 <style>
+/* ── Reset ─────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#07090d;color:#c8d4e0;font-family:'IBM Plex Mono','SF Mono',monospace;font-size:12px;min-height:100vh}
-.topbar{background:#080b10;border-bottom:1px solid #141d2a;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;box-shadow:0 1px 30px rgba(0,0,0,0.6)}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-name{font-size:15px;font-weight:700;letter-spacing:0.16em;color:#dde3ec;text-transform:uppercase}
-.brand-sub{font-size:15px;font-weight:700;letter-spacing:0.16em;color:#e8b84b;text-transform:uppercase}
-.live-dot{width:8px;height:8px;border-radius:50%;background:#34d058;box-shadow:0 0 0 3px rgba(52,208,88,0.15);animation:pulse 2.4s ease-in-out infinite;flex-shrink:0}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 3px rgba(52,208,88,0.15)}50%{opacity:0.4;box-shadow:0 0 0 6px rgba(52,208,88,0.05)}}
-.ts-pill{font-size:11px;color:#3d5068;border:1px solid #141d2a;padding:5px 14px;border-radius:6px;letter-spacing:0.06em;background:rgba(255,255,255,0.015)}
-.indices{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #141d2a;background:#141d2a;gap:1px}
-.idx{background:#080b10;padding:22px 26px;position:relative;overflow:hidden;transition:background 0.18s}
-.idx:hover{background:#0b0f18}
-.idx-acc{position:absolute;top:0;left:0;bottom:0;width:3px}
-.up-acc{background:linear-gradient(to bottom,#34d058 0%,rgba(52,208,88,0.06) 100%)}
-.dn-acc{background:linear-gradient(to bottom,#ff4d4d 0%,rgba(255,77,77,0.06) 100%)}
-.idx-glow-up{position:absolute;top:0;left:0;width:200px;height:200px;background:radial-gradient(circle at 5% 0%,rgba(52,208,88,0.09) 0%,transparent 65%);pointer-events:none}
-.idx-glow-dn{position:absolute;top:0;left:0;width:200px;height:200px;background:radial-gradient(circle at 5% 0%,rgba(255,77,77,0.09) 0%,transparent 65%);pointer-events:none}
-.idx-lbl{font-size:9px;letter-spacing:0.24em;color:#2e4258;text-transform:uppercase;font-weight:700;margin-bottom:10px;position:relative}
-.idx-val{font-size:28px;font-weight:700;color:#eaf0f8;letter-spacing:-0.025em;font-variant-numeric:tabular-nums;position:relative;line-height:1}
-.idx-chg{font-size:13px;font-weight:600;margin-top:8px;position:relative;letter-spacing:0.02em}
-.green{color:#34d058}.red{color:#ff4d4d}
-.body{padding:20px 26px 48px}
-.scanner-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.scanner-lbl{display:flex;align-items:center;gap:9px;font-size:9px;letter-spacing:0.24em;color:#e8b84b;text-transform:uppercase;font-weight:700}
-.scanner-lbl::before{content:'';width:3px;height:14px;background:linear-gradient(to bottom,#e8b84b,#7a5e18);border-radius:2px;flex-shrink:0}
-.count-badge{font-size:9px;color:#2e4258;border:1px solid #141d2a;padding:2px 10px;border-radius:20px;letter-spacing:0.07em}
-.dataTables_wrapper{color:#c8d4e0}
-.dataTables_wrapper .dataTables_filter,.dataTables_wrapper .dataTables_length{margin-bottom:12px}
-.dataTables_wrapper .dataTables_filter label,.dataTables_wrapper .dataTables_length label{font-size:10px;color:#3d5068;display:flex;align-items:center;gap:8px;letter-spacing:0.05em}
-.dataTables_wrapper .dataTables_filter input,.dataTables_wrapper .dataTables_length select{background:#0d1420;color:#c8d4e0;border:1px solid #141d2a;border-radius:5px;padding:5px 10px;font-family:inherit;font-size:11px;outline:none;transition:border-color 0.15s}
-.dataTables_wrapper .dataTables_filter input:focus{border-color:#4a3a10}
-.dataTables_wrapper .dataTables_info{font-size:10px;color:#2e4258;padding-top:10px}
-.dataTables_wrapper .dataTables_paginate{padding-top:10px}
-.dataTables_wrapper .paginate_button{font-family:inherit!important;font-size:10px!important;color:#3d5068!important;border:1px solid #141d2a!important;border-radius:4px!important;padding:3px 8px!important;margin:0 2px!important;background:transparent!important}
-.dataTables_wrapper .paginate_button:hover{background:#0d1420!important;color:#e8b84b!important;border-color:#4a3a10!important}
-.dataTables_wrapper .paginate_button.current,.dataTables_wrapper .paginate_button.current:hover{background:#0d1420!important;color:#e8b84b!important;border-color:#e8b84b!important}
-.tbl-wrap{border:1px solid #141d2a;border-radius:10px;overflow:hidden;background:#080b10}
-#stockTable{width:100%!important;border-collapse:collapse;margin:0!important}
-#stockTable thead th{background:#060810!important;color:#1e3048!important;font-size:8px!important;font-weight:700!important;letter-spacing:0.2em!important;text-transform:uppercase!important;border:none!important;border-bottom:1px solid #141d2a!important;padding:10px 12px!important;white-space:nowrap!important;cursor:pointer!important}
-#stockTable thead th:hover{color:#e8b84b!important}
-#stockTable tbody tr{border-bottom:1px solid rgba(20,29,42,0.8)!important;cursor:pointer;transition:background 0.1s}
-#stockTable tbody tr:hover{background:rgba(232,184,75,0.035)!important}
-#stockTable tbody td{border:none!important;padding:10px 12px!important;vertical-align:middle!important;text-align:right!important;font-variant-numeric:tabular-nums!important;font-size:11px!important}
-#stockTable tbody td:first-child{text-align:left!important}
-.tkr{display:inline-flex;align-items:center;justify-content:center;background:#e8b84b;color:#0a0700!important;font-size:10px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:5px;min-width:60px;pointer-events:none;user-select:none}
-tr:hover .tkr,tr:active .tkr{background:#e8b84b!important;color:#0a0700!important}
-.px{color:#d4dde8!important;font-weight:600}
-.rank-val{color:#e8b84b!important;font-weight:700;font-size:12px!important}
-.adx-val{color:#5b9bd5!important}
-.rsi-val{color:#6a7a8a!important}
-.bk-val{color:#4aacbf!important}
-.sl-val{color:#cc5555!important}
-.up-pct{color:#34d058!important;font-weight:600}
-.dn-pct{color:#ff4d4d!important;font-weight:600}
-.tr-up{color:#34d058!important;font-weight:600}
-.tr-dn{color:#ff4d4d!important;font-weight:600}
-.tr-flat{color:#1a2a3a!important;font-size:13px!important}
-.s4{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(52,208,88,0.12);color:#34d058;border:1px solid rgba(52,208,88,0.28)}
-.s3{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(232,184,75,0.12);color:#e8b84b;border:1px solid rgba(232,184,75,0.28)}
-.s2{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(20,29,42,0.9);color:#3d5068;border:1px solid #141d2a}
-.s1{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(255,77,77,0.08);color:#ff4d4d;border:1px solid rgba(255,77,77,0.2)}
-.modal-content{background:#080b10;border:1px solid #141d2a;border-radius:12px;overflow:hidden}
-.modal-header{background:#060810;border-bottom:1px solid #141d2a;padding:13px 20px;display:flex;align-items:center;justify-content:space-between}
-.modal-title{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#e8b84b}
-.modal-close{background:none;border:1px solid #141d2a;color:#3d5068;font-size:13px;cursor:pointer;border-radius:4px;padding:2px 8px;font-family:inherit;transition:all 0.15s}
-.modal-close:hover{border-color:#3d5068;color:#c8d4e0}
-.modal-body{padding:0;height:580px}
+html{font-size:13px}
+body{
+  background:#07090d;
+  color:#8fa3b8;
+  font-family:'IBM Plex Mono',monospace;
+  min-height:100vh;
+}
+
+/* ── Topbar ─────────────────────────────────────────────────── */
+.topbar{
+  background:#090d13;
+  border-bottom:1px solid #0f1923;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:200;
+}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-name{
+  font-size:14px;font-weight:600;
+  letter-spacing:0.18em;
+  color:#cdd9e5;
+  text-transform:uppercase;
+}
+.brand-cmd{
+  font-size:14px;font-weight:700;
+  letter-spacing:0.18em;
+  color:#d4a843;
+  text-transform:uppercase;
+}
+.live-dot{
+  width:7px;height:7px;
+  border-radius:50%;
+  background:#34c759;
+  box-shadow:0 0 0 2px rgba(52,199,89,0.18);
+  animation:livepulse 2.6s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes livepulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 2px rgba(52,199,89,0.18)}
+  50%{opacity:0.35;box-shadow:0 0 0 5px rgba(52,199,89,0.05)}
+}
+.ts-pill{
+  font-size:10px;color:#3a5068;
+  border:1px solid #0f1923;
+  padding:4px 14px;border-radius:5px;
+  letter-spacing:0.07em;
+  background:#06080c;
+}
+
+/* ── Index Cards ─────────────────────────────────────────────── */
+.indices{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid #0f1923;
+  gap:1px;
+  background:#0f1923;
+}
+.idx-card{
+  background:#09090f;
+  padding:20px 24px;
+  position:relative;
+  overflow:hidden;
+  transition:background .15s;
+  cursor:default;
+}
+.idx-card:hover{background:#0c1018}
+.idx-side{
+  position:absolute;top:0;left:0;bottom:0;width:3px;
+}
+.up-acc{background:linear-gradient(180deg,#34c759 0%,rgba(52,199,89,0.05) 100%)}
+.dn-acc{background:linear-gradient(180deg,#ff3b30 0%,rgba(255,59,48,0.05) 100%)}
+.glow-up{
+  position:absolute;top:0;left:0;
+  width:160px;height:160px;
+  background:radial-gradient(circle at 0% 0%,rgba(52,199,89,0.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.glow-dn{
+  position:absolute;top:0;left:0;
+  width:160px;height:160px;
+  background:radial-gradient(circle at 0% 0%,rgba(255,59,48,0.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.idx-lbl{
+  font-size:9px;letter-spacing:0.26em;
+  color:#2a4058;text-transform:uppercase;
+  font-weight:700;margin-bottom:10px;
+  position:relative;
+}
+.idx-num{
+  font-size:28px;font-weight:700;
+  color:#dce8f0;
+  letter-spacing:-0.025em;
+  font-variant-numeric:tabular-nums;
+  line-height:1;position:relative;
+}
+.idx-chg{
+  font-size:13px;font-weight:600;
+  margin-top:8px;position:relative;
+}
+.green{color:#34c759}
+.red{color:#ff3b30}
+
+/* ── Body ───────────────────────────────────────────────────── */
+.wrap{padding:22px 28px 60px}
+.scan-bar{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.scan-lbl{
+  display:flex;align-items:center;gap:10px;
+  font-size:9px;letter-spacing:0.26em;
+  color:#d4a843;text-transform:uppercase;font-weight:700;
+}
+.scan-lbl::before{
+  content:'';width:3px;height:14px;
+  background:linear-gradient(180deg,#d4a843,#6a5010);
+  border-radius:2px;flex-shrink:0;
+}
+.cnt-badge{
+  font-size:9px;color:#253545;
+  border:1px solid #0f1923;
+  padding:2px 10px;border-radius:20px;
+  letter-spacing:0.07em;
+}
+
+/* ── DataTables search/length bar ───────────────────────────── */
+.dataTables_wrapper{color:#8fa3b8}
+.dataTables_length,.dataTables_filter{margin-bottom:14px}
+.dataTables_length label,
+.dataTables_filter label{
+  display:flex;align-items:center;gap:8px;
+  font-size:10px;color:#3a5068;letter-spacing:0.06em;
+}
+.dataTables_filter input,
+.dataTables_length select{
+  background:#0d1520;
+  color:#a0b4c8;
+  border:1px solid #0f1923;
+  border-radius:5px;
+  padding:5px 10px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  outline:none;
+}
+.dataTables_filter input:focus{border-color:#6a5010}
+.dataTables_info{font-size:10px;color:#253545;padding-top:10px}
+.dataTables_paginate{padding-top:10px}
+.paginate_button{
+  font-family:'IBM Plex Mono',monospace !important;
+  font-size:10px !important;
+  color:#3a5068 !important;
+  border:1px solid #0f1923 !important;
+  border-radius:4px !important;
+  padding:3px 8px !important;
+  margin:0 2px !important;
+  background:transparent !important;
+  cursor:pointer;
+}
+.paginate_button:hover{
+  background:#0d1520 !important;
+  color:#d4a843 !important;
+  border-color:#6a5010 !important;
+}
+.paginate_button.current,
+.paginate_button.current:hover{
+  background:#0d1520 !important;
+  color:#d4a843 !important;
+  border-color:#d4a843 !important;
+}
+
+/* ── Table ──────────────────────────────────────────────────── */
+.tbl-wrap{
+  border:1px solid #0f1923;
+  border-radius:10px;
+  overflow:hidden;
+}
+#stockTable{
+  width:100% !important;
+  border-collapse:collapse;
+  background:#09090f;
+}
+#stockTable thead th{
+  background:#060810 !important;
+  color:#1e3248 !important;
+  font-family:'IBM Plex Mono',monospace !important;
+  font-size:8px !important;
+  font-weight:700 !important;
+  letter-spacing:0.22em !important;
+  text-transform:uppercase !important;
+  border:none !important;
+  border-bottom:1px solid #0f1923 !important;
+  padding:10px 14px !important;
+  white-space:nowrap !important;
+  cursor:pointer !important;
+}
+#stockTable thead th:hover{color:#d4a843 !important}
+#stockTable.dataTable thead th.sorting_asc::after,
+#stockTable.dataTable thead th.sorting_desc::after{
+  color:#d4a843;
+}
+#stockTable tbody tr{
+  background:#09090f !important;
+  border-bottom:1px solid #0d1520 !important;
+  cursor:pointer;
+  transition:background .1s;
+}
+#stockTable tbody tr:hover{
+  background:#0d1826 !important;
+}
+#stockTable tbody td{
+  background:transparent !important;
+  border:none !important;
+  padding:11px 14px !important;
+  font-variant-numeric:tabular-nums;
+  color:#4a6278;
+  font-size:12px;
+}
+.td-ticker{text-align:left !important}
+.td-r{text-align:right !important}
+.td-c{text-align:center !important}
+
+/* ── Cell styles ─────────────────────────────────────────────── */
+.tkr{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#d4a843;
+  color:#1a0d00 !important;
+  font-size:10px;font-weight:800;
+  letter-spacing:0.08em;
+  padding:4px 11px;
+  border-radius:5px;
+  min-width:60px;
+  pointer-events:none;
+  user-select:none;
+}
+tr:hover .tkr{background:#d4a843 !important;color:#1a0d00 !important}
+.px{color:#c8d8e8 !important;font-weight:600}
+.rank{color:#d4a843 !important;font-weight:700;font-size:13px !important}
+.adxc{color:#4a90c8 !important}
+.rsic{color:#5a7888 !important}
+.bkc{color:#3aacbf !important}
+.slc{color:#c05050 !important}
+.up-pct{color:#34c759 !important;font-weight:600}
+.dn-pct{color:#ff3b30 !important;font-weight:600}
+.tr-up{color:#34c759 !important;font-weight:600}
+.tr-dn{color:#ff3b30 !important;font-weight:600}
+.tr-flat{color:#1a2a3a !important;font-size:14px !important}
+
+/* Score circles */
+.s4{
+  width:28px;height:28px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  background:#0d2a16;color:#34c759;
+  border:1.5px solid rgba(52,199,89,0.35);
+}
+.s3{
+  width:28px;height:28px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  background:#2a1e00;color:#d4a843;
+  border:1.5px solid rgba(212,168,67,0.35);
+}
+.s2{
+  width:28px;height:28px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  background:#0d1520;color:#3a5068;
+  border:1.5px solid #0f1923;
+}
+.s1{
+  width:28px;height:28px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  background:#2a0a0a;color:#ff3b30;
+  border:1.5px solid rgba(255,59,48,0.3);
+}
+
+/* ── Modal ──────────────────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;
+  inset:0;z-index:500;
+  background:rgba(0,0,0,0.75);
+  align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  width:90%;max-width:1100px;
+  background:#09090f;
+  border:1px solid #0f1923;
+  border-radius:12px;
+  overflow:hidden;
+}
+.modal-head{
+  background:#060810;
+  border-bottom:1px solid #0f1923;
+  padding:13px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-lbl{
+  font-size:11px;font-weight:700;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:#d4a843;
+}
+.modal-x{
+  background:none;border:1px solid #0f1923;
+  color:#3a5068;font-size:14px;
+  cursor:pointer;border-radius:4px;
+  padding:2px 9px;font-family:inherit;
+  transition:all .15s;
+}
+.modal-x:hover{border-color:#3a5068;color:#cdd9e5}
+#tv_container{height:580px}
+
+/* ── Scrollbar ──────────────────────────────────────────────── */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:#07090d}
-::-webkit-scrollbar-thumb{background:#141d2a;border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:#2e4258}
+::-webkit-scrollbar-thumb{background:#0f1923;border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:#1a2a3a}
 </style>
 </head>
 <body>
+
 <div class="topbar">
   <div class="brand">
     <div class="live-dot"></div>
     <span class="brand-name">Assaf Shtivi</span>
-    <span class="brand-sub">Command Center</span>
+    <span class="brand-cmd">Command Center</span>
   </div>
-  <div class="ts-pill">IDT 29/04/2026 21:06</div>
+  <div class="ts-pill">IDT 30/04/2026 08:30</div>
 </div>
-<div class="indices"><div class="idx"><div class="idx-acc dn-acc"></div><div class="idx-glow-dn"></div><div class="idx-lbl">S&P 500</div><div class="idx-val">7,119</div><div class="idx-chg red">-0.28%</div></div><div class="idx"><div class="idx-acc dn-acc"></div><div class="idx-glow-dn"></div><div class="idx-lbl">NASDAQ</div><div class="idx-val">24,581</div><div class="idx-chg red">-0.34%</div></div><div class="idx"><div class="idx-acc dn-acc"></div><div class="idx-glow-dn"></div><div class="idx-lbl">BITCOIN</div><div class="idx-val">75,851</div><div class="idx-chg red">-0.65%</div></div><div class="idx"><div class="idx-acc up-acc"></div><div class="idx-glow-up"></div><div class="idx-lbl">VIX (FEAR)</div><div class="idx-val">18.42</div><div class="idx-chg green">+3.31%</div></div></div>
-<div class="body">
-  <div class="scanner-bar">
-    <div class="scanner-lbl">Watchlist Scanner</div>
-    <div class="count-badge">78 stocks</div>
+
+<div class="indices"><div class="idx-card"><div class="idx-side dn-acc"></div><div class="glow-dn"></div><div class="idx-lbl">S&P 500</div><div class="idx-num">7,136</div><div class="idx-chg red">-0.04%</div></div><div class="idx-card"><div class="idx-side up-acc"></div><div class="glow-up"></div><div class="idx-lbl">NASDAQ</div><div class="idx-num">24,673</div><div class="idx-chg green">+0.04%</div></div><div class="idx-card"><div class="idx-side dn-acc"></div><div class="glow-dn"></div><div class="idx-lbl">BITCOIN</div><div class="idx-num">75,408</div><div class="idx-chg red">-1.23%</div></div><div class="idx-card"><div class="idx-side up-acc"></div><div class="glow-up"></div><div class="idx-lbl">VIX (FEAR)</div><div class="idx-num">18.81</div><div class="idx-chg green">+5.50%</div></div></div>
+
+<div class="wrap">
+  <div class="scan-bar">
+    <div class="scan-lbl">Watchlist Scanner</div>
+    <div class="cnt-badge">78 stocks</div>
   </div>
   <div class="tbl-wrap">
-    <table id="stockTable" class="table table-hover text-center align-middle mb-0">
+    <table id="stockTable">
       <thead><tr>
-        <th style="text-align:left">Ticker</th>
+        <th>Ticker</th>
         <th>Price</th><th>Day %</th><th>Score</th><th>Rank</th>
         <th>ADX</th><th>RSI</th><th>Breakout</th><th>Stop Loss</th><th>Trend</th>
       </tr></thead>
-      <tbody><tr onclick="openChart('SNDK')"><td><span class="tkr">SNDK</span></td><td class="px">$1,072.53</td><td class="up-pct">+7.00%</td><td><span class="s3">3</span></td><td class="rank-val">105.2</td><td class="adx-val">36.5</td><td class="rsi-val">68.2</td><td class="bk-val">$1,103.00</td><td class="sl-val">$959.30</td><td class="tr-flat">-</td></tr><tr onclick="openChart('NVTS')"><td><span class="tkr">NVTS</span></td><td class="px">$15.12</td><td class="up-pct">+0.03%</td><td><span class="s3">3</span></td><td class="rank-val">103.3</td><td class="adx-val">32.7</td><td class="rsi-val">60.4</td><td class="bk-val">$19.79</td><td class="sl-val">$11.80</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('CRML')"><td><span class="tkr">CRML</span></td><td class="px">$11.26</td><td class="dn-pct">-5.10%</td><td><span class="s3">3</span></td><td class="rank-val">100.5</td><td class="adx-val">26.9</td><td class="rsi-val">53.7</td><td class="bk-val">$14.51</td><td class="sl-val">$8.43</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('AVGO')"><td><span class="tkr">AVGO</span></td><td class="px">$398.58</td><td class="dn-pct">-0.31%</td><td><span class="s3">3</span></td><td class="rank-val">100.4</td><td class="adx-val">32.8</td><td class="rsi-val">61.5</td><td class="bk-val">$429.31</td><td class="sl-val">$377.06</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('EQIX')"><td><span class="tkr">EQIX</span></td><td class="px">$1,083.08</td><td class="up-pct">+0.62%</td><td><span class="s3">3</span></td><td class="rank-val">100.4</td><td class="adx-val">44.7</td><td class="rsi-val">63.5</td><td class="bk-val">$1,128.68</td><td class="sl-val">$1,039.99</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('MU')"><td><span class="tkr">MU</span></td><td class="px">$511.98</td><td class="up-pct">+1.53%</td><td><span class="s3">3</span></td><td class="rank-val">99.7</td><td class="adx-val">25.4</td><td class="rsi-val">67.4</td><td class="bk-val">$531.36</td><td class="sl-val">$465.32</td><td class="tr-flat">-</td></tr><tr onclick="openChart('GOOG')"><td><span class="tkr">GOOG</span></td><td class="px">$346.57</td><td class="dn-pct">-0.27%</td><td><span class="s3">3</span></td><td class="rank-val">97.7</td><td class="adx-val">31.9</td><td class="rsi-val">70.2</td><td class="bk-val">$353.39</td><td class="sl-val">$332.64</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('CVNA')"><td><span class="tkr">CVNA</span></td><td class="px">$394.49</td><td class="dn-pct">-2.94%</td><td><span class="s3">3</span></td><td class="rank-val">97.0</td><td class="adx-val">26.2</td><td class="rsi-val">60.8</td><td class="bk-val">$416.88</td><td class="sl-val">$358.05</td><td class="tr-flat">-</td></tr><tr onclick="openChart('WULF')"><td><span class="tkr">WULF</span></td><td class="px">$20.02</td><td class="dn-pct">-3.75%</td><td><span class="s3">3</span></td><td class="rank-val">96.6</td><td class="adx-val">20.1</td><td class="rsi-val">57.0</td><td class="bk-val">$21.60</td><td class="sl-val">$17.21</td><td class="tr-flat">-</td></tr><tr onclick="openChart('NVDA')"><td><span class="tkr">NVDA</span></td><td class="px">$208.51</td><td class="dn-pct">-2.19%</td><td><span class="s3">3</span></td><td class="rank-val">95.8</td><td class="adx-val">28.4</td><td class="rsi-val">64.5</td><td class="bk-val">$216.83</td><td class="sl-val">$197.62</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('INTC')"><td><span class="tkr">INTC</span></td><td class="px">$93.36</td><td class="up-pct">+10.46%</td><td><span class="s3">3</span></td><td class="rank-val">95.0</td><td class="adx-val">45.9</td><td class="rsi-val">85.9</td><td class="bk-val">$94.10</td><td class="sl-val">$85.56</td><td class="tr-flat">-</td></tr><tr onclick="openChart('ALLY')"><td><span class="tkr">ALLY</span></td><td class="px">$43.70</td><td class="dn-pct">-1.60%</td><td><span class="s3">3</span></td><td class="rank-val">92.1</td><td class="adx-val">26.5</td><td class="rsi-val">57.1</td><td class="bk-val">$47.02</td><td class="sl-val">$41.33</td><td class="tr-flat">-</td></tr><tr onclick="openChart('VRT')"><td><span class="tkr">VRT</span></td><td class="px">$302.64</td><td class="dn-pct">-0.78%</td><td><span class="s3">3</span></td><td class="rank-val">92.1</td><td class="adx-val">19.6</td><td class="rsi-val">55.7</td><td class="bk-val">$330.30</td><td class="sl-val">$275.73</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('IREN')"><td><span class="tkr">IREN</span></td><td class="px">$42.71</td><td class="dn-pct">-3.89%</td><td><span class="s3">3</span></td><td class="rank-val">92.0</td><td class="adx-val">16.4</td><td class="rsi-val">47.6</td><td class="bk-val">$54.14</td><td class="sl-val">$35.89</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('CAT')"><td><span class="tkr">CAT</span></td><td class="px">$812.29</td><td class="dn-pct">-0.68%</td><td><span class="s3">3</span></td><td class="rank-val">91.5</td><td class="adx-val">22.0</td><td class="rsi-val">62.7</td><td class="bk-val">$845.27</td><td class="sl-val">$774.96</td><td class="tr-flat">-</td></tr><tr onclick="openChart('BBAI')"><td><span class="tkr">BBAI</span></td><td class="px">$3.80</td><td class="dn-pct">-7.77%</td><td><span class="s3">3</span></td><td class="rank-val">90.8</td><td class="adx-val">19.1</td><td class="rsi-val">51.4</td><td class="bk-val">$4.22</td><td class="sl-val">$3.28</td><td class="tr-flat">-</td></tr><tr onclick="openChart('OSS')"><td><span class="tkr">OSS</span></td><td class="px">$8.68</td><td class="dn-pct">-6.36%</td><td><span class="s3">3</span></td><td class="rank-val">89.7</td><td class="adx-val">19.3</td><td class="rsi-val">45.2</td><td class="bk-val">$11.28</td><td class="sl-val">$7.06</td><td class="tr-flat">-</td></tr><tr onclick="openChart('HUN')"><td><span class="tkr">HUN</span></td><td class="px">$13.35</td><td class="dn-pct">-2.31%</td><td><span class="s3">3</span></td><td class="rank-val">89.4</td><td class="adx-val">25.7</td><td class="rsi-val">51.5</td><td class="bk-val">$14.22</td><td class="sl-val">$12.15</td><td class="tr-flat">-</td></tr><tr onclick="openChart('UUUU')"><td><span class="tkr">UUUU</span></td><td class="px">$19.60</td><td class="dn-pct">-4.81%</td><td><span class="s3">3</span></td><td class="rank-val">88.1</td><td class="adx-val">16.6</td><td class="rsi-val">48.3</td><td class="bk-val">$23.13</td><td class="sl-val">$16.52</td><td class="tr-flat">-</td></tr><tr onclick="openChart('RIVN')"><td><span class="tkr">RIVN</span></td><td class="px">$15.98</td><td class="dn-pct">-1.02%</td><td><span class="s3">3</span></td><td class="rank-val">87.4</td><td class="adx-val">19.7</td><td class="rsi-val">48.4</td><td class="bk-val">$18.07</td><td class="sl-val">$14.66</td><td class="tr-flat">-</td></tr><tr onclick="openChart('ASML')"><td><span class="tkr">ASML</span></td><td class="px">$1,380.15</td><td class="dn-pct">-0.32%</td><td><span class="s3">3</span></td><td class="rank-val">85.1</td><td class="adx-val">15.0</td><td class="rsi-val">46.4</td><td class="bk-val">$1,528.64</td><td class="sl-val">$1,295.88</td><td class="tr-flat">-</td></tr><tr onclick="openChart('ONDS')"><td><span class="tkr">ONDS</span></td><td class="px">$9.45</td><td class="dn-pct">-9.83%</td><td><span class="s3">3</span></td><td class="rank-val">84.9</td><td class="adx-val">11.9</td><td class="rsi-val">43.7</td><td class="bk-val">$11.61</td><td class="sl-val">$7.91</td><td class="tr-flat">-</td></tr><tr onclick="openChart('AAPL')"><td><span class="tkr">AAPL</span></td><td class="px">$269.86</td><td class="dn-pct">-0.31%</td><td><span class="s3">3</span></td><td class="rank-val">83.5</td><td class="adx-val">12.3</td><td class="rsi-val">57.1</td><td class="bk-val">$275.77</td><td class="sl-val">$259.96</td><td class="tr-flat">-</td></tr><tr onclick="openChart('AMPY')"><td><span class="tkr">AMPY</span></td><td class="px">$6.31</td><td class="up-pct">+2.44%</td><td><span class="s3">3</span></td><td class="rank-val">81.3</td><td class="adx-val">13.4</td><td class="rsi-val">59.9</td><td class="bk-val">$6.39</td><td class="sl-val">$5.86</td><td class="tr-up">↑ (2)</td></tr><tr onclick="openChart('SEDG')"><td><span class="tkr">SEDG</span></td><td class="px">$40.40</td><td class="dn-pct">-8.78%</td><td><span class="s3">3</span></td><td class="rank-val">79.3</td><td class="adx-val">16.0</td><td class="rsi-val">45.2</td><td class="bk-val">$53.75</td><td class="sl-val">$33.63</td><td class="tr-flat">-</td></tr><tr onclick="openChart('CNC')"><td><span class="tkr">CNC</span></td><td class="px">$54.25</td><td class="up-pct">+9.44%</td><td><span class="s3">3</span></td><td class="rank-val">71.6</td><td class="adx-val">29.2</td><td class="rsi-val">86.8</td><td class="bk-val">$54.39</td><td class="sl-val">$50.53</td><td class="tr-flat">-</td></tr><tr onclick="openChart('AMD')"><td><span class="tkr">AMD</span></td><td class="px">$334.34</td><td class="up-pct">+3.44%</td><td><span class="s2">2</span></td><td class="rank-val">83.0</td><td class="adx-val">42.0</td><td class="rsi-val">75.7</td><td class="bk-val">$352.99</td><td class="sl-val">$308.10</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('ON')"><td><span class="tkr">ON</span></td><td class="px">$98.89</td><td class="up-pct">+5.99%</td><td><span class="s2">2</span></td><td class="rank-val">82.0</td><td class="adx-val">40.1</td><td class="rsi-val">79.2</td><td class="bk-val">$101.25</td><td class="sl-val">$91.77</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('WDC')"><td><span class="tkr">WDC</span></td><td class="px">$421.24</td><td class="up-pct">+7.74%</td><td><span class="s2">2</span></td><td class="rank-val">81.8</td><td class="adx-val">39.6</td><td class="rsi-val">75.5</td><td class="bk-val">$441.99</td><td class="sl-val">$383.58</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('BULL')"><td><span class="tkr">BULL</span></td><td class="px">$6.55</td><td class="dn-pct">-7.82%</td><td><span class="s2">2</span></td><td class="rank-val">78.3</td><td class="adx-val">36.0</td><td class="rsi-val">56.7</td><td class="bk-val">$7.52</td><td class="sl-val">$5.76</td><td class="tr-flat">-</td></tr><tr onclick="openChart('AFRM')"><td><span class="tkr">AFRM</span></td><td class="px">$62.42</td><td class="dn-pct">-1.17%</td><td><span class="s2">2</span></td><td class="rank-val">77.5</td><td class="adx-val">32.5</td><td class="rsi-val">60.9</td><td class="bk-val">$68.74</td><td class="sl-val">$56.38</td><td class="tr-flat">-</td></tr><tr onclick="openChart('IONQ')"><td><span class="tkr">IONQ</span></td><td class="px">$40.98</td><td class="dn-pct">-4.88%</td><td><span class="s2">2</span></td><td class="rank-val">76.7</td><td class="adx-val">29.3</td><td class="rsi-val">55.2</td><td class="bk-val">$49.13</td><td class="sl-val">$34.21</td><td class="tr-flat">-</td></tr><tr onclick="openChart('AMZN')"><td><span class="tkr">AMZN</span></td><td class="px">$263.60</td><td class="up-pct">+1.50%</td><td><span class="s2">2</span></td><td class="rank-val">75.0</td><td class="adx-val">34.4</td><td class="rsi-val">75.8</td><td class="bk-val">$265.91</td><td class="sl-val">$252.12</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('OKLO')"><td><span class="tkr">OKLO</span></td><td class="px">$64.18</td><td class="dn-pct">-7.11%</td><td><span class="s2">2</span></td><td class="rank-val">74.5</td><td class="adx-val">28.6</td><td class="rsi-val">51.4</td><td class="bk-val">$81.50</td><td class="sl-val">$51.11</td><td class="tr-flat">-</td></tr><tr onclick="openChart('BEN')"><td><span class="tkr">BEN</span></td><td class="px">$29.62</td><td class="up-pct">+0.54%</td><td><span class="s2">2</span></td><td class="rank-val">71.5</td><td class="adx-val">27.4</td><td class="rsi-val">75.0</td><td class="bk-val">$30.28</td><td class="sl-val">$27.91</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('MSTR')"><td><span class="tkr">MSTR</span></td><td class="px">$158.44</td><td class="dn-pct">-4.39%</td><td><span class="s2">2</span></td><td class="rank-val">70.5</td><td class="adx-val">25.7</td><td class="rsi-val">55.4</td><td class="bk-val">$183.25</td><td class="sl-val">$140.43</td><td class="tr-flat">-</td></tr><tr onclick="openChart('QBTS')"><td><span class="tkr">QBTS</span></td><td class="px">$17.75</td><td class="dn-pct">-2.02%</td><td><span class="s2">2</span></td><td class="rank-val">70.5</td><td class="adx-val">22.6</td><td class="rsi-val">48.8</td><td class="bk-val">$22.49</td><td class="sl-val">$14.71</td><td class="tr-flat">-</td></tr><tr onclick="openChart('MSFT')"><td><span class="tkr">MSFT</span></td><td class="px">$422.78</td><td class="dn-pct">-1.51%</td><td><span class="s2">2</span></td><td class="rank-val">69.8</td><td class="adx-val">30.8</td><td class="rsi-val">60.6</td><td class="bk-val">$433.70</td><td class="sl-val">$403.13</td><td class="tr-flat">-</td></tr><tr onclick="openChart('CLSK')"><td><span class="tkr">CLSK</span></td><td class="px">$11.32</td><td class="dn-pct">-3.94%</td><td><span class="s2">2</span></td><td class="rank-val">68.5</td><td class="adx-val">17.8</td><td class="rsi-val">53.4</td><td class="bk-val">$13.23</td><td class="sl-val">$9.93</td><td class="tr-flat">-</td></tr><tr onclick="openChart('MP')"><td><span class="tkr">MP</span></td><td class="px">$61.66</td><td class="dn-pct">-0.06%</td><td><span class="s2">2</span></td><td class="rank-val">68.4</td><td class="adx-val">19.2</td><td class="rsi-val">53.6</td><td class="bk-val">$69.43</td><td class="sl-val">$54.22</td><td class="tr-flat">-</td></tr><tr onclick="openChart('META')"><td><span class="tkr">META</span></td><td class="px">$670.39</td><td class="dn-pct">-0.14%</td><td><span class="s2">2</span></td><td class="rank-val">67.7</td><td class="adx-val">22.9</td><td class="rsi-val">59.1</td><td class="bk-val">$691.52</td><td class="sl-val">$641.42</td><td class="tr-flat">-</td></tr><tr onclick="openChart('ORCL')"><td><span class="tkr">ORCL</span></td><td class="px">$162.27</td><td class="dn-pct">-2.22%</td><td><span class="s2">2</span></td><td class="rank-val">65.7</td><td class="adx-val">22.8</td><td class="rsi-val">49.6</td><td class="bk-val">$189.18</td><td class="sl-val">$146.60</td><td class="tr-flat">-</td></tr><tr onclick="openChart('SMR')"><td><span class="tkr">SMR</span></td><td class="px">$11.20</td><td class="dn-pct">-5.20%</td><td><span class="s2">2</span></td><td class="rank-val">65.1</td><td class="adx-val">25.5</td><td class="rsi-val">47.4</td><td class="bk-val">$14.20</td><td class="sl-val">$8.79</td><td class="tr-flat">-</td></tr><tr onclick="openChart('RGTI')"><td><span class="tkr">RGTI</span></td><td class="px">$15.60</td><td class="dn-pct">-4.82%</td><td><span class="s2">2</span></td><td class="rank-val">64.7</td><td class="adx-val">19.0</td><td class="rsi-val">44.1</td><td class="bk-val">$20.17</td><td class="sl-val">$13.01</td><td class="tr-flat">-</td></tr><tr onclick="openChart('OPEN')"><td><span class="tkr">OPEN</span></td><td class="px">$5.41</td><td class="dn-pct">-1.37%</td><td><span class="s2">2</span></td><td class="rank-val">64.3</td><td class="adx-val">17.6</td><td class="rsi-val">57.6</td><td class="bk-val">$6.00</td><td class="sl-val">$4.70</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('SOFI')"><td><span class="tkr">SOFI</span></td><td class="px">$15.83</td><td class="dn-pct">-13.78%</td><td><span class="s2">2</span></td><td class="rank-val">63.8</td><td class="adx-val">25.4</td><td class="rsi-val">35.9</td><td class="bk-val">$20.13</td><td class="sl-val">$14.35</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('HOOD')"><td><span class="tkr">HOOD</span></td><td class="px">$70.27</td><td class="dn-pct">-14.38%</td><td><span class="s2">2</span></td><td class="rank-val">62.6</td><td class="adx-val">21.3</td><td class="rsi-val">39.2</td><td class="bk-val">$93.32</td><td class="sl-val">$62.47</td><td class="tr-flat">-</td></tr><tr onclick="openChart('BX')"><td><span class="tkr">BX</span></td><td class="px">$118.82</td><td class="dn-pct">-2.22%</td><td><span class="s2">2</span></td><td class="rank-val">62.6</td><td class="adx-val">21.9</td><td class="rsi-val">46.9</td><td class="bk-val">$133.25</td><td class="sl-val">$110.11</td><td class="tr-flat">-</td></tr><tr onclick="openChart('RDDT')"><td><span class="tkr">RDDT</span></td><td class="px">$146.40</td><td class="dn-pct">-1.04%</td><td><span class="s2">2</span></td><td class="rank-val">62.4</td><td class="adx-val">15.9</td><td class="rsi-val">47.2</td><td class="bk-val">$168.70</td><td class="sl-val">$132.06</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('FISV')"><td><span class="tkr">FISV</span></td><td class="px">$61.91</td><td class="up-pct">+0.50%</td><td><span class="s2">2</span></td><td class="rank-val">62.3</td><td class="adx-val">17.9</td><td class="rsi-val">58.0</td><td class="bk-val">$65.29</td><td class="sl-val">$58.66</td><td class="tr-flat">-</td></tr><tr onclick="openChart('NNE')"><td><span class="tkr">NNE</span></td><td class="px">$22.41</td><td class="dn-pct">-5.48%</td><td><span class="s2">2</span></td><td class="rank-val">62.0</td><td class="adx-val">15.0</td><td class="rsi-val">46.1</td><td class="bk-val">$28.33</td><td class="sl-val">$18.25</td><td class="tr-flat">-</td></tr><tr onclick="openChart('CRWD')"><td><span class="tkr">CRWD</span></td><td class="px">$448.78</td><td class="dn-pct">-1.36%</td><td><span class="s2">2</span></td><td class="rank-val">61.9</td><td class="adx-val">14.8</td><td class="rsi-val">58.3</td><td class="bk-val">$467.95</td><td class="sl-val">$414.86</td><td class="tr-flat">-</td></tr><tr onclick="openChart('DDOG')"><td><span class="tkr">DDOG</span></td><td class="px">$132.26</td><td class="up-pct">+0.54%</td><td><span class="s2">2</span></td><td class="rank-val">61.6</td><td class="adx-val">16.1</td><td class="rsi-val">60.7</td><td class="bk-val">$136.00</td><td class="sl-val">$120.45</td><td class="tr-flat">-</td></tr><tr onclick="openChart('PANW')"><td><span class="tkr">PANW</span></td><td class="px">$180.64</td><td class="dn-pct">-0.19%</td><td><span class="s2">2</span></td><td class="rank-val">61.6</td><td class="adx-val">14.6</td><td class="rsi-val">60.6</td><td class="bk-val">$186.00</td><td class="sl-val">$167.53</td><td class="tr-flat">-</td></tr><tr onclick="openChart('APP')"><td><span class="tkr">APP</span></td><td class="px">$435.83</td><td class="dn-pct">-2.94%</td><td><span class="s2">2</span></td><td class="rank-val">61.1</td><td class="adx-val">13.7</td><td class="rsi-val">48.0</td><td class="bk-val">$491.99</td><td class="sl-val">$390.56</td><td class="tr-flat">-</td></tr><tr onclick="openChart('TSLA')"><td><span class="tkr">TSLA</span></td><td class="px">$371.57</td><td class="dn-pct">-1.18%</td><td><span class="s2">2</span></td><td class="rank-val">59.8</td><td class="adx-val">17.3</td><td class="rsi-val">46.6</td><td class="bk-val">$409.28</td><td class="sl-val">$344.75</td><td class="tr-flat">-</td></tr><tr onclick="openChart('BMNR')"><td><span class="tkr">BMNR</span></td><td class="px">$20.40</td><td class="dn-pct">-5.03%</td><td><span class="s2">2</span></td><td class="rank-val">58.3</td><td class="adx-val">10.9</td><td class="rsi-val">44.0</td><td class="bk-val">$24.11</td><td class="sl-val">$18.08</td><td class="tr-flat">-</td></tr><tr onclick="openChart('SHOP')"><td><span class="tkr">SHOP</span></td><td class="px">$120.58</td><td class="dn-pct">-1.20%</td><td><span class="s2">2</span></td><td class="rank-val">58.0</td><td class="adx-val">12.0</td><td class="rsi-val">46.7</td><td class="bk-val">$137.30</td><td class="sl-val">$110.37</td><td class="tr-flat">-</td></tr><tr onclick="openChart('NEM')"><td><span class="tkr">NEM</span></td><td class="px">$107.48</td><td class="dn-pct">-2.20%</td><td><span class="s2">2</span></td><td class="rank-val">58.0</td><td class="adx-val">13.9</td><td class="rsi-val">43.9</td><td class="bk-val">$122.00</td><td class="sl-val">$99.75</td><td class="tr-dn">↓ (4)</td></tr><tr onclick="openChart('FUBO')"><td><span class="tkr">FUBO</span></td><td class="px">$11.68</td><td class="up-pct">+1.65%</td><td><span class="s1">1</span></td><td class="rank-val">43.1</td><td class="adx-val">18.7</td><td class="rsi-val">42.7</td><td class="bk-val">$14.54</td><td class="sl-val">$9.99</td><td class="tr-flat">-</td></tr><tr onclick="openChart('NFLX')"><td><span class="tkr">NFLX</span></td><td class="px">$92.25</td><td class="dn-pct">-0.03%</td><td><span class="s1">1</span></td><td class="rank-val">37.6</td><td class="adx-val">25.5</td><td class="rsi-val">41.3</td><td class="bk-val">$108.95</td><td class="sl-val">$87.55</td><td class="tr-flat">-</td></tr><tr onclick="openChart('HL')"><td><span class="tkr">HL</span></td><td class="px">$17.36</td><td class="dn-pct">-2.66%</td><td><span class="s1">1</span></td><td class="rank-val">33.9</td><td class="adx-val">17.3</td><td class="rsi-val">38.0</td><td class="bk-val">$21.05</td><td class="sl-val">$16.06</td><td class="tr-dn">↓ (2)</td></tr><tr onclick="openChart('MNDY')"><td><span class="tkr">MNDY</span></td><td class="px">$66.02</td><td class="dn-pct">-1.83%</td><td><span class="s1">1</span></td><td class="rank-val">33.8</td><td class="adx-val">18.9</td><td class="rsi-val">45.2</td><td class="bk-val">$73.58</td><td class="sl-val">$58.42</td><td class="tr-flat">-</td></tr><tr onclick="openChart('CRCL')"><td><span class="tkr">CRCL</span></td><td class="px">$92.59</td><td class="dn-pct">-1.87%</td><td><span class="s1">1</span></td><td class="rank-val">33.1</td><td class="adx-val">14.8</td><td class="rsi-val">44.0</td><td class="bk-val">$111.20</td><td class="sl-val">$78.99</td><td class="tr-flat">-</td></tr><tr onclick="openChart('ZS')"><td><span class="tkr">ZS</span></td><td class="px">$134.36</td><td class="dn-pct">-1.26%</td><td><span class="s1">1</span></td><td class="rank-val">33.0</td><td class="adx-val">17.0</td><td class="rsi-val">45.7</td><td class="bk-val">$150.50</td><td class="sl-val">$122.59</td><td class="tr-flat">-</td></tr><tr onclick="openChart('MRNA')"><td><span class="tkr">MRNA</span></td><td class="px">$45.13</td><td class="dn-pct">-4.27%</td><td><span class="s1">1</span></td><td class="rank-val">33.0</td><td class="adx-val">19.2</td><td class="rsi-val">34.0</td><td class="bk-val">$56.20</td><td class="sl-val">$39.61</td><td class="tr-flat">-</td></tr><tr onclick="openChart('CTKB')"><td><span class="tkr">CTKB</span></td><td class="px">$4.38</td><td class="dn-pct">-4.27%</td><td><span class="s1">1</span></td><td class="rank-val">32.8</td><td class="adx-val">14.7</td><td class="rsi-val">44.8</td><td class="bk-val">$4.85</td><td class="sl-val">$3.99</td><td class="tr-dn">↓ (3)</td></tr><tr onclick="openChart('CRM')"><td><span class="tkr">CRM</span></td><td class="px">$180.13</td><td class="dn-pct">-0.65%</td><td><span class="s1">1</span></td><td class="rank-val">31.6</td><td class="adx-val">14.4</td><td class="rsi-val">47.5</td><td class="bk-val">$193.56</td><td class="sl-val">$167.57</td><td class="tr-flat">-</td></tr><tr onclick="openChart('INTU')"><td><span class="tkr">INTU</span></td><td class="px">$389.78</td><td class="dn-pct">-2.65%</td><td><span class="s1">1</span></td><td class="rank-val">31.3</td><td class="adx-val">17.1</td><td class="rsi-val">45.1</td><td class="bk-val">$435.24</td><td class="sl-val">$361.41</td><td class="tr-flat">-</td></tr><tr onclick="openChart('PLTR')"><td><span class="tkr">PLTR</span></td><td class="px">$136.59</td><td class="dn-pct">-3.25%</td><td><span class="s1">1</span></td><td class="rank-val">31.2</td><td class="adx-val">12.7</td><td class="rsi-val">42.7</td><td class="bk-val">$156.28</td><td class="sl-val">$125.68</td><td class="tr-flat">-</td></tr><tr onclick="openChart('TCMD')"><td><span class="tkr">TCMD</span></td><td class="px">$22.40</td><td class="dn-pct">-4.96%</td><td><span class="s1">1</span></td><td class="rank-val">30.3</td><td class="adx-val">17.3</td><td class="rsi-val">30.9</td><td class="bk-val">$27.07</td><td class="sl-val">$20.15</td><td class="tr-dn">↓ (2)</td></tr><tr onclick="openChart('NKE')"><td><span class="tkr">NKE</span></td><td class="px">$44.48</td><td class="dn-pct">-1.22%</td><td><span class="s1">0</span></td><td class="rank-val">14.6</td><td class="adx-val">35.7</td><td class="rsi-val">35.4</td><td class="bk-val">$46.97</td><td class="sl-val">$42.26</td><td class="tr-flat">-</td></tr><tr onclick="openChart('LLY')"><td><span class="tkr">LLY</span></td><td class="px">$852.79</td><td class="dn-pct">-2.43%</td><td><span class="s1">0</span></td><td class="rank-val">9.7</td><td class="adx-val">21.4</td><td class="rsi-val">33.5</td><td class="bk-val">$976.68</td><td class="sl-val">$807.03</td><td class="tr-flat">-</td></tr><tr onclick="openChart('BTG')"><td><span class="tkr">BTG</span></td><td class="px">$4.30</td><td class="dn-pct">-2.16%</td><td><span class="s1">0</span></td><td class="rank-val">8.5</td><td class="adx-val">16.2</td><td class="rsi-val">36.6</td><td class="bk-val">$5.12</td><td class="sl-val">$3.94</td><td class="tr-flat">-</td></tr><tr onclick="openChart('CMG')"><td><span class="tkr">CMG</span></td><td class="px">$32.67</td><td class="dn-pct">-0.62%</td><td><span class="s1">0</span></td><td class="rank-val">8.5</td><td class="adx-val">14.6</td><td class="rsi-val">38.9</td><td class="bk-val">$37.08</td><td class="sl-val">$30.76</td><td class="tr-dn">↓ (2)</td></tr><tr onclick="openChart('NOW')"><td><span class="tkr">NOW</span></td><td class="px">$87.97</td><td class="dn-pct">-2.78%</td><td><span class="s1">0</span></td><td class="rank-val">8.1</td><td class="adx-val">24.4</td><td class="rsi-val">39.6</td><td class="bk-val">$105.90</td><td class="sl-val">$78.52</td><td class="tr-dn">↓ (1)</td></tr><tr onclick="openChart('FIG')"><td><span class="tkr">FIG</span></td><td class="px">$16.82</td><td class="dn-pct">-2.10%</td><td><span class="s1">0</span></td><td class="rank-val">5.0</td><td class="adx-val">18.3</td><td class="rsi-val">32.9</td><td class="bk-val">$23.15</td><td class="sl-val">$13.94</td><td class="tr-flat">-</td></tr><tr onclick="openChart('ASTS')"><td><span class="tkr">ASTS</span></td><td class="px">$69.50</td><td class="dn-pct">-3.31%</td><td><span class="s1">0</span></td><td class="rank-val">4.3</td><td class="adx-val">11.6</td><td class="rsi-val">36.4</td><td class="bk-val">$104.15</td><td class="sl-val">$56.68</td><td class="tr-flat">-</td></tr></tbody>
+      <tbody><tr onclick="openChart('WDC')"><td class="td-ticker"><span class="tkr">WDC</span></td><td class="td-r px">$412.76</td><td class="td-r up-pct">+5.57%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">131.8</td><td class="td-r adxc">39.6</td><td class="td-r rsic">74.0</td><td class="td-r bkc">$441.99</td><td class="td-r slc">$374.11</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('EQIX')"><td class="td-ticker"><span class="tkr">EQIX</span></td><td class="td-r px">$1,089.07</td><td class="td-r up-pct">+1.18%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">125.6</td><td class="td-r adxc">44.7</td><td class="td-r rsic">64.9</td><td class="td-r bkc">$1,128.68</td><td class="td-r slc">$1,045.21</td><td class="td-r tr-up">↑ (3)</td></tr><tr onclick="openChart('GOOG')"><td class="td-ticker"><span class="tkr">GOOG</span></td><td class="td-r px">$347.31</td><td class="td-r dn-pct">-0.05%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">122.7</td><td class="td-r adxc">31.9</td><td class="td-r rsic">71.1</td><td class="td-r bkc">$353.40</td><td class="td-r slc">$333.38</td><td class="td-r tr-up">↑ (3)</td></tr><tr onclick="openChart('CVNA')"><td class="td-ticker"><span class="tkr">CVNA</span></td><td class="td-r px">$396.59</td><td class="td-r dn-pct">-2.42%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">122.1</td><td class="td-r adxc">26.1</td><td class="td-r rsic">61.7</td><td class="td-r bkc">$416.88</td><td class="td-r slc">$360.01</td><td class="td-r tr-up">↑ (3)</td></tr><tr onclick="openChart('BEN')"><td class="td-ticker"><span class="tkr">BEN</span></td><td class="td-r px">$29.45</td><td class="td-r dn-pct">-0.03%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">121.3</td><td class="td-r adxc">27.4</td><td class="td-r rsic">74.3</td><td class="td-r bkc">$30.28</td><td class="td-r slc">$27.74</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('CAT')"><td class="td-ticker"><span class="tkr">CAT</span></td><td class="td-r px">$810.05</td><td class="td-r dn-pct">-0.96%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">116.4</td><td class="td-r adxc">22.0</td><td class="td-r rsic">61.8</td><td class="td-r bkc">$845.27</td><td class="td-r slc">$772.67</td><td class="td-r tr-up">↑ (3)</td></tr><tr onclick="openChart('HUN')"><td class="td-ticker"><span class="tkr">HUN</span></td><td class="td-r px">$13.25</td><td class="td-r dn-pct">-3.00%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">113.9</td><td class="td-r adxc">25.1</td><td class="td-r rsic">50.3</td><td class="td-r bkc">$14.22</td><td class="td-r slc">$12.03</td><td class="td-r tr-up">↑ (3)</td></tr><tr onclick="openChart('SEDG')"><td class="td-ticker"><span class="tkr">SEDG</span></td><td class="td-r px">$41.58</td><td class="td-r dn-pct">-6.12%</td><td class="td-c"><span class="s4">4</span></td><td class="td-r rank">104.9</td><td class="td-r adxc">16.0</td><td class="td-r rsic">47.0</td><td class="td-r bkc">$53.75</td><td class="td-r slc">$34.81</td><td class="td-r tr-up">↑ (3)</td></tr><tr onclick="openChart('AMD')"><td class="td-ticker"><span class="tkr">AMD</span></td><td class="td-r px">$337.11</td><td class="td-r up-pct">+4.30%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">108.0</td><td class="td-r adxc">42.1</td><td class="td-r rsic">76.2</td><td class="td-r bkc">$352.99</td><td class="td-r slc">$310.23</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('ON')"><td class="td-ticker"><span class="tkr">ON</span></td><td class="td-r px">$98.86</td><td class="td-r up-pct">+5.96%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">107.0</td><td class="td-r adxc">40.1</td><td class="td-r rsic">79.2</td><td class="td-r bkc">$101.26</td><td class="td-r slc">$91.74</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('SNDK')"><td class="td-ticker"><span class="tkr">SNDK</span></td><td class="td-r px">$1,064.21</td><td class="td-r up-pct">+6.17%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">105.2</td><td class="td-r adxc">36.5</td><td class="td-r rsic">67.8</td><td class="td-r bkc">$1,103.00</td><td class="td-r slc">$950.46</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('BULL')"><td class="td-ticker"><span class="tkr">BULL</span></td><td class="td-r px">$6.76</td><td class="td-r dn-pct">-4.79%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">104.5</td><td class="td-r adxc">36.0</td><td class="td-r rsic">61.2</td><td class="td-r bkc">$7.52</td><td class="td-r slc">$5.97</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('NVTS')"><td class="td-ticker"><span class="tkr">NVTS</span></td><td class="td-r px">$15.48</td><td class="td-r up-pct">+2.38%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">103.3</td><td class="td-r adxc">32.7</td><td class="td-r rsic">61.4</td><td class="td-r bkc">$19.79</td><td class="td-r slc">$12.15</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('AVGO')"><td class="td-ticker"><span class="tkr">AVGO</span></td><td class="td-r px">$405.45</td><td class="td-r up-pct">+1.41%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">100.9</td><td class="td-r adxc">32.8</td><td class="td-r rsic">64.2</td><td class="td-r bkc">$429.31</td><td class="td-r slc">$383.66</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CRML')"><td class="td-ticker"><span class="tkr">CRML</span></td><td class="td-r px">$11.38</td><td class="td-r dn-pct">-4.05%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">100.5</td><td class="td-r adxc">26.9</td><td class="td-r rsic">54.2</td><td class="td-r bkc">$14.51</td><td class="td-r slc">$8.55</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('OKLO')"><td class="td-ticker"><span class="tkr">OKLO</span></td><td class="td-r px">$64.98</td><td class="td-r dn-pct">-5.95%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">99.9</td><td class="td-r adxc">28.6</td><td class="td-r rsic">52.2</td><td class="td-r bkc">$81.50</td><td class="td-r slc">$51.87</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('AMZN')"><td class="td-ticker"><span class="tkr">AMZN</span></td><td class="td-r px">$263.04</td><td class="td-r up-pct">+1.29%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">99.9</td><td class="td-r adxc">34.4</td><td class="td-r rsic">75.5</td><td class="td-r bkc">$265.91</td><td class="td-r slc">$251.56</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('MU')"><td class="td-ticker"><span class="tkr">MU</span></td><td class="td-r px">$518.46</td><td class="td-r up-pct">+2.81%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">99.7</td><td class="td-r adxc">25.4</td><td class="td-r rsic">68.4</td><td class="td-r bkc">$531.36</td><td class="td-r slc">$471.79</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('WULF')"><td class="td-ticker"><span class="tkr">WULF</span></td><td class="td-r px">$20.02</td><td class="td-r dn-pct">-3.75%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">96.6</td><td class="td-r adxc">20.1</td><td class="td-r rsic">57.0</td><td class="td-r bkc">$21.60</td><td class="td-r slc">$17.21</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('NVDA')"><td class="td-ticker"><span class="tkr">NVDA</span></td><td class="td-r px">$209.25</td><td class="td-r dn-pct">-1.84%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">95.8</td><td class="td-r adxc">28.2</td><td class="td-r rsic">65.4</td><td class="td-r bkc">$216.83</td><td class="td-r slc">$198.26</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('MSFT')"><td class="td-ticker"><span class="tkr">MSFT</span></td><td class="td-r px">$424.46</td><td class="td-r dn-pct">-1.12%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">95.0</td><td class="td-r adxc">30.8</td><td class="td-r rsic">61.8</td><td class="td-r bkc">$433.70</td><td class="td-r slc">$404.81</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('META')"><td class="td-ticker"><span class="tkr">META</span></td><td class="td-r px">$669.12</td><td class="td-r dn-pct">-0.33%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">92.6</td><td class="td-r adxc">22.9</td><td class="td-r rsic">58.6</td><td class="td-r bkc">$691.52</td><td class="td-r slc">$640.10</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('VRT')"><td class="td-ticker"><span class="tkr">VRT</span></td><td class="td-r px">$306.18</td><td class="td-r up-pct">+0.38%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">92.5</td><td class="td-r adxc">19.6</td><td class="td-r rsic">57.4</td><td class="td-r bkc">$330.30</td><td class="td-r slc">$279.27</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('ALLY')"><td class="td-ticker"><span class="tkr">ALLY</span></td><td class="td-r px">$43.81</td><td class="td-r dn-pct">-1.35%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">92.1</td><td class="td-r adxc">26.5</td><td class="td-r rsic">57.8</td><td class="td-r bkc">$47.02</td><td class="td-r slc">$41.44</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('IREN')"><td class="td-ticker"><span class="tkr">IREN</span></td><td class="td-r px">$42.86</td><td class="td-r dn-pct">-3.56%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">92.1</td><td class="td-r adxc">16.4</td><td class="td-r rsic">47.8</td><td class="td-r bkc">$54.14</td><td class="td-r slc">$36.04</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('BBAI')"><td class="td-ticker"><span class="tkr">BBAI</span></td><td class="td-r px">$3.82</td><td class="td-r dn-pct">-7.28%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">91.0</td><td class="td-r adxc">19.1</td><td class="td-r rsic">51.9</td><td class="td-r bkc">$4.22</td><td class="td-r slc">$3.30</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('OPEN')"><td class="td-ticker"><span class="tkr">OPEN</span></td><td class="td-r px">$5.58</td><td class="td-r up-pct">+1.82%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">90.3</td><td class="td-r adxc">17.7</td><td class="td-r rsic">61.5</td><td class="td-r bkc">$6.00</td><td class="td-r slc">$4.85</td><td class="td-r tr-up">↑ (2)</td></tr><tr onclick="openChart('OSS')"><td class="td-ticker"><span class="tkr">OSS</span></td><td class="td-r px">$8.79</td><td class="td-r dn-pct">-5.18%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">90.1</td><td class="td-r adxc">19.3</td><td class="td-r rsic">46.1</td><td class="td-r bkc">$11.28</td><td class="td-r slc">$7.17</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('UUUU')"><td class="td-ticker"><span class="tkr">UUUU</span></td><td class="td-r px">$19.58</td><td class="td-r dn-pct">-4.91%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">88.0</td><td class="td-r adxc">16.6</td><td class="td-r rsic">48.2</td><td class="td-r bkc">$23.13</td><td class="td-r slc">$16.49</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('RIVN')"><td class="td-ticker"><span class="tkr">RIVN</span></td><td class="td-r px">$16.06</td><td class="td-r dn-pct">-0.50%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">87.6</td><td class="td-r adxc">19.7</td><td class="td-r rsic">49.1</td><td class="td-r bkc">$18.07</td><td class="td-r slc">$14.74</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('ASML')"><td class="td-ticker"><span class="tkr">ASML</span></td><td class="td-r px">$1,394.08</td><td class="td-r up-pct">+0.69%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">85.4</td><td class="td-r adxc">15.0</td><td class="td-r rsic">48.0</td><td class="td-r bkc">$1,528.64</td><td class="td-r slc">$1,309.30</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('ONDS')"><td class="td-ticker"><span class="tkr">ONDS</span></td><td class="td-r px">$9.49</td><td class="td-r dn-pct">-9.45%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">85.1</td><td class="td-r adxc">11.9</td><td class="td-r rsic">44.1</td><td class="td-r bkc">$11.61</td><td class="td-r slc">$7.95</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('AAPL')"><td class="td-ticker"><span class="tkr">AAPL</span></td><td class="td-r px">$270.17</td><td class="td-r dn-pct">-0.20%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">83.5</td><td class="td-r adxc">12.3</td><td class="td-r rsic">57.5</td><td class="td-r bkc">$275.77</td><td class="td-r slc">$260.27</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CTKB')"><td class="td-ticker"><span class="tkr">CTKB</span></td><td class="td-r px">$4.44</td><td class="td-r dn-pct">-2.84%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">83.2</td><td class="td-r adxc">14.7</td><td class="td-r rsic">47.0</td><td class="td-r bkc">$4.85</td><td class="td-r slc">$4.06</td><td class="td-r tr-up">↑ (1)</td></tr><tr onclick="openChart('AMPY')"><td class="td-ticker"><span class="tkr">AMPY</span></td><td class="td-r px">$6.40</td><td class="td-r up-pct">+3.90%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">81.7</td><td class="td-r adxc">13.5</td><td class="td-r rsic">61.4</td><td class="td-r bkc">$6.42</td><td class="td-r slc">$5.94</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('INTC')"><td class="td-ticker"><span class="tkr">INTC</span></td><td class="td-r px">$94.75</td><td class="td-r up-pct">+12.10%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">80.0</td><td class="td-r adxc">46.0</td><td class="td-r rsic">86.4</td><td class="td-r bkc">$94.95</td><td class="td-r slc">$86.83</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CNC')"><td class="td-ticker"><span class="tkr">CNC</span></td><td class="td-r px">$53.98</td><td class="td-r up-pct">+8.90%</td><td class="td-c"><span class="s3">3</span></td><td class="td-r rank">71.6</td><td class="td-r adxc">29.2</td><td class="td-r rsic">86.6</td><td class="td-r bkc">$54.62</td><td class="td-r slc">$50.21</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('AFRM')"><td class="td-ticker"><span class="tkr">AFRM</span></td><td class="td-r px">$63.48</td><td class="td-r up-pct">+0.51%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">78.1</td><td class="td-r adxc">32.5</td><td class="td-r rsic">63.1</td><td class="td-r bkc">$68.74</td><td class="td-r slc">$57.40</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('IONQ')"><td class="td-ticker"><span class="tkr">IONQ</span></td><td class="td-r px">$42.11</td><td class="td-r dn-pct">-2.25%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">76.7</td><td class="td-r adxc">29.3</td><td class="td-r rsic">57.9</td><td class="td-r bkc">$49.13</td><td class="td-r slc">$35.33</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('QBTS')"><td class="td-ticker"><span class="tkr">QBTS</span></td><td class="td-r px">$18.27</td><td class="td-r up-pct">+0.88%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">71.5</td><td class="td-r adxc">22.6</td><td class="td-r rsic">51.1</td><td class="td-r bkc">$22.49</td><td class="td-r slc">$15.21</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('MSTR')"><td class="td-ticker"><span class="tkr">MSTR</span></td><td class="td-r px">$158.19</td><td class="td-r dn-pct">-4.54%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">70.3</td><td class="td-r adxc">25.4</td><td class="td-r rsic">55.2</td><td class="td-r bkc">$183.25</td><td class="td-r slc">$139.82</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CLSK')"><td class="td-ticker"><span class="tkr">CLSK</span></td><td class="td-r px">$11.37</td><td class="td-r dn-pct">-3.56%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">68.7</td><td class="td-r adxc">17.8</td><td class="td-r rsic">53.9</td><td class="td-r bkc">$13.23</td><td class="td-r slc">$9.98</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('MP')"><td class="td-ticker"><span class="tkr">MP</span></td><td class="td-r px">$61.30</td><td class="td-r dn-pct">-0.65%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">68.2</td><td class="td-r adxc">19.2</td><td class="td-r rsic">53.1</td><td class="td-r bkc">$69.43</td><td class="td-r slc">$53.86</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('ORCL')"><td class="td-ticker"><span class="tkr">ORCL</span></td><td class="td-r px">$163.83</td><td class="td-r dn-pct">-1.28%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">66.0</td><td class="td-r adxc">22.8</td><td class="td-r rsic">50.8</td><td class="td-r bkc">$189.18</td><td class="td-r slc">$148.16</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('RGTI')"><td class="td-ticker"><span class="tkr">RGTI</span></td><td class="td-r px">$16.08</td><td class="td-r dn-pct">-1.89%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">65.7</td><td class="td-r adxc">19.0</td><td class="td-r rsic">46.6</td><td class="td-r bkc">$20.17</td><td class="td-r slc">$13.49</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('SMR')"><td class="td-ticker"><span class="tkr">SMR</span></td><td class="td-r px">$11.32</td><td class="td-r dn-pct">-4.23%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">65.4</td><td class="td-r adxc">25.5</td><td class="td-r rsic">47.9</td><td class="td-r bkc">$14.20</td><td class="td-r slc">$8.89</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('SOFI')"><td class="td-ticker"><span class="tkr">SOFI</span></td><td class="td-r px">$15.52</td><td class="td-r dn-pct">-15.44%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">63.4</td><td class="td-r adxc">25.5</td><td class="td-r rsic">34.5</td><td class="td-r bkc">$20.13</td><td class="td-r slc">$14.02</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('HOOD')"><td class="td-ticker"><span class="tkr">HOOD</span></td><td class="td-r px">$71.20</td><td class="td-r dn-pct">-13.24%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">63.0</td><td class="td-r adxc">21.4</td><td class="td-r rsic">40.0</td><td class="td-r bkc">$93.32</td><td class="td-r slc">$63.37</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('BX')"><td class="td-ticker"><span class="tkr">BX</span></td><td class="td-r px">$119.83</td><td class="td-r dn-pct">-1.39%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">62.8</td><td class="td-r adxc">21.9</td><td class="td-r rsic">48.4</td><td class="td-r bkc">$133.25</td><td class="td-r slc">$111.08</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('RDDT')"><td class="td-ticker"><span class="tkr">RDDT</span></td><td class="td-r px">$147.75</td><td class="td-r dn-pct">-0.12%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">62.7</td><td class="td-r adxc">15.9</td><td class="td-r rsic">48.1</td><td class="td-r bkc">$168.70</td><td class="td-r slc">$133.24</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('FISV')"><td class="td-ticker"><span class="tkr">FISV</span></td><td class="td-r px">$62.02</td><td class="td-r up-pct">+0.68%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">62.4</td><td class="td-r adxc">17.9</td><td class="td-r rsic">58.4</td><td class="td-r bkc">$65.29</td><td class="td-r slc">$58.77</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CRWD')"><td class="td-ticker"><span class="tkr">CRWD</span></td><td class="td-r px">$452.38</td><td class="td-r dn-pct">-0.57%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">62.2</td><td class="td-r adxc">14.8</td><td class="td-r rsic">59.7</td><td class="td-r bkc">$467.95</td><td class="td-r slc">$418.25</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('NNE')"><td class="td-ticker"><span class="tkr">NNE</span></td><td class="td-r px">$22.42</td><td class="td-r dn-pct">-5.44%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">62.0</td><td class="td-r adxc">15.0</td><td class="td-r rsic">46.2</td><td class="td-r bkc">$28.33</td><td class="td-r slc">$18.26</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('DDOG')"><td class="td-ticker"><span class="tkr">DDOG</span></td><td class="td-r px">$133.98</td><td class="td-r up-pct">+1.85%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">62.0</td><td class="td-r adxc">16.1</td><td class="td-r rsic">62.3</td><td class="td-r bkc">$136.00</td><td class="td-r slc">$121.90</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('PANW')"><td class="td-ticker"><span class="tkr">PANW</span></td><td class="td-r px">$181.54</td><td class="td-r up-pct">+0.30%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">61.7</td><td class="td-r adxc">14.6</td><td class="td-r rsic">61.4</td><td class="td-r bkc">$186.00</td><td class="td-r slc">$168.32</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('APP')"><td class="td-ticker"><span class="tkr">APP</span></td><td class="td-r px">$443.43</td><td class="td-r dn-pct">-1.25%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">61.6</td><td class="td-r adxc">13.7</td><td class="td-r rsic">49.8</td><td class="td-r bkc">$491.99</td><td class="td-r slc">$398.16</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('TSLA')"><td class="td-ticker"><span class="tkr">TSLA</span></td><td class="td-r px">$372.80</td><td class="td-r dn-pct">-0.86%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">59.9</td><td class="td-r adxc">17.3</td><td class="td-r rsic">47.2</td><td class="td-r bkc">$409.28</td><td class="td-r slc">$345.98</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CMG')"><td class="td-ticker"><span class="tkr">CMG</span></td><td class="td-r px">$32.99</td><td class="td-r up-pct">+0.37%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">58.8</td><td class="td-r adxc">14.7</td><td class="td-r rsic">41.0</td><td class="td-r bkc">$37.08</td><td class="td-r slc">$31.06</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('BMNR')"><td class="td-ticker"><span class="tkr">BMNR</span></td><td class="td-r px">$20.66</td><td class="td-r dn-pct">-3.82%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">58.7</td><td class="td-r adxc">11.0</td><td class="td-r rsic">45.2</td><td class="td-r bkc">$24.11</td><td class="td-r slc">$18.32</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('SHOP')"><td class="td-ticker"><span class="tkr">SHOP</span></td><td class="td-r px">$121.26</td><td class="td-r dn-pct">-0.65%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">58.1</td><td class="td-r adxc">12.0</td><td class="td-r rsic">47.4</td><td class="td-r bkc">$137.30</td><td class="td-r slc">$110.99</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('NEM')"><td class="td-ticker"><span class="tkr">NEM</span></td><td class="td-r px">$107.61</td><td class="td-r dn-pct">-2.08%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">58.0</td><td class="td-r adxc">13.9</td><td class="td-r rsic">44.0</td><td class="td-r bkc">$122.00</td><td class="td-r slc">$99.88</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('TCMD')"><td class="td-ticker"><span class="tkr">TCMD</span></td><td class="td-r px">$22.50</td><td class="td-r dn-pct">-4.54%</td><td class="td-c"><span class="s2">2</span></td><td class="td-r rank">55.4</td><td class="td-r adxc">17.3</td><td class="td-r rsic">31.4</td><td class="td-r bkc">$27.07</td><td class="td-r slc">$20.25</td><td class="td-r tr-up">↑ (1)</td></tr><tr onclick="openChart('FUBO')"><td class="td-ticker"><span class="tkr">FUBO</span></td><td class="td-r px">$11.85</td><td class="td-r up-pct">+3.13%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">43.6</td><td class="td-r adxc">18.7</td><td class="td-r rsic">44.3</td><td class="td-r bkc">$14.54</td><td class="td-r slc">$10.14</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('NFLX')"><td class="td-ticker"><span class="tkr">NFLX</span></td><td class="td-r px">$92.12</td><td class="td-r dn-pct">-0.16%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">37.5</td><td class="td-r adxc">25.5</td><td class="td-r rsic">41.0</td><td class="td-r bkc">$108.95</td><td class="td-r slc">$87.42</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('LLY')"><td class="td-ticker"><span class="tkr">LLY</span></td><td class="td-r px">$851.21</td><td class="td-r dn-pct">-2.61%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">34.7</td><td class="td-r adxc">21.4</td><td class="td-r rsic">33.3</td><td class="td-r bkc">$976.68</td><td class="td-r slc">$805.40</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('HL')"><td class="td-ticker"><span class="tkr">HL</span></td><td class="td-r px">$17.47</td><td class="td-r dn-pct">-2.07%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">34.0</td><td class="td-r adxc">17.3</td><td class="td-r rsic">38.6</td><td class="td-r bkc">$21.05</td><td class="td-r slc">$16.16</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('MNDY')"><td class="td-ticker"><span class="tkr">MNDY</span></td><td class="td-r px">$66.66</td><td class="td-r dn-pct">-0.88%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">34.0</td><td class="td-r adxc">18.9</td><td class="td-r rsic">46.2</td><td class="td-r bkc">$73.58</td><td class="td-r slc">$59.00</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CRCL')"><td class="td-ticker"><span class="tkr">CRCL</span></td><td class="td-r px">$95.56</td><td class="td-r up-pct">+1.28%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">33.9</td><td class="td-r adxc">14.7</td><td class="td-r rsic">46.7</td><td class="td-r bkc">$111.20</td><td class="td-r slc">$81.82</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('NOW')"><td class="td-ticker"><span class="tkr">NOW</span></td><td class="td-r px">$88.89</td><td class="td-r dn-pct">-1.77%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">33.4</td><td class="td-r adxc">24.4</td><td class="td-r rsic">40.4</td><td class="td-r bkc">$105.90</td><td class="td-r slc">$79.44</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('MRNA')"><td class="td-ticker"><span class="tkr">MRNA</span></td><td class="td-r px">$45.72</td><td class="td-r dn-pct">-3.01%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">33.3</td><td class="td-r adxc">19.2</td><td class="td-r rsic">35.1</td><td class="td-r bkc">$56.20</td><td class="td-r slc">$40.20</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('ZS')"><td class="td-ticker"><span class="tkr">ZS</span></td><td class="td-r px">$134.73</td><td class="td-r dn-pct">-0.98%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">33.0</td><td class="td-r adxc">17.0</td><td class="td-r rsic">46.1</td><td class="td-r bkc">$150.50</td><td class="td-r slc">$122.87</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('CRM')"><td class="td-ticker"><span class="tkr">CRM</span></td><td class="td-r px">$181.22</td><td class="td-r dn-pct">-0.06%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">31.7</td><td class="td-r adxc">14.4</td><td class="td-r rsic">48.4</td><td class="td-r bkc">$193.56</td><td class="td-r slc">$168.49</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('INTU')"><td class="td-ticker"><span class="tkr">INTU</span></td><td class="td-r px">$395.08</td><td class="td-r dn-pct">-1.32%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">31.7</td><td class="td-r adxc">17.2</td><td class="td-r rsic">46.8</td><td class="td-r bkc">$435.24</td><td class="td-r slc">$366.62</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('PLTR')"><td class="td-ticker"><span class="tkr">PLTR</span></td><td class="td-r px">$137.97</td><td class="td-r dn-pct">-2.27%</td><td class="td-c"><span class="s1">1</span></td><td class="td-r rank">31.4</td><td class="td-r adxc">12.7</td><td class="td-r rsic">43.8</td><td class="td-r bkc">$156.28</td><td class="td-r slc">$127.06</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('NKE')"><td class="td-ticker"><span class="tkr">NKE</span></td><td class="td-r px">$44.39</td><td class="td-r dn-pct">-1.42%</td><td class="td-c"><span class="s1">0</span></td><td class="td-r rank">14.5</td><td class="td-r adxc">35.7</td><td class="td-r rsic">35.1</td><td class="td-r bkc">$46.97</td><td class="td-r slc">$42.17</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('BTG')"><td class="td-ticker"><span class="tkr">BTG</span></td><td class="td-r px">$4.31</td><td class="td-r dn-pct">-1.82%</td><td class="td-c"><span class="s1">0</span></td><td class="td-r rank">8.6</td><td class="td-r adxc">16.2</td><td class="td-r rsic">36.9</td><td class="td-r bkc">$5.12</td><td class="td-r slc">$3.96</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('FIG')"><td class="td-ticker"><span class="tkr">FIG</span></td><td class="td-r px">$16.86</td><td class="td-r dn-pct">-1.86%</td><td class="td-c"><span class="s1">0</span></td><td class="td-r rank">5.1</td><td class="td-r adxc">18.3</td><td class="td-r rsic">33.1</td><td class="td-r bkc">$23.15</td><td class="td-r slc">$13.98</td><td class="td-r tr-flat">-</td></tr><tr onclick="openChart('ASTS')"><td class="td-ticker"><span class="tkr">ASTS</span></td><td class="td-r px">$69.85</td><td class="td-r dn-pct">-2.82%</td><td class="td-c"><span class="s1">0</span></td><td class="td-r rank">4.5</td><td class="td-r adxc">11.6</td><td class="td-r rsic">36.7</td><td class="td-r bkc">$104.15</td><td class="td-r slc">$57.02</td><td class="td-r tr-flat">-</td></tr></tbody>
     </table>
   </div>
 </div>
-<div class="modal fade" id="chartModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="modal-title" id="chartModalLabel">Live Chart</span>
-        <button class="modal-close" data-bs-dismiss="modal">&#x2715;</button>
-      </div>
-      <div class="modal-body"><div id="tv_chart_container" style="height:100%;"></div></div>
+
+<div class="modal-overlay" id="chartModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-lbl" id="modalTicker">Live Chart</span>
+      <button class="modal-x" onclick="closeModal()">&#x2715;</button>
     </div>
+    <div id="tv_container"></div>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://s3.tradingview.com/tv.js"></script>
 <script>
 $(document).ready(function(){
   $('#stockTable').DataTable({
-    order:[[4,'desc']],pageLength:50,lengthMenu:[25,50,100],
-    language:{search:'',searchPlaceholder:'\u05d7\u05e4\u05e9 \u05d8\u05d9\u05e7\u05e8...'},
+    order:[[4,'desc']],
+    pageLength:50,
+    lengthMenu:[25,50,100],
+    language:{search:'',searchPlaceholder:'חפש טיקר...'},
     columnDefs:[{targets:'_all',className:''}]
   });
 });
-var chartModal=new bootstrap.Modal(document.getElementById('chartModal'));
-function openChart(ticker){
-  document.getElementById('chartModalLabel').textContent=ticker+' — Live Analysis';
-  document.getElementById('tv_chart_container').innerHTML='';
-  chartModal.show();
+function openChart(t){
+  document.getElementById('modalTicker').textContent=t+' — Live Analysis';
+  document.getElementById('tv_container').innerHTML='';
+  document.getElementById('chartModal').classList.add('open');
   setTimeout(function(){
     new TradingView.widget({
-      autosize:true,symbol:ticker,interval:'D',timezone:'Asia/Jerusalem',
-      theme:'dark',style:'1',locale:'en',toolbar_bg:'#080b10',
+      autosize:true,symbol:t,interval:'D',timezone:'Asia/Jerusalem',
+      theme:'dark',style:'1',locale:'en',toolbar_bg:'#09090f',
       hide_side_toolbar:false,allow_symbol_change:true,
-      container_id:'tv_chart_container'
+      container_id:'tv_container'
     });
-  },180);
+  },200);
 }
-document.getElementById('chartModal').addEventListener('hidden.bs.modal',function(){
-  document.getElementById('tv_chart_container').innerHTML='';
+function closeModal(){
+  document.getElementById('chartModal').classList.remove('open');
+  document.getElementById('tv_container').innerHTML='';
+}
+document.getElementById('chartModal').addEventListener('click',function(e){
+  if(e.target===this) closeModal();
 });
 </script>
 </body></html>
