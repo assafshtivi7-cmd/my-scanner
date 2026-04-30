@@ -204,7 +204,7 @@ def generate_html(results, market_summary):
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:13px}
 body{
-  background:#07090d;
+  background:#0d1117;
   color:#8fa3b8;
   font-family:'IBM Plex Mono',monospace;
   min-height:100vh;
@@ -212,7 +212,7 @@ body{
 
 /* ── Topbar ─────────────────────────────────────────────────── */
 .topbar{
-  background:#090d13;
+  background:#0f1520;
   border-bottom:1px solid #0f1923;
   height:56px;
   display:flex;
@@ -250,7 +250,7 @@ body{
 }
 .ts-pill{
   font-size:10px;color:#3a5068;
-  border:1px solid #0f1923;
+  border:1px solid #141d2a;
   padding:4px 14px;border-radius:5px;
   letter-spacing:0.07em;
   background:#06080c;
@@ -262,11 +262,11 @@ body{
   grid-template-columns:repeat(4,1fr);
   border-bottom:1px solid #0f1923;
   gap:1px;
-  background:#0f1923;
+  background:#141d2a;
 }
 .idx-card{
-  background:#09090f;
-  padding:20px 24px;
+  background:#0f1520;
+  padding:26px 28px;
   position:relative;
   overflow:hidden;
   transition:background .15s;
@@ -291,21 +291,21 @@ body{
   pointer-events:none;
 }
 .idx-lbl{
-  font-size:9px;letter-spacing:0.26em;
+  font-size:10px;letter-spacing:0.22em;
   color:#2a4058;text-transform:uppercase;
-  font-weight:700;margin-bottom:10px;
+  font-weight:700;margin-bottom:12px;
   position:relative;
 }
 .idx-num{
-  font-size:28px;font-weight:700;
+  font-size:32px;font-weight:700;
   color:#dce8f0;
   letter-spacing:-0.025em;
   font-variant-numeric:tabular-nums;
   line-height:1;position:relative;
 }
 .idx-chg{
-  font-size:13px;font-weight:600;
-  margin-top:8px;position:relative;
+  font-size:14px;font-weight:600;
+  margin-top:10px;position:relative;
 }
 .green{color:#34c759}
 .red{color:#ff3b30}
@@ -329,7 +329,7 @@ body{
 }
 .cnt-badge{
   font-size:9px;color:#253545;
-  border:1px solid #0f1923;
+  border:1px solid #141d2a;
   padding:2px 10px;border-radius:20px;
   letter-spacing:0.07em;
 }
@@ -344,9 +344,9 @@ body{
 }
 .dataTables_filter input,
 .dataTables_length select{
-  background:#0d1520;
+  background:#141d2a;
   color:#a0b4c8;
-  border:1px solid #0f1923;
+  border:1px solid #141d2a;
   border-radius:5px;
   padding:5px 10px;
   font-family:'IBM Plex Mono',monospace;
@@ -381,17 +381,17 @@ body{
 
 /* ── Table ──────────────────────────────────────────────────── */
 .tbl-wrap{
-  border:1px solid #0f1923;
+  border:1px solid #141d2a;
   border-radius:10px;
   overflow:hidden;
 }
 #stockTable{
   width:100% !important;
   border-collapse:collapse;
-  background:#09090f;
+  background:#0f1520;
 }
 #stockTable thead th{
-  background:#060810 !important;
+  background:#0a1018 !important;
   color:#1e3248 !important;
   font-family:'IBM Plex Mono',monospace !important;
   font-size:8px !important;
@@ -399,7 +399,7 @@ body{
   letter-spacing:0.22em !important;
   text-transform:uppercase !important;
   border:none !important;
-  border-bottom:1px solid #0f1923 !important;
+  border-bottom:1px solid #141d2a !important;
   padding:10px 14px !important;
   white-space:nowrap !important;
   cursor:pointer !important;
@@ -411,7 +411,7 @@ body{
 }
 #stockTable tbody tr{
   background:#09090f !important;
-  border-bottom:1px solid #0d1520 !important;
+  border-bottom:1px solid #151e28 !important;
   cursor:pointer;
   transition:background .1s;
 }
@@ -475,7 +475,7 @@ tr:hover .tkr{background:#d4a843 !important;color:#1a0d00 !important}
   width:28px;height:28px;border-radius:50%;
   display:inline-flex;align-items:center;justify-content:center;
   font-size:12px;font-weight:700;
-  background:#0d1520;color:#3a5068;
+  background:#141d2a;color:#3a5068;
   border:1.5px solid #0f1923;
 }
 .s1{
@@ -496,8 +496,8 @@ tr:hover .tkr{background:#d4a843 !important;color:#1a0d00 !important}
 .modal-overlay.open{display:flex}
 .modal-box{
   width:90%;max-width:1100px;
-  background:#09090f;
-  border:1px solid #0f1923;
+  background:#0f1520;
+  border:1px solid #141d2a;
   border-radius:12px;
   overflow:hidden;
 }
@@ -513,7 +513,7 @@ tr:hover .tkr{background:#d4a843 !important;color:#1a0d00 !important}
   color:#d4a843;
 }
 .modal-x{
-  background:none;border:1px solid #0f1923;
+  background:none;border:1px solid #141d2a;
   color:#3a5068;font-size:14px;
   cursor:pointer;border-radius:4px;
   padding:2px 9px;font-family:inherit;
@@ -525,7 +525,7 @@ tr:hover .tkr{background:#d4a843 !important;color:#1a0d00 !important}
 /* ── Scrollbar ──────────────────────────────────────────────── */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:#07090d}
-::-webkit-scrollbar-thumb{background:#0f1923;border-radius:2px}
+::-webkit-scrollbar-thumb{background:#141d2a;border-radius:2px}
 ::-webkit-scrollbar-thumb:hover{background:#1a2a3a}
 </style>
 </head>
